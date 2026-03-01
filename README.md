@@ -6,13 +6,14 @@ A physics-based, real-time wargame simulation built with Python and pygame, feat
 
 ## Features
 
-- **Live OSM map** — Web-Mercator tile streaming with disk cache and 4 concurrent download workers
+- **CARTO Voyager map** — Web-Mercator tile streaming with English labels, disk cache, and 4 concurrent download workers
 - **Physics-based sensor model** — Radar detection ranges adjusted for RCS, ECM jamming, radar horizon (earth curvature), and altitude
 - **Fog of War** — Blue player sees only what their sensors can detect; contacts degrade through FAINT → PROBABLE → CONFIRMED classifications
 - **Electronic warfare** — Active ECM jamming reduces enemy detection range; burn-through range forces detection at close quarters; chaff and flares defeat radar and IR-guided missiles
 - **Multi-domain combat** — Air-to-air, air-to-ground, and ground-to-ground engagements using domain-locked weapon rules
 - **Damage model** — Four-state health system (OK / LIGHT / MODERATE / HEAVY / KILLED) that degrades speed, radar performance, and climb rate
 - **Fuel system** — Units burn fuel in real time and automatically RTB at configurable bingo fuel levels; crashes if fuel reaches zero
+- **Airbase & duty cycle** — Aircraft park at airbases between sorties; on landing they rearm and refuel over a timed ground turn before becoming available again
 - **Salvo doctrine** — Single Last Shot (SLS) and free-salvo firing modes; AI fire cooldowns prevent spam
 - **Adjustable time compression** — PAUSE / 1× / 15× / 60× / 300×
 - **Scenario & deployment save/load** — JSON-based format for full state persistence
@@ -51,9 +52,9 @@ An optional scenario file path can be specified at launch. Without one, the game
 
 ### Setup Mode
 
-The bottom panel shows a unit roster. Select a platform, set a quantity, click **Place on Map**, then click a location on the map to deploy units. When satisfied, click **Start Combat** to begin the simulation.
+The bottom panel shows a unit roster. Select a platform, set a quantity, click **Place on Map**, then click a location on the map to deploy units. Right-clicking a placed unit removes it. When satisfied, click **Start Combat** to begin the simulation.
 
-You can save your deployment at any time with **Ctrl+S**.
+Use **Save Deployment** and **Load Deployment** in the panel to persist Blue-side force compositions between sessions. You can also save the full scenario at any time with **Ctrl+S**.
 
 ### Combat Mode
 
@@ -66,7 +67,8 @@ The simulation runs in real time. Units with assigned missions and waypoints wil
 | Input | Action |
 |---|---|
 | **Left-click** (map) | Select a unit |
-| **Right-click** (map) | Add waypoint for selected unit |
+| **Right-click** (map, combat) | Add waypoint for selected unit (auto-activates a READY unit) |
+| **Right-click** (unit, setup) | Remove unit from map |
 | **Scroll wheel** | Zoom in / out |
 | **Middle-click drag** | Pan camera |
 | **1 – 5** | Set time compression (Pause / 1× / 15× / 60× / 300×) |
@@ -90,6 +92,9 @@ The simulation runs in real time. Units with assigned missions and waypoints wil
 | **Weapon buttons** | Select active weapon for manual fire |
 | **SLS / Salvo** | Toggle salvo doctrine (SLS = one missile at a time; Salvo = continuous fire) |
 | **FOG OF WAR** | Toggle between full visibility and sensor-only contact view |
+| **Save Deployment / Load Deployment** | (Setup mode) Persist or restore Blue force layout |
+
+When an **airbase** unit is selected in combat, the panel also shows a launch button for each parked aircraft. Aircraft showing `READY` can be scrambled immediately; those showing `REARM Xs` are still on the ground turn.
 
 ---
 
@@ -127,7 +132,28 @@ Contacts time out after **30 seconds** without a refresh.
 
 ---
 
-## Weapon Probability of Kill
+## Airbase & Duty Cycle
+
+Aircraft are assigned a **home airbase** via `home_uid`. Between sorties they exist in one of four duty states:
+
+| State | Meaning |
+|---|---|
+| `READY` | On the ground, fully armed and fuelled — can be launched |
+| `ACTIVE` | Airborne and operating |
+| `REARMING` | On the ground, reloading weapons and refuelling (timer counts down) |
+
+**Sortie lifecycle:**
+
+1. Player (or scenario file) launches a READY aircraft → state becomes `ACTIVE`, unit climbs to cruise altitude and begins its mission.
+2. When bingo fuel is reached the unit's mission switches to `RTB`. It navigates to the nearest friendly airbase.
+3. On arrival (within 2 km) the unit lands: fuel is restored to full, loadout is reset to default, and state changes to `REARMING` for `rearm_time_s` seconds (120 s for land bases, 90 s for carriers).
+4. After the ground turn completes the unit returns to `READY`.
+
+If the assigned home base is destroyed the unit automatically diverts to the nearest surviving friendly airbase. If no friendly base remains the unit is removed.
+
+**Airbase platforms** (`type: airbase`) are stationary, have very high RCS (making them easy to detect), and carry no weapons. Three variants exist: `AirbaseB` (land base), `AircraftCarrier`, and `MilitaryAirbase`, differing only in display name and rearm time.
+
+When a unit is not `ACTIVE` it is invisible on the map and cannot be targeted.
 
 ```
 Pk = base_pk − (launch_distance / 50) × 0.10 − ECM_effect − chaff/flare_penalty
@@ -160,6 +186,9 @@ A random roll against Pk determines hit or miss on intercept.
 | NASAMS II | SAM | — | 75 km | AIM-120 (ground-launched) |
 | IRIS-T SLM | SAM | — | 250 km | IRIS-T |
 | Flakpanzer Gepard | SPAAG | 65 km/h | 15 km | 35mm Oerlikon |
+| Airbase / Runway (`AirbaseB`) | Airbase | — | — | — |
+| Military Airbase | Airbase | — | — | — |
+| Aircraft Carrier | Airbase | — | — | — |
 
 ### Red (Russia)
 
@@ -209,7 +238,7 @@ A random roll against Pk determines hit or miss on intercept.
 
 ## Scenario File Format
 
-Scenarios are stored as JSON files:
+Scenarios are stored as JSON files. Aircraft units now include `home_uid`, `duty_state`, and `duty_timer` fields:
 
 ```json
 {
@@ -220,22 +249,30 @@ Scenarios are stored as JSON files:
   "start_zoom": 7,
   "units": [
     {
+      "id": "base_001",
+      "platform": "AirbaseB",
+      "callsign": "ALPHA BASE 1",
+      "side": "Blue",
+      "lat": 50.08, "lon": 25.57,
+      "loadout": {},
+      "roe": "TIGHT",
+      "home_uid": "",
+      "duty_state": "ACTIVE",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
       "id": "unit_001",
       "platform": "F-16AM",
-      "callsign": "Viper 1",
+      "callsign": "VIPER 1",
       "side": "Blue",
-      "lat": 50.1234,
-      "lon": 29.5678,
+      "lat": 50.08, "lon": 25.57,
       "loadout": {"AIM-120C": 4, "AIM-9X": 2, "M61A1": 1},
       "roe": "TIGHT",
-      "waypoints": [[50.5, 30.2]],
-      "mission": {
-        "name": "CAP Alpha",
-        "type": "CAP",
-        "lat": 50.5, "lon": 30.2,
-        "radius": 40, "alt": 25000,
-        "rtb_fuel": 0.25
-      }
+      "home_uid": "base_001",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
     }
   ]
 }
@@ -256,18 +293,19 @@ Scenarios are stored as JSON files:
 ## Project Structure
 
 ```
-main.py          — Entry point, event loop, app state
-scenario.py      — Data models, platform/weapon DB, save/load
-simulation.py    — Real-time engine: movement, AI, missile resolution
-sensor.py        — Radar detection, contact classification, ECM
-renderer.py      — All pygame rendering (tiles, units, contacts, HUD)
-ui.py            — pygame-gui panels, buttons, event routing
-geo.py           — Web-Mercator projection, haversine, bearing
-map_tiles.py     — Async OSM tile fetcher with disk cache
-constants.py     — Shared constants
-units.json       — Platform override database (optional)
-weapons.json     — Weapon override database (optional)
-map_cache/       — Cached OSM tile images (auto-created)
+main.py             — Entry point, event loop, app state
+scenario.py         — Data models, platform/weapon DB, save/load
+simulation.py       — Real-time engine: movement, AI, missile resolution, duty cycle
+sensor.py           — Radar detection, contact classification, ECM
+renderer.py         — All pygame rendering (tiles, units, contacts, HUD)
+ui.py               — pygame-gui panels, buttons, event routing
+geo.py              — Web-Mercator projection, haversine, bearing
+map_tiles.py        — Async CARTO tile fetcher with disk cache
+constants.py        — Shared constants
+airbases.json       — Default Blue deployment (airbases + parked aircraft)
+units.json          — Platform override database (optional)
+weapons.json        — Weapon override database (optional)
+map_cache_en/       — Cached CARTO Voyager tile images (auto-created)
 ```
 
 ---
@@ -284,6 +322,6 @@ Both sides use the same autonomous engagement logic:
 
 ---
 
-## Map Cache
+## Map Tiles
 
-Map tiles are downloaded from OpenStreetMap and cached to `map_cache/` on disk. The in-memory LRU cache holds up to 512 tile surfaces. Please respect the [OpenStreetMap tile usage policy](https://operations.osmfoundation.org/policies/tiles/).
+Map tiles are served by [CARTO Voyager](https://carto.com/basemaps/) (OpenStreetMap data with English place-name labels) and cached to `map_cache_en/` on disk. The in-memory LRU cache holds up to 512 tile surfaces. Subdomains `a`–`d` are rotated to stay within rate limits. Please respect CARTO's [tile usage policy](https://carto.com/legal/).
