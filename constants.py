@@ -1,11 +1,10 @@
 # constants.py — all shared constants in one place
 
 # ── Default window size (used only at startup) ───────────────────────────────
-# After launch the actual size is read from pygame.display.get_surface().
 WINDOW_WIDTH_DEFAULT    = 1920
 WINDOW_HEIGHT_DEFAULT   = 1080
-BOTTOM_PANEL_FRACTION   = 0.30  # Panel takes up 30% of window height
-BOTTOM_PANEL_MIN_HEIGHT = 220   # Minimum height so text doesn't overlap
+BOTTOM_PANEL_FRACTION   = 0.30
+BOTTOM_PANEL_MIN_HEIGHT = 220
 FPS                     = 60
 TILE_SIZE               = 256
 
@@ -22,6 +21,11 @@ TRAIL_COLOR        = (255, 200,  80)
 PANEL_BG           = (18,   26,  34)
 TEXT_COLOR         = (200, 215, 225)
 LOG_COLOR          = (160, 200, 160)
+
+# Contact classification colours (used by renderer)
+CONTACT_FAINT_COLOR    = (140, 140, 140)   # grey blip — barely detected
+CONTACT_PROBABLE_COLOR = (220, 160,  60)   # amber — type resolved
+CONTACT_CONFIRM_COLOR  = (255,  60,  60)   # red — full resolution
 
 # ── Time-compression steps ────────────────────────────────────────────────────
 TIME_SPEEDS       = [0, 1, 15, 60, 300]
