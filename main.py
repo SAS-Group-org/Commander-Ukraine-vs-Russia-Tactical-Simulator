@@ -58,8 +58,26 @@ class CameraState:
         px, py = self.pixel_xy
         self.lat, self.lon = pixel_to_lat_lon(px - dx, py - dy, self.zoom)
 
-    def zoom_by(self, delta):
+    def zoom_by(self, delta: int, sx: float, sy: float) -> None:
+        old_zoom = self.zoom
         self.zoom = max(4, min(12, self.zoom + delta))
+        
+        # If we hit the zoom limits, do nothing
+        if self.zoom == old_zoom:
+            return
+            
+        # 1. Find world coordinates under the cursor BEFORE zooming
+        target_lat, target_lon = self.screen_to_world(sx, sy)
+        
+        # 2. Get the absolute pixel coordinates of that world point AT THE NEW ZOOM
+        tx, ty = lat_lon_to_pixel(target_lat, target_lon, self.zoom)
+        
+        # 3. Calculate what the camera center pixel must be to keep that point under the cursor
+        cam_px = tx - sx + self.win_w / 2
+        cam_py = ty - sy + self.map_h / 2
+        
+        # 4. Update camera center lat/lon
+        self.lat, self.lon = pixel_to_lat_lon(cam_px, cam_py, self.zoom)
 
     def screen_to_world(self, sx, sy):
         px, py = self.pixel_xy
@@ -545,34 +563,44 @@ def main() -> None:
                 if app_mode == "combat":
                     state_str = "ACTIVE" if selected_unit.is_jamming else "PASSIVE"
                     sim.log(f"{selected_unit.callsign}: ECM set to {state_str}.")
+            elif action.get("type") == "toggle_radar" and selected_unit:
+                selected_unit.radar_active = not getattr(selected_unit, 'radar_active', True)
+                if app_mode == "combat":
+                    state_str = "ON" if selected_unit.radar_active else "OFF"
+                    sim.log(f"{selected_unit.callsign}: Radar emissions set to {state_str}.")
             elif action.get("type") == "toggle_roe" and selected_unit:
                 roes = ["FREE", "TIGHT", "HOLD"]
                 idx = roes.index(selected_unit.roe)
                 selected_unit.roe = roes[(idx + 1) % 3]
-            elif action.get("type") == "launch_parked":
+            elif action.get("type") == "select_parked":
                 p_uid = action["uid"]
                 p_unit = sim.get_unit_by_uid(p_uid)
-                if p_unit and p_unit.duty_state == "READY":
-                    p_unit.duty_state = "ACTIVE"
-                    p_unit.altitude_ft = p_unit.platform.cruise_alt_ft
-                    p_unit.target_altitude_ft = p_unit.platform.cruise_alt_ft
-                    
-                    base = sim.get_unit_by_uid(p_unit.home_uid)
-                    cap_lat = base.lat if base else p_unit.lat
-                    cap_lon = base.lon if base else p_unit.lon
-                    
-                    p_unit.mission = Mission(
-                        name=f"{p_unit.callsign} Local CAP",
-                        mission_type="CAP",
-                        target_lat=cap_lat,
-                        target_lon=cap_lon,
-                        radius_km=30.0,
-                        altitude_ft=p_unit.platform.cruise_alt_ft,
-                        rtb_fuel_pct=0.25
-                    )
-                    p_unit.clear_waypoints()
-                    if app_mode == "combat":
-                        sim.log(f"{p_unit.callsign}: Launched for local CAP.")
+                if p_unit:
+                    if selected_unit: selected_unit.selected = False
+                    selected_unit = p_unit
+                    selected_unit.selected = True
+                    # init default mission for config targeting
+                    if not selected_unit.mission:
+                        base = sim.get_unit_by_uid(selected_unit.home_uid)
+                        lat, lon = (base.lat, base.lon) if base else (selected_unit.lat, selected_unit.lon)
+                        selected_unit.mission = Mission(f"{selected_unit.callsign} Alpha", "CAP", lat, lon, 30.0, selected_unit.platform.cruise_alt_ft, 0.25)
+                    ui.rebuild_weapon_buttons(selected_unit, sim)
+            elif action.get("type") == "cycle_mission" and selected_unit:
+                msns = ["CAP", "STRIKE", "SEAD"]
+                cur = selected_unit.mission.mission_type if selected_unit.mission else "CAP"
+                nxt = msns[(msns.index(cur) + 1) % len(msns)]
+                if selected_unit.mission:
+                    selected_unit.mission.mission_type = nxt
+            elif action.get("type") == "cycle_loadout" and selected_unit:
+                role = selected_unit.cycle_loadout(db)
+                ui.rebuild_weapon_buttons(selected_unit, sim)
+            elif action.get("type") == "launch_unit" and selected_unit:
+                if selected_unit.duty_state == "READY":
+                    selected_unit.duty_state = "ACTIVE"
+                    selected_unit.altitude_ft = selected_unit.platform.cruise_alt_ft
+                    selected_unit.target_altitude_ft = selected_unit.platform.cruise_alt_ft
+                    selected_unit.clear_waypoints()
+                    sim.log(f"{selected_unit.callsign}: Launched for {selected_unit.mission.mission_type if selected_unit.mission else 'Patrol'}.")
                     ui.rebuild_weapon_buttons(selected_unit, sim)
             elif action.get("type") == "assign_cap" and selected_unit:
                 assigning_mission = "CAP"
@@ -606,6 +634,7 @@ def main() -> None:
                     elif selected_unit:
                         selected_unit.selected = False
                         selected_unit = None
+                        ui.rebuild_weapon_buttons(None, sim)
                 elif event.key == pygame.K_DELETE and selected_unit:
                     selected_unit.clear_waypoints()
                     if app_mode == "combat": 
@@ -718,6 +747,14 @@ def main() -> None:
                     elif selected_unit and app_mode == "combat":
                         if assigning_mission:
                             assigning_mission = None
+                        elif selected_unit.duty_state == "READY":
+                            lat, lon = cam.screen_to_world(*event.pos)
+                            if not selected_unit.mission:
+                                selected_unit.mission = Mission("Configured Mission", "CAP", lat, lon, 30.0, selected_unit.platform.cruise_alt_ft, 0.25)
+                            else:
+                                selected_unit.mission.target_lat = lat
+                                selected_unit.mission.target_lon = lon
+                            sim.log(f"{selected_unit.callsign}: target waypoint set.")
                         else:
                             if selected_unit.duty_state == "READY":
                                 selected_unit.duty_state = "ACTIVE"
@@ -725,7 +762,11 @@ def main() -> None:
                             _handle_right_click(event.pos, cam, sim, selected_unit, db, ui, show_all_enemies)
 
                 elif event.button in (4, 5):
-                    cam.zoom_by(1 if event.button == 4 else -1)
+                    mx, my = event.pos
+                    # If hovering over the UI panel, zoom to center instead
+                    if my > cur_map_h:
+                        mx, my = cam.win_w / 2, cur_map_h / 2
+                    cam.zoom_by(1 if event.button == 4 else -1, mx, my)
 
             elif event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1: 
@@ -736,7 +777,10 @@ def main() -> None:
                     cam.pan(event.rel[0], event.rel[1])
                     
             elif event.type == pygame.MOUSEWHEEL:
-                cam.zoom_by(event.y)
+                mx, my = pygame.mouse.get_pos()
+                if my > cur_map_h:
+                    mx, my = cam.win_w / 2, cur_map_h / 2
+                cam.zoom_by(event.y, mx, my)
 
         if app_mode == "combat":
             sim.update(real_delta)

@@ -82,6 +82,10 @@ class Renderer:
             
             if unit.side == "Red" and not show_all_enemies: 
                 continue         
+            
+            # Hide the ring if the radar is toggled off
+            if not getattr(unit, 'radar_active', True):
+                continue
                 
             sx, sy = world_to_screen(unit.lat, unit.lon, cam_px, cam_py, zoom, win_w, map_h)
             

@@ -63,16 +63,22 @@ def classify_detection(sensor_unit: "Unit",
     if dist_km > horizon_km:
         return "NONE"
 
-    # 2. RCS-adjusted detection range & Damage Penalty
-    rcs_ratio  = max(target.platform.rcs_m2, 0.01) / RCS_REFERENCE_M2
-    R_rcs      = (sensor_unit.platform.radar_range_km * sensor_unit.performance_mult) * (rcs_ratio ** 0.25)
+    # If radar is disabled, limit to visual/optical range ONLY
+    if not getattr(sensor_unit, 'radar_active', True):
+        R_effective = 8.0  
+        if dist_km > R_effective:
+            return "NONE"
+    else:
+        # 2. RCS-adjusted detection range
+        rcs_ratio  = max(target.platform.rcs_m2, 0.01) / RCS_REFERENCE_M2
+        R_rcs      = (sensor_unit.platform.radar_range_km * sensor_unit.performance_mult) * (rcs_ratio ** 0.25)
 
-    # 3. Active ECM Jamming Reduction
-    ecm_penalty = 0.0
-    if target.is_jamming and dist_km > BURNTHROUGH_RANGE_KM:
-        ecm_penalty = target.platform.ecm_rating * ECM_SCALE
-        
-    R_effective = R_rcs * max(0.0, 1.0 - ecm_penalty)
+        # 3. Active ECM Jamming Reduction
+        ecm_penalty = 0.0
+        if target.is_jamming and dist_km > BURNTHROUGH_RANGE_KM:
+            ecm_penalty = target.platform.ecm_rating * ECM_SCALE
+            
+        R_effective = R_rcs * max(0.0, 1.0 - ecm_penalty)
 
     if R_effective <= 0.0 or dist_km > R_effective * FAINT_BAND:
         return "NONE"

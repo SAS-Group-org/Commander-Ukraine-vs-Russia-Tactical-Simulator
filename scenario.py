@@ -27,7 +27,8 @@ class WeaponDef:
     domain:       str     
     damage:       float   
     reload_time_s: float  
-    eccm:         float   
+    eccm:         float
+    inevadable:   bool = False
 
 @dataclass(frozen=True)
 class PlatformDef:
@@ -94,6 +95,11 @@ class Missile:
             dist_penalty = (self.launch_dist / 50.0) * 0.10
             pk = self.wdef.base_pk - dist_penalty 
 
+            # ARM seeker logic: heavy penalty if target turned off its radar
+            if self.wdef.seeker == "ARM":
+                if not getattr(self.target, 'radar_active', True):
+                    pk -= 0.60 
+
             if self.target.is_jamming and self.target.platform.ecm_rating > 0:
                 if self.wdef.seeker in ("ARH", "SARH"):
                     ecm_effect = max(0.0, self.target.platform.ecm_rating - self.wdef.eccm)
@@ -106,7 +112,11 @@ class Missile:
                 self.target.flare -= 1
                 pk -= FLARE_PK_PENALTY
 
-            pk = max(MIN_PK, min(MAX_PK, pk))
+            if self.wdef.inevadable:
+                pk = 1.0  
+            else:
+                pk = max(MIN_PK, min(MAX_PK, pk))
+                
             if random.random() <= pk:
                 self.target.take_damage(self.wdef.damage)
                 self.status = "HIT"
@@ -146,6 +156,7 @@ class Unit:
         self.side       = side
         self.platform   = platform
         self.loadout    = dict(loadout)
+        self.current_loadout_role: str = "DEFAULT"
         self.image_path = image_path
         self.fuel_kg    = platform.fuel_capacity_kg
 
@@ -287,19 +298,71 @@ class Unit:
             return True
         return False
 
+    def cycle_loadout(self, db: "Database") -> str:
+        roles = ["DEFAULT", "A2A", "A2G", "SEAD"]
+        idx = (roles.index(self.current_loadout_role) + 1) % len(roles)
+        new_role = roles[idx]
+        self.current_loadout_role = new_role
+        
+        if new_role == "DEFAULT":
+            self.loadout = dict(self.platform.default_loadout)
+            return new_role
+            
+        new_loadout = {}
+        guns = {w: 1 for w in self.platform.available_weapons if db.weapons.get(w) and db.weapons[w].is_gun}
+        new_loadout.update(guns)
+        
+        aw = [w for w in self.platform.available_weapons if db.weapons.get(w) and not db.weapons[w].is_gun]
+        
+        if new_role == "A2A":
+            a2a = [w for w in aw if db.weapons.get(w) and db.weapons[w].domain == "air"]
+            for w in a2a: new_loadout[w] = 4 
+        elif new_role == "A2G":
+            a2g = [w for w in aw if db.weapons.get(w) and db.weapons[w].domain == "ground" and db.weapons[w].seeker != "ARM"]
+            a2a = [w for w in aw if db.weapons.get(w) and db.weapons[w].domain == "air"]
+            for w in a2g: new_loadout[w] = 4
+            if a2a: new_loadout[a2a[0]] = 2 
+        elif new_role == "SEAD":
+            arms = [w for w in aw if db.weapons.get(w) and db.weapons[w].seeker == "ARM"]
+            a2a = [w for w in aw if db.weapons.get(w) and db.weapons[w].domain == "air"]
+            if arms:
+                for w in arms: new_loadout[w] = 4
+            else:
+                a2g = [w for w in aw if db.weapons.get(w) and db.weapons[w].domain == "ground"]
+                for w in a2g: new_loadout[w] = 4
+            if a2a: new_loadout[a2a[0]] = 2
+            
+        self.loadout = new_loadout
+        self.weapon_cooldowns = {k: 0.0 for k in self.loadout.keys()}
+        return new_role
+
     def best_weapon_for(self, db: "Database", target: "Unit") -> Optional[str]:
         target_is_air = target.platform.unit_type in ("fighter", "attacker", "helicopter")
         best_key   = None
-        best_range = -1.0
+        best_score = -1.0
+        is_sead = self.mission and self.mission.mission_type == "SEAD"
+        
         for wkey, qty in self.loadout.items():
             if qty <= 0: continue
             wdef = db.weapons.get(wkey)
             if not wdef: continue
             if wdef.domain == "air" and not target_is_air: continue
             if wdef.domain == "ground" and target_is_air: continue
-            if wdef.range_km > best_range:
+            
+            # ARM Targeting Constraints
+            if wdef.seeker == "ARM":
+                if not getattr(target, 'radar_active', True):
+                    continue 
+            
+            score = wdef.range_km
+            if is_sead and wdef.seeker == "ARM":
+                score += 1000 
+            elif not target_is_air and target.platform.unit_type in ("sam", "airbase") and wdef.seeker == "ARM":
+                score += 500
+                
+            if score > best_score:
                 best_key   = wkey
-                best_range = wdef.range_km
+                best_score = score
         return best_key
 
     def trigger_flash(self, frames: int = 12) -> None:
@@ -322,13 +385,10 @@ class Database:
         self.weapons:   dict[str, WeaponDef]   = {}
         self.platforms: dict[str, PlatformDef] = {}
 
-        # Load from external JSON
         raw_weapons = {}
         if weapons_path and os.path.exists(weapons_path):
             with open(weapons_path, encoding="utf-8") as fh:
                 raw_weapons = json.load(fh)
-        else:
-            print(f"[WARNING] Weapons file not found or path is empty: {weapons_path}")
 
         for key, d in raw_weapons.items():
             self.weapons[key] = WeaponDef(
@@ -345,15 +405,13 @@ class Database:
                 damage       = float(d.get("damage", 0.6)),
                 reload_time_s = float(d.get("reload_time_s", 0.5 if d.get("is_gun") else 3.0)),
                 eccm         = float(d.get("eccm", 0.1)),
+                inevadable   = d.get("inevadable", False)
             )
 
-        # Load from external JSON
         raw_platforms = {}
         if units_path and os.path.exists(units_path):
             with open(units_path, encoding="utf-8") as fh:
                 raw_platforms = json.load(fh)
-        else:
-            print(f"[WARNING] Units file not found or path is empty: {units_path}")
 
         for key, d in raw_platforms.items():
             self.platforms[key] = PlatformDef(

@@ -46,13 +46,11 @@ class SimulationEngine:
         self.log(f"Scenario loaded — {len(units)} units ready.")
 
     def get_unit_by_uid(self, uid: str) -> Optional[Unit]:
-        """Fixed missing attribute error."""
         for u in self.units:
             if u.uid == uid: return u
         return None
 
     def set_compression(self, factor: int) -> None:
-        """Fixed missing attribute error."""
         self.time_compression = factor
         self.paused = (factor == 0)
         self.log("PAUSED" if self.paused else f"Time compression → {factor}×")
@@ -80,13 +78,10 @@ class SimulationEngine:
         self._tick_flashes()
 
     def _unit_defensive_ai(self, sim_delta: float) -> None:
-        """CMO-style Defensive AI: Handles break turns, speed bleed, and CMs."""
-        
         for u in self.units:
             if not u.alive or u.platform.unit_type not in ("fighter", "attacker", "helicopter"):
                 continue
 
-            # 1. Threat Detection (15km reaction window)
             incoming = [m for m in self.missiles if m.active and m.target == u]
             
             if incoming:
@@ -96,7 +91,6 @@ class SimulationEngine:
                 threat = min(incoming, key=lambda m: slant_range_km(u.lat, u.lon, u.altitude_ft, m.lat, m.lon, m.altitude_ft))
                 dist = slant_range_km(u.lat, u.lon, u.altitude_ft, threat.lat, threat.lon, threat.altitude_ft)
 
-                # 2. Seeker-Specific Countermeasures
                 if dist < 15.0:
                     if threat.wdef.seeker in ("ARH", "SARH") and u.chaff > 0:
                         if random.random() < (0.25 * sim_delta):
@@ -107,16 +101,12 @@ class SimulationEngine:
                             u.flare -= 1
                             if u.side == "Blue": self.log(f"{u.callsign}: Flaring!")
 
-                # 3. Defensive Break Turn & Speed Bleed
                 current_spd = u.platform.speed_kmh * u.performance_mult
                 if current_spd > _MIN_EVASION_SPEED_KMH:
                     threat_brg = bearing(u.lat, u.lon, threat.lat, threat.lon)
                     u.heading = (threat_brg + 90) % 360 
-                    
-                    # Simulated speed loss from high G maneuvering
                     speed_loss = current_spd * _G_LIMIT_BLEED_FACTOR * sim_delta
                 
-                # 4. Defensive Descent
                 if u.altitude_ft > 2000:
                     u.target_altitude_ft = max(1000, u.altitude_ft - 5000)
 
@@ -124,7 +114,6 @@ class SimulationEngine:
                     u.clear_waypoints() 
 
             else:
-                # 5. Mission Recovery (after 8s clear skies)
                 if u.is_evading and (self.game_time - u.last_evasion_time) > 8.0:
                     u.is_evading = False
                     if u.mission:
@@ -208,7 +197,23 @@ class SimulationEngine:
 
     def _auto_engage_shooter(self, shooter: Unit, targets: list[Unit], contacts: dict[str, Contact]) -> None:
         if shooter.roe == "HOLD": return
-        for host in targets:
+        
+        # SEAD AI Logic
+        if shooter.mission and shooter.mission.mission_type == "SEAD":
+            valid_targets = []
+            for host in targets:
+                contact = contacts.get(host.uid)
+                if not contact or contact.classification == "FAINT": continue
+                score = 0
+                if host.platform.unit_type in ("sam", "airbase"): score += 100
+                if getattr(host, 'radar_active', False): score += 50
+                valid_targets.append((score, host))
+            valid_targets.sort(key=lambda x: x[0], reverse=True)
+            targets_to_check = [t[1] for t in valid_targets]
+        else:
+            targets_to_check = targets
+            
+        for host in targets_to_check:
             contact = contacts.get(host.uid)
             if not contact or contact.classification == "FAINT": continue
             wkey = shooter.best_weapon_for(self.db, host)
