@@ -88,29 +88,38 @@ class SimulationEngine:
                 u.is_evading = True
                 u.last_evasion_time = self.game_time
                 
-                threat = min(incoming, key=lambda m: slant_range_km(u.lat, u.lon, u.altitude_ft, m.lat, m.lon, m.altitude_ft))
-                dist = slant_range_km(u.lat, u.lon, u.altitude_ft, threat.lat, threat.lon, threat.altitude_ft)
+                # Auto-activate ECM when under fire
+                if getattr(u.platform, 'ecm_rating', 0.0) > 0 and not u.is_jamming:
+                    u.is_jamming = True
+                    if u.side == "Blue": self.log(f"{u.callsign}: Jammer active!")
+                
+                # Evaluate countermeasures uniquely for ALL incoming threats
+                for threat in incoming:
+                    dist = slant_range_km(u.lat, u.lon, u.altitude_ft, threat.lat, threat.lon, threat.altitude_ft)
+                    if dist < 15.0:
+                        if threat.wdef.seeker in ("ARH", "SARH") and u.chaff > 0:
+                            if random.random() < (0.25 * sim_delta):
+                                u.chaff -= 1
+                                if u.side == "Blue": self.log(f"{u.callsign}: Chaff away!")
+                        elif threat.wdef.seeker == "IR" and u.flare > 0:
+                            if random.random() < (0.35 * sim_delta):
+                                u.flare -= 1
+                                if u.side == "Blue": self.log(f"{u.callsign}: Flaring!")
 
-                if dist < 15.0:
-                    if threat.wdef.seeker in ("ARH", "SARH") and u.chaff > 0:
-                        if random.random() < (0.25 * sim_delta):
-                            u.chaff -= 1
-                            if u.side == "Blue": self.log(f"{u.callsign}: Chaff away!")
-                    elif threat.wdef.seeker == "IR" and u.flare > 0:
-                        if random.random() < (0.35 * sim_delta):
-                            u.flare -= 1
-                            if u.side == "Blue": self.log(f"{u.callsign}: Flaring!")
+                # Evade physically based on the single closest threat
+                closest_threat = min(incoming, key=lambda m: slant_range_km(u.lat, u.lon, u.altitude_ft, m.lat, m.lon, m.altitude_ft))
+                closest_dist = slant_range_km(u.lat, u.lon, u.altitude_ft, closest_threat.lat, closest_threat.lon, closest_threat.altitude_ft)
 
                 current_spd = u.platform.speed_kmh * u.performance_mult
                 if current_spd > _MIN_EVASION_SPEED_KMH:
-                    threat_brg = bearing(u.lat, u.lon, threat.lat, threat.lon)
+                    threat_brg = bearing(u.lat, u.lon, closest_threat.lat, closest_threat.lon)
                     u.heading = (threat_brg + 90) % 360 
                     speed_loss = current_spd * _G_LIMIT_BLEED_FACTOR * sim_delta
                 
                 if u.altitude_ft > 2000:
                     u.target_altitude_ft = max(1000, u.altitude_ft - 5000)
 
-                if u.waypoints and dist < 8.0:
+                if u.waypoints and closest_dist < 8.0:
                     u.clear_waypoints() 
 
             else:
@@ -230,8 +239,14 @@ class SimulationEngine:
                 if m.status == "HIT":
                     m.target.trigger_flash()
                     if not m.target.alive: self.log(f"SPLASH {m.target.callsign}!")
-                else:
-                    self.log(f"{m.target.callsign} evaded.")
+                elif m.status == "MISSED":
+                    # Differentiate the log message based on unit type
+                    if m.target.platform.unit_type in ("fighter", "attacker", "helicopter"):
+                        self.log(f"{m.target.callsign} evaded.")
+                    else:
+                        self.log(f"Missile missed {m.target.callsign}.")
+                elif m.status == "LOST":
+                    pass
 
     def _update_contacts(self) -> None:
         blue_active = [u for u in self.units if u.side == "Blue" and u.alive]

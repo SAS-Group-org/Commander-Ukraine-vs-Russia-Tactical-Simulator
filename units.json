@@ -25,48 +25,48 @@
   },
   "MiG-29UA": {
     "display_name": "MiG-29 Fulcrum", "type": "fighter", "speed_kmh": 2400, "ceiling_ft": 57000, "ecm_rating": 0.20,
-    "radar": {"type": "N019 Sapfir", "range_km": 150, "modes": ["air"]}, "default_loadout": {"R-27R": 2, "R-27T": 2, "R-73": 4, "GSh-30-1": 1},
-    "available_weapons": ["R-27R","R-27T","R-73","AIM-9M","GSh-30-1"], "fleet_count": 45, "player_side": "Blue", "rcs_m2": 5.0, "cruise_alt_ft": 30000
+    "radar": {"type": "N019 Sapfir", "range_km": 150, "modes": ["air"]}, "default_loadout": {"R-27R": 2, "R-27T": 2, "R-73": 4, "GSh-30-1": 2000},
+    "available_weapons": ["R-27R", "R-27T", "R-73", "R-60M", "AIM-9M", "AGM-88", "JDAM_ER", "AASM_Hammer", "GSh-30-1"], "fleet_count": 45, "player_side": "Blue", "rcs_m2": 5.0, "cruise_alt_ft": 30000
   },
   "Su-27UA": {
     "display_name": "Su-27 Flanker-B", "type": "fighter", "speed_kmh": 2500, "ceiling_ft": 59000, "ecm_rating": 0.25,
-    "radar": {"type": "N001 Mech", "range_km": 200, "modes": ["air","surface"]}, "default_loadout": {"R-27R": 4, "R-27T": 2, "R-73": 4, "GSh-30-1": 1},
-    "available_weapons": ["R-27R","R-27T","R-73","AIM-9M","GSh-30-1"], "fleet_count": 23, "player_side": "Blue", "rcs_m2": 5.0, "cruise_alt_ft": 30000
+    "radar": {"type": "N001 Mech", "range_km": 200, "modes": ["air","surface"]}, "default_loadout": {"R-27R": 4, "R-27T": 2, "R-73": 4, "GSh-30-1": 2000},
+    "available_weapons": ["R-27R", "R-27T", "R-73", "R-60M", "AIM-9M", "AGM-88", "JDAM_ER", "GSh-30-1"], "fleet_count": 23, "player_side": "Blue", "rcs_m2": 5.0, "cruise_alt_ft": 30000
   },
   "F-16AM": {
     "display_name": "F-16AM Fighting Falcon (MLU)", "type": "fighter", "speed_kmh": 2150, "ceiling_ft": 50000, "ecm_rating": 0.22,
-    "radar": {"type": "AN/APG-66(V)2", "range_km": 130, "modes": ["air","surface"]}, "default_loadout": {"AIM-120C": 4, "AIM-9X": 2, "M61A1": 1},
-    "available_weapons": ["AIM-120C","AIM-9X","AIM-9M","M61A1"], "fleet_count": 23, "player_side": "Blue", "rcs_m2": 5.0, "cruise_alt_ft": 30000
+    "radar": {"type": "AN/APG-66(V)2", "range_km": 130, "modes": ["air","surface"]}, "default_loadout": {"AIM-120C": 4, "AIM-9X": 2, "M61A1": 2000},
+    "available_weapons": ["AIM-120C", "AIM-9X", "AIM-9M", "AGM-88", "JDAM_ER", "GBU-39", "AASM_Hammer", "M61A1"], "fleet_count": 23, "player_side": "Blue", "rcs_m2": 5.0, "cruise_alt_ft": 30000
   },
   "F-16UA": {
     "display_name": "F-16 Fighting Falcon (Block 52)", "type": "fighter", "speed_kmh": 2150, "ceiling_ft": 50000, "ecm_rating": 0.18,
-    "radar": {"type": "AN/APG-68(V)9", "range_km": 148, "modes": ["air","surface"]}, "default_loadout": {"AIM-120C": 6, "AIM-9X": 2, "M61A1": 1},
-    "available_weapons": ["AIM-120C","AIM-9X","AIM-9M","M61A1"], "fleet_count": 20, "player_side": "Blue", "rcs_m2": 5.0, "cruise_alt_ft": 30000
+    "radar": {"type": "AN/APG-68(V)9", "range_km": 148, "modes": ["air","surface"]}, "default_loadout": {"AIM-120C": 6, "AIM-9X": 2, "M61A1": 2000},
+    "available_weapons": ["AIM-120C", "AIM-9X", "AIM-9M", "AGM-88", "JDAM_ER", "GBU-39", "AASM_Hammer", "M61A1"], "fleet_count": 20, "player_side": "Blue", "rcs_m2": 5.0, "cruise_alt_ft": 30000
   },
   "F-16A": {
     "display_name": "F-16A Fighting Falcon", "type": "fighter", "speed_kmh": 2150, "ceiling_ft": 50000, "ecm_rating": 0.15,
-    "radar": {"type": "AN/APG-66", "range_km": 120, "modes": ["air","surface"]}, "default_loadout": {"AIM-120C": 4, "AIM-9X": 2, "M61A1": 1},
-    "available_weapons": ["AIM-120C","AIM-9X","AIM-9M","M61A1"], "fleet_count": 12, "player_side": "Blue", "rcs_m2": 5.0, "cruise_alt_ft": 30000
+    "radar": {"type": "AN/APG-66", "range_km": 120, "modes": ["air","surface"]}, "default_loadout": {"AIM-120C": 4, "AIM-9X": 2, "M61A1": 2000},
+    "available_weapons": ["AIM-120C", "AIM-9X", "AIM-9M", "AGM-88", "JDAM_ER", "GBU-39", "AASM_Hammer", "M61A1"], "fleet_count": 12, "player_side": "Blue", "rcs_m2": 5.0, "cruise_alt_ft": 30000
   },
   "F-16C": {
     "display_name": "F-16C Fighting Falcon", "type": "fighter", "speed_kmh": 2150, "ceiling_ft": 50000, "ecm_rating": 0.18,
-    "radar": {"type": "AN/APG-68", "range_km": 148, "modes": ["air","surface"]}, "default_loadout": {"AIM-120C": 6, "AIM-9X": 2, "M61A1": 1},
-    "available_weapons": ["AIM-120C","AIM-9X","AIM-9M","M61A1"], "fleet_count": 8, "player_side": "Blue", "rcs_m2": 5.0, "cruise_alt_ft": 30000
+    "radar": {"type": "AN/APG-68", "range_km": 148, "modes": ["air","surface"]}, "default_loadout": {"AIM-120C": 6, "AIM-9X": 2, "M61A1": 2000},
+    "available_weapons": ["AIM-120C", "AIM-9X", "AIM-9M", "AGM-88", "JDAM_ER", "GBU-39", "AASM_Hammer", "M61A1"], "fleet_count": 8, "player_side": "Blue", "rcs_m2": 5.0, "cruise_alt_ft": 30000
   },
   "Su-25UA": {
     "display_name": "Su-25 Frogfoot (CAS)", "type": "attacker", "speed_kmh": 950,  "ceiling_ft": 23000, "ecm_rating": 0.15,
-    "radar": {"type": "Klen-PS (laser)", "range_km": 20, "modes": ["surface"]}, "default_loadout": {"R-60": 2, "S-8": 2, "GSh-30-2": 1},
-    "available_weapons": ["R-60","S-8","Kh-25ML","GSh-30-2"], "fleet_count": 19, "player_side": "Blue", "rcs_m2": 8.0, "cruise_alt_ft": 12000
+    "radar": {"type": "Klen-PS (laser)", "range_km": 20, "modes": ["surface"]}, "default_loadout": {"R-60M": 2, "S-8": 2, "GSh-30-2": 2000},
+    "available_weapons": ["R-60M", "S-8", "Kh-25ML", "Kh-29T", "GSh-30-2"], "fleet_count": 19, "player_side": "Blue", "rcs_m2": 8.0, "cruise_alt_ft": 12000
   },
   "Su-24M": {
     "display_name": "Su-24M Fencer-D (Strike)", "type": "attacker", "speed_kmh": 1700, "ceiling_ft": 36000, "ecm_rating": 0.18,
-    "radar": {"type": "Orion-A", "range_km": 50, "modes": ["surface"]}, "default_loadout": {"Kh-25ML": 4, "R-60": 2, "GSh-6-23": 1},
-    "available_weapons": ["Kh-25ML","R-60","GSh-6-23"], "fleet_count": 13, "player_side": "Blue", "rcs_m2": 8.0, "cruise_alt_ft": 12000
+    "radar": {"type": "Orion-A", "range_km": 50, "modes": ["surface"]}, "default_loadout": {"Kh-25ML": 4, "R-60M": 2, "GSh-6-23": 2000},
+    "available_weapons": ["Kh-25ML", "Kh-29T", "Kh-58", "Storm_Shadow", "R-60M", "GSh-6-23"], "fleet_count": 13, "player_side": "Blue", "rcs_m2": 8.0, "cruise_alt_ft": 12000
   },
   "Mirage2000-5F": {
     "display_name": "Mirage 2000-5F", "type": "fighter", "speed_kmh": 2530, "ceiling_ft": 59000, "ecm_rating": 0.28,
-    "radar": {"type": "RDY-2", "range_km": 185, "modes": ["air","surface"]}, "default_loadout": {"MICA-EM": 4, "MICA-IR": 2, "DEFA-554": 1},
-    "available_weapons": ["MICA-EM","MICA-IR","AIM-9M","DEFA-554"], "fleet_count": 6, "player_side": "Blue", "rcs_m2": 5.0, "cruise_alt_ft": 30000
+    "radar": {"type": "RDY-2", "range_km": 185, "modes": ["air","surface"]}, "default_loadout": {"MICA-EM": 4, "MICA-IR": 2, "DEFA-554": 2000},
+    "available_weapons": ["MICA-EM", "MICA-IR", "Storm_Shadow", "AASM_Hammer", "DEFA-554"], "fleet_count": 6, "player_side": "Blue", "rcs_m2": 5.0, "cruise_alt_ft": 30000
   },
   "Bayraktar_TB2": {
     "display_name": "Bayraktar TB2", "type": "attacker", "speed_kmh": 220, "ceiling_ft": 25000, "ecm_rating": 0.0,
@@ -85,8 +85,8 @@
   },
   "Mi-24V": {
     "display_name": "Mi-24V Hind-E (Attack)", "type": "helicopter", "speed_kmh": 320,  "ceiling_ft": 14800, "ecm_rating": 0.10,
-    "radar": {"type": "None", "range_km": 20, "modes": ["surface"]}, "default_loadout": {"Shturm": 4, "S-8": 2, "Yak-B": 1},
-    "available_weapons": ["Shturm","S-8","R-60","Yak-B"], "fleet_count": 38, "player_side": "Blue", "rcs_m2": 10.0, "cruise_alt_ft": 1500
+    "radar": {"type": "None", "range_km": 20, "modes": ["surface"]}, "default_loadout": {"Shturm": 4, "S-8": 2, "Yak-B": 1000},
+    "available_weapons": ["Shturm", "S-8", "R-60M", "Yak-B"], "fleet_count": 38, "player_side": "Blue", "rcs_m2": 10.0, "cruise_alt_ft": 1500
   },
   "Mi-2UA": {
     "display_name": "Mi-2 Hoplite (Light)", "type": "helicopter", "speed_kmh": 210,  "ceiling_ft": 13100, "ecm_rating": 0.03,
@@ -95,28 +95,28 @@
   },
   "Su-27S": {
     "display_name": "Su-27S Flanker-B", "type": "fighter", "speed_kmh": 2500, "ceiling_ft": 59000, "ecm_rating": 0.25,
-    "radar": {"type": "N001 Mech", "range_km": 240, "modes": ["air","surface"]}, "default_loadout": {"R-27R": 4, "R-27T": 2, "R-73": 4, "GSh-30-1": 1},
-    "available_weapons": ["R-27R","R-27T","R-73","GSh-30-1"], "fleet_count": 0, "player_side": "Red", "rcs_m2": 5.0, "cruise_alt_ft": 30000
+    "radar": {"type": "N001 Mech", "range_km": 240, "modes": ["air","surface"]}, "default_loadout": {"R-27R": 4, "R-27T": 2, "R-73": 4, "GSh-30-1": 2000},
+    "available_weapons": ["R-27R", "R-27T", "R-73", "R-60M", "Kh-29T", "Kh-58", "GSh-30-1"], "fleet_count": 0, "player_side": "Red", "rcs_m2": 5.0, "cruise_alt_ft": 30000
   },
   "Su-35S": {
     "display_name": "Su-35S Flanker-E", "type": "fighter", "speed_kmh": 2500, "ceiling_ft": 59000, "ecm_rating": 0.30,
-    "radar": {"type": "Irbis-E", "range_km": 300, "modes": ["air","surface"]}, "default_loadout": {"R-77": 4, "R-27T": 2, "R-73": 6, "GSh-30-1": 1},
-    "available_weapons": ["R-77","R-27R","R-27T","R-73","GSh-30-1"], "fleet_count": 0, "player_side": "Red", "rcs_m2": 5.0, "cruise_alt_ft": 30000
+    "radar": {"type": "Irbis-E", "range_km": 300, "modes": ["air","surface"]}, "default_loadout": {"R-77": 4, "R-27T": 2, "R-73": 6, "GSh-30-1": 2000},
+    "available_weapons": ["R-77", "R-27R", "R-27T", "R-73", "R-60M", "Kh-29T", "Kh-58", "GSh-30-1"], "fleet_count": 0, "player_side": "Red", "rcs_m2": 5.0, "cruise_alt_ft": 30000
   },
   "MiG-29A": {
     "display_name": "MiG-29A Fulcrum-A", "type": "fighter", "speed_kmh": 2400, "ceiling_ft": 57000, "ecm_rating": 0.20,
-    "radar": {"type": "N019 Sapfir", "range_km": 180, "modes": ["air"]}, "default_loadout": {"R-27R": 2, "R-27T": 2, "R-73": 4, "GSh-30-1": 1},
-    "available_weapons": ["R-27R","R-27T","R-73","GSh-30-1"], "fleet_count": 0, "player_side": "Red", "rcs_m2": 5.0, "cruise_alt_ft": 30000
+    "radar": {"type": "N019 Sapfir", "range_km": 180, "modes": ["air"]}, "default_loadout": {"R-27R": 2, "R-27T": 2, "R-73": 4, "GSh-30-1": 2000},
+    "available_weapons": ["R-27R", "R-27T", "R-73", "R-60M", "GSh-30-1"], "fleet_count": 0, "player_side": "Red", "rcs_m2": 5.0, "cruise_alt_ft": 30000
   },
   "Su-30SM": {
     "display_name": "Su-30SM Flanker-H", "type": "fighter", "speed_kmh": 2125, "ceiling_ft": 56700, "ecm_rating": 0.28,
-    "radar": {"type": "N011M BARS", "range_km": 280, "modes": ["air","surface"]}, "default_loadout": {"R-77": 4, "R-73": 4, "GSh-30-1": 1},
-    "available_weapons": ["R-77","R-27R","R-27T","R-73","GSh-30-1"], "fleet_count": 0, "player_side": "Red", "rcs_m2": 5.0, "cruise_alt_ft": 30000
+    "radar": {"type": "N011M BARS", "range_km": 280, "modes": ["air","surface"]}, "default_loadout": {"R-77": 4, "R-73": 4, "GSh-30-1": 2000},
+    "available_weapons": ["R-77", "R-27R", "R-27T", "R-73", "R-60M", "Kh-29T", "Kh-58", "GSh-30-1"], "fleet_count": 0, "player_side": "Red", "rcs_m2": 5.0, "cruise_alt_ft": 30000
   },
   "Su-25R": {
     "display_name": "Su-25 Frogfoot (Russian)", "type": "attacker", "speed_kmh": 950, "ceiling_ft": 23000, "ecm_rating": 0.12,
-    "radar": {"type": "Klen-PS (laser)", "range_km": 20, "modes": ["surface"]}, "default_loadout": {"R-60": 2, "S-8": 2, "GSh-30-2": 1},
-    "available_weapons": ["R-60", "S-8", "Kh-25ML", "GSh-30-2"], "fleet_count": 0, "player_side": "Red", "rcs_m2": 8.0, "cruise_alt_ft": 12000
+    "radar": {"type": "Klen-PS (laser)", "range_km": 20, "modes": ["surface"]}, "default_loadout": {"R-60M": 2, "S-8": 2, "GSh-30-2": 2000},
+    "available_weapons": ["R-60M", "S-8", "Kh-25ML", "Kh-29T", "GSh-30-2"], "fleet_count": 0, "player_side": "Red", "rcs_m2": 8.0, "cruise_alt_ft": 12000
   },
   "S-400": {
     "display_name": "S-400 Triumf (SA-21)", "type": "sam", "speed_kmh": 40, "ceiling_ft": 0, "ecm_rating": 0.10,

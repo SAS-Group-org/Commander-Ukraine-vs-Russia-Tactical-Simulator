@@ -1,0 +1,554 @@
+{
+  "deployment": [
+    {
+      "id": "blue_0001",
+      "platform": "AirbaseB",
+      "callsign": "ALPHA BASE 1",
+      "side": "Blue",
+      "lat": 50.081599,
+      "lon": 25.573212,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {},
+      "roe": "TIGHT",
+      "home_uid": "",
+      "duty_state": "ACTIVE",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0002",
+      "platform": "AirbaseB",
+      "callsign": "ALPHA BASE 2",
+      "side": "Blue",
+      "lat": 48.806637,
+      "lon": 25.326019,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {},
+      "roe": "TIGHT",
+      "home_uid": "",
+      "duty_state": "ACTIVE",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0003",
+      "platform": "AirbaseB",
+      "callsign": "ALPHA BASE 3",
+      "side": "Blue",
+      "lat": 48.589099,
+      "lon": 28.446136,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {},
+      "roe": "TIGHT",
+      "home_uid": "",
+      "duty_state": "ACTIVE",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0004",
+      "platform": "AirbaseB",
+      "callsign": "ALPHA BASE 4",
+      "side": "Blue",
+      "lat": 50.638792,
+      "lon": 29.63266,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {},
+      "roe": "TIGHT",
+      "home_uid": "",
+      "duty_state": "ACTIVE",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0005",
+      "platform": "AirbaseB",
+      "callsign": "ALPHA BASE 5",
+      "side": "Blue",
+      "lat": 49.681625,
+      "lon": 29.434906,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {},
+      "roe": "TIGHT",
+      "home_uid": "",
+      "duty_state": "ACTIVE",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0006",
+      "platform": "F-16AM",
+      "callsign": "VIPER 1",
+      "side": "Blue",
+      "lat": 50.081599,
+      "lon": 25.573212,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "AIM-120C": 4,
+        "AIM-9X": 2,
+        "M61A1": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0001",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0007",
+      "platform": "F-16AM",
+      "callsign": "VIPER 2",
+      "side": "Blue",
+      "lat": 50.081599,
+      "lon": 25.573212,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "AIM-120C": 4,
+        "AIM-9X": 2,
+        "M61A1": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0001",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0008",
+      "platform": "F-16AM",
+      "callsign": "VIPER 3",
+      "side": "Blue",
+      "lat": 50.081599,
+      "lon": 25.573212,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "AIM-120C": 4,
+        "AIM-9X": 2,
+        "M61A1": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0001",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0009",
+      "platform": "F-16AM",
+      "callsign": "VIPER 4",
+      "side": "Blue",
+      "lat": 50.081599,
+      "lon": 25.573212,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "AIM-120C": 4,
+        "AIM-9X": 2,
+        "M61A1": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0001",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0010",
+      "platform": "F-16AM",
+      "callsign": "VIPER 5",
+      "side": "Blue",
+      "lat": 50.081599,
+      "lon": 25.573212,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "AIM-120C": 4,
+        "AIM-9X": 2,
+        "M61A1": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0001",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0011",
+      "platform": "Su-25UA",
+      "callsign": "WARTHOG 1",
+      "side": "Blue",
+      "lat": 48.806637,
+      "lon": 25.326019,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "R-60": 2,
+        "S-8": 2,
+        "GSh-30-2": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0002",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0012",
+      "platform": "Su-25UA",
+      "callsign": "WARTHOG 2",
+      "side": "Blue",
+      "lat": 48.806637,
+      "lon": 25.326019,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "R-60": 2,
+        "S-8": 2,
+        "GSh-30-2": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0002",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0013",
+      "platform": "Su-25UA",
+      "callsign": "WARTHOG 3",
+      "side": "Blue",
+      "lat": 48.806637,
+      "lon": 25.326019,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "R-60": 2,
+        "S-8": 2,
+        "GSh-30-2": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0002",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0014",
+      "platform": "Su-25UA",
+      "callsign": "WARTHOG 4",
+      "side": "Blue",
+      "lat": 48.806637,
+      "lon": 25.326019,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "R-60": 2,
+        "S-8": 2,
+        "GSh-30-2": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0002",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0015",
+      "platform": "Su-25UA",
+      "callsign": "WARTHOG 5",
+      "side": "Blue",
+      "lat": 48.806637,
+      "lon": 25.326019,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "R-60": 2,
+        "S-8": 2,
+        "GSh-30-2": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0002",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0016",
+      "platform": "Mirage2000-5F",
+      "callsign": "ANGEL 1",
+      "side": "Blue",
+      "lat": 48.589099,
+      "lon": 28.446136,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "MICA-EM": 4,
+        "MICA-IR": 2,
+        "DEFA-554": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0003",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0017",
+      "platform": "Mirage2000-5F",
+      "callsign": "ANGEL 2",
+      "side": "Blue",
+      "lat": 48.589099,
+      "lon": 28.446136,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "MICA-EM": 4,
+        "MICA-IR": 2,
+        "DEFA-554": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0003",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0018",
+      "platform": "Mirage2000-5F",
+      "callsign": "ANGEL 3",
+      "side": "Blue",
+      "lat": 48.589099,
+      "lon": 28.446136,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "MICA-EM": 4,
+        "MICA-IR": 2,
+        "DEFA-554": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0003",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0019",
+      "platform": "Mirage2000-5F",
+      "callsign": "ANGEL 4",
+      "side": "Blue",
+      "lat": 48.589099,
+      "lon": 28.446136,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "MICA-EM": 4,
+        "MICA-IR": 2,
+        "DEFA-554": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0003",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0020",
+      "platform": "Mirage2000-5F",
+      "callsign": "ANGEL 5",
+      "side": "Blue",
+      "lat": 48.589099,
+      "lon": 28.446136,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "MICA-EM": 4,
+        "MICA-IR": 2,
+        "DEFA-554": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0003",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0021",
+      "platform": "F-16UA",
+      "callsign": "FALCON 1",
+      "side": "Blue",
+      "lat": 49.681625,
+      "lon": 29.434906,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "AIM-120C": 6,
+        "AIM-9X": 2,
+        "M61A1": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0005",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0022",
+      "platform": "F-16UA",
+      "callsign": "FALCON 2",
+      "side": "Blue",
+      "lat": 49.681625,
+      "lon": 29.434906,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "AIM-120C": 6,
+        "AIM-9X": 2,
+        "M61A1": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0005",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0023",
+      "platform": "F-16UA",
+      "callsign": "FALCON 3",
+      "side": "Blue",
+      "lat": 49.681625,
+      "lon": 29.434906,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "AIM-120C": 6,
+        "AIM-9X": 2,
+        "M61A1": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0005",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0024",
+      "platform": "F-16UA",
+      "callsign": "FALCON 4",
+      "side": "Blue",
+      "lat": 49.681625,
+      "lon": 29.434906,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "AIM-120C": 6,
+        "AIM-9X": 2,
+        "M61A1": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0005",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0025",
+      "platform": "F-16UA",
+      "callsign": "FALCON 5",
+      "side": "Blue",
+      "lat": 49.681625,
+      "lon": 29.434906,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "AIM-120C": 6,
+        "AIM-9X": 2,
+        "M61A1": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0005",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0026",
+      "platform": "Mi-24V",
+      "callsign": "HIND 1",
+      "side": "Blue",
+      "lat": 50.638792,
+      "lon": 29.63266,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "Shturm": 4,
+        "S-8": 2,
+        "Yak-B": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0004",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0027",
+      "platform": "Mi-24V",
+      "callsign": "HIND 2",
+      "side": "Blue",
+      "lat": 50.638792,
+      "lon": 29.63266,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "Shturm": 4,
+        "S-8": 2,
+        "Yak-B": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0004",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0028",
+      "platform": "Mi-24V",
+      "callsign": "HIND 3",
+      "side": "Blue",
+      "lat": 50.638792,
+      "lon": 29.63266,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "Shturm": 4,
+        "S-8": 2,
+        "Yak-B": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0004",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0029",
+      "platform": "Mi-24V",
+      "callsign": "HIND 4",
+      "side": "Blue",
+      "lat": 50.638792,
+      "lon": 29.63266,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "Shturm": 4,
+        "S-8": 2,
+        "Yak-B": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0004",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    },
+    {
+      "id": "blue_0030",
+      "platform": "Mi-24V",
+      "callsign": "HIND 5",
+      "side": "Blue",
+      "lat": 50.638792,
+      "lon": 29.63266,
+      "image_path": "assets/blue_jet.png",
+      "loadout": {
+        "Shturm": 4,
+        "S-8": 2,
+        "Yak-B": 1
+      },
+      "roe": "TIGHT",
+      "home_uid": "blue_0004",
+      "duty_state": "READY",
+      "duty_timer": 0.0,
+      "waypoints": []
+    }
+  ]
+}

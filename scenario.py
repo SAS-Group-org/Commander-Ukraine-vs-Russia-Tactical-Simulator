@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 import pygame
 
-from constants import MIN_PK, MAX_PK, MISSILE_TRAIL_LEN, CHAFF_PK_PENALTY, FLARE_PK_PENALTY
+from constants import MIN_PK, MAX_PK, MISSILE_TRAIL_LEN, CHAFF_PK_PENALTY, FLARE_PK_PENALTY, BURNTHROUGH_RANGE_KM
 from geo import haversine, bearing, slant_range_km
 
 @dataclass(frozen=True)
@@ -81,9 +81,11 @@ class Missile:
 
     def update(self, sim_delta: float) -> None:
         if not self.active: return
+        
+        # If target is destroyed by another missile, mark as LOST, not MISSED.
         if not self.target.alive:
             self.active = False
-            self.status = "MISSED"
+            self.status = "LOST"
             return
 
         self.trail.append((self.lat, self.lon))
@@ -92,7 +94,10 @@ class Missile:
         dist        = slant_range_km(self.lat, self.lon, self.altitude_ft, self.target.lat, self.target.lon, self.target.altitude_ft)
 
         if dist <= move_dist:
-            dist_penalty = (self.launch_dist / 50.0) * 0.10
+            # Scale penalty by the weapon's maximum range.
+            range_fraction = self.launch_dist / max(1.0, self.wdef.range_km)
+            dist_penalty = range_fraction * 0.15
+            
             pk = self.wdef.base_pk - dist_penalty 
 
             # ARM seeker logic: heavy penalty if target turned off its radar
@@ -100,10 +105,12 @@ class Missile:
                 if not getattr(self.target, 'radar_active', True):
                     pk -= 0.60 
 
+            # ECM penalty for radar-guided missiles (only if outside burn-through range)
             if self.target.is_jamming and self.target.platform.ecm_rating > 0:
-                if self.wdef.seeker in ("ARH", "SARH"):
-                    ecm_effect = max(0.0, self.target.platform.ecm_rating - self.wdef.eccm)
-                    pk -= ecm_effect
+                if self.launch_dist > BURNTHROUGH_RANGE_KM:
+                    if self.wdef.seeker in ("ARH", "SARH"):
+                        ecm_effect = max(0.0, self.target.platform.ecm_rating - self.wdef.eccm)
+                        pk -= ecm_effect
 
             if self.wdef.seeker in ("ARH", "SARH") and self.target.chaff > 0:
                 self.target.chaff -= 1
@@ -135,13 +142,26 @@ class Missile:
             self.altitude_ft += dalt * ratio
 
     def estimated_pk(self) -> float:
-        dist         = slant_range_km(self.lat, self.lon, self.altitude_ft, self.target.lat, self.target.lon, self.target.altitude_ft)
-        dist_penalty = (dist / 50.0) * 0.10
+        dist = slant_range_km(self.lat, self.lon, self.altitude_ft, self.target.lat, self.target.lon, self.target.altitude_ft)
+        
+        # Ensure estimated_pk mirrors the exact same scaled logic
+        range_fraction = dist / max(1.0, self.wdef.range_km)
+        dist_penalty = range_fraction * 0.15
+        
         pk = self.wdef.base_pk - dist_penalty
+        
+        # Mirror the ARM seeker penalty so the UI accurately reflects radar shutdowns
+        if self.wdef.seeker == "ARM":
+            if not getattr(self.target, 'radar_active', True):
+                pk -= 0.60
+                
+        # ECM penalty for radar-guided missiles (only if outside burn-through range)
         if self.target.is_jamming and self.target.platform.ecm_rating > 0:
-            if self.wdef.seeker in ("ARH", "SARH"):
-                ecm_effect = max(0.0, self.target.platform.ecm_rating - self.wdef.eccm)
-                pk -= ecm_effect
+            if self.launch_dist > BURNTHROUGH_RANGE_KM:
+                if self.wdef.seeker in ("ARH", "SARH"):
+                    ecm_effect = max(0.0, self.target.platform.ecm_rating - self.wdef.eccm)
+                    pk -= ecm_effect
+                    
         return max(MIN_PK, min(MAX_PK, pk))
 
 class Unit:
