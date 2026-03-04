@@ -1,39 +1,45 @@
-# WarSim — Real-Time Air & Ground Combat Simulator
-
-A physics-based, real-time wargame simulation built with Python and pygame, featuring authentic sensor modelling, electronic warfare, and multi-domain (air + ground) combat set in a modern eastern European theatre.
-
----
-
-## Features
-
-- **CARTO Voyager map** — Web-Mercator tile streaming with English labels, disk cache, and 4 concurrent download workers
-- **Physics-based sensor model** — Radar detection ranges adjusted for RCS, ECM jamming, radar horizon (earth curvature), and altitude
-- **Fog of War** — Blue player sees only what their sensors can detect; contacts degrade through FAINT → PROBABLE → CONFIRMED classifications
-- **Electronic warfare** — Active ECM jamming reduces enemy detection range; burn-through range forces detection at close quarters; chaff and flares defeat radar and IR-guided missiles
-- **Multi-domain combat** — Air-to-air, air-to-ground, and ground-to-ground engagements using domain-locked weapon rules
-- **Damage model** — Four-state health system (OK / LIGHT / MODERATE / HEAVY / KILLED) that degrades speed, radar performance, and climb rate
-- **Fuel system** — Units burn fuel in real time and automatically RTB at configurable bingo fuel levels; crashes if fuel reaches zero
-- **Airbase & duty cycle** — Aircraft park at airbases between sorties; on landing they rearm and refuel over a timed ground turn before becoming available again
-- **Salvo doctrine** — Single Last Shot (SLS) and free-salvo firing modes; AI fire cooldowns prevent spam
-- **Adjustable time compression** — PAUSE / 1× / 15× / 60× / 300×
-- **Scenario & deployment save/load** — JSON-based format for full state persistence
-- **Setup + combat modes** — Place units on the map in setup mode, then transition to live combat
+# Commander: Ukraine vs Russia — Tactical Simulator
+### A real-time air and ground combat wargame set in the Donbas theatre
 
 ---
 
 ## Requirements
 
-```
-Python 3.11+
-pygame
-pygame-gui
-requests
-```
+| Dependency | Version |
+|---|---|
+| Python | 3.11 or newer |
+| pygame | 2.x |
+| pygame_gui | 0.6.x |
+| requests | any recent |
 
 Install dependencies:
 
 ```bash
-pip install pygame pygame-gui requests
+pip install pygame pygame_gui requests
+```
+
+---
+
+## File Structure
+
+```
+project/
+├── main.py               # Entry point — run this
+├── simulation.py         # Core simulation engine
+├── scenario.py           # Data models, unit logic, save/load
+├── sensor.py             # Multi-spectrum sensor model
+├── renderer.py           # Map and unit drawing
+├── ui.py                 # Bottom panel UI
+├── geo.py                # Geo-math and terrain masking
+├── map_tiles.py          # Async OSM tile downloader
+├── constants.py          # Shared tuning values
+├── weapons.json          # Weapon definitions database
+├── units.json            # Platform definitions database
+├── assets/
+│   ├── blue_jet.png
+│   └── red_jet.png
+└── data/
+    └── scenarios/        # Auto-created on first launch
 ```
 
 ---
@@ -44,284 +50,265 @@ pip install pygame pygame-gui requests
 python main.py
 ```
 
-An optional scenario file path can be specified at launch. Without one, the game starts in **Setup Mode** so you can build your own deployment.
+On first launch the game will:
+1. Generate a fresh Red order-of-battle across Donbas, Luhansk, and Crimea and write it to `data/scenarios/ukraine_russia.json`.
+2. Begin downloading map tiles from CARTO in the background into `map_cache_en/`. The map will fill in over the first minute of play — this only happens once; tiles are cached to disk permanently.
+3. Open in **Setup Mode** so you can deploy Blue forces before the simulation starts.
+
+The window is fully resizable at any time.
 
 ---
 
 ## Game Modes
 
+The game has two modes that you switch between at any time.
+
 ### Setup Mode
-
-The bottom panel shows a unit roster. Select a platform, set a quantity, click **Place on Map**, then click a location on the map to deploy units. Right-clicking a placed unit removes it. When satisfied, click **Start Combat** to begin the simulation.
-
-Use **Save Deployment** and **Load Deployment** in the panel to persist Blue-side force compositions between sessions. You can also save the full scenario at any time with **Ctrl+S**.
+Deploy and configure your Blue force before the battle begins, or call in reinforcements during a pause mid-game. The simulation is frozen while in this mode.
 
 ### Combat Mode
-
-The simulation runs in real time. Units with assigned missions and waypoints will navigate autonomously. Select a Blue unit to issue orders from the bottom panel.
+The simulation runs in real time (or at compressed speed). You issue orders to individual units by selecting them on the map.
 
 ---
 
-## Controls
+## Setup Mode — Deploying Blue Forces
 
-| Input | Action |
+When the game opens you are in Setup Mode. The bottom panel shows your available Blue roster on the left.
+
+### Placing Units
+
+1. **Browse the roster** in the left column. Units are grouped by category (AWACS, Fixed-Wing, Rotary, Air Defense, Armor, etc.) and show their fleet count.
+2. **Click a unit type** in the roster to select it for placement. Enter a quantity in the number field if you want to place several at once.
+3. **Click a location on the map** to place the unit there.
+   - Aircraft and helicopters must be placed within 100 km of an existing Blue airbase. They will snap to the nearest one automatically.
+   - Ground units cannot be placed in water.
+4. Repeat until you are satisfied with your deployment.
+
+> **Tip:** Click **Auto-Deploy** to have the game automatically distribute a full Blue force across seven historical clusters — Kyiv, Lviv, Starokostiantyniv, Zhytomyr, Dnipro, Kherson, and Odesa.
+
+### Managing Placed Units
+
+| Action | How |
 |---|---|
-| **Left-click** (map) | Select a unit |
-| **Right-click** (map, combat) | Add waypoint for selected unit (auto-activates a READY unit) |
-| **Right-click** (unit, setup) | Remove unit from map |
-| **Scroll wheel** | Zoom in / out |
-| **Middle-click drag** | Pan camera |
-| **1 – 5** | Set time compression (Pause / 1× / 15× / 60× / 300×) |
-| **Space** | Toggle pause |
-| **Ctrl+S** | Save current scenario |
-| **Delete** | Remove selected unit |
-| **Escape** | Deselect / cancel placement |
+| Remove a single unit | Right-click it on the map, or select it then click **Remove Selected** |
+| Remove all Blue units | Click **Clear All Blue** |
+| Save your deployment | Click **Save Deployment** — exports a `.json` file you can reload later |
+| Load a saved deployment | Click **Load Deployment** — adds those units to the current scenario |
+
+### Starting the Simulation
+
+Click **Start Simulation** in the bottom-right corner of the Setup panel. You can return to Setup Mode at any time during combat by clicking **Reinforce** (pauses the simulation).
 
 ---
 
-## Bottom Panel — Combat Controls
+## Combat Mode — Controls
 
-| Control | Description |
+### Map Navigation
+
+| Action | Control |
 |---|---|
-| **▲ / ▼ altitude buttons** | Climb or dive selected aircraft by 500 / 1k / 5k ft |
-| **AUTO** | Toggle autonomous weapon engagement for selected unit |
-| **ROE** | Cycle Rules of Engagement: **TIGHT** (confirmed only) → **FREE** (probable+) → **HOLD** (no fire) |
-| **ECM** | Toggle active jamming on the selected unit |
-| **ASSIGN CAP** | Assign a Combat Air Patrol mission (click map to set centre) |
-| **CLEAR MSN** | Cancel active mission |
-| **Weapon buttons** | Select active weapon for manual fire |
-| **SLS / Salvo** | Toggle salvo doctrine (SLS = one missile at a time; Salvo = continuous fire) |
-| **FOG OF WAR** | Toggle between full visibility and sensor-only contact view |
-| **Save Deployment / Load Deployment** | (Setup mode) Persist or restore Blue force layout |
+| Pan the map | Click and drag (left button on empty space) |
+| Zoom in / out | Scroll wheel, or scroll over the map |
+| Zoom range | Levels 4 (world) through 12 (city-level) |
 
-When an **airbase** unit is selected in combat, the panel also shows a launch button for each parked aircraft. Aircraft showing `READY` can be scrambled immediately; those showing `REARM Xs` are still on the ground turn.
+### Time Controls
 
----
+The time speed buttons are in the bottom panel. You can also use keyboard shortcuts:
 
-## Sensor & Detection Model
-
-Detection range for each radar is computed as:
-
-```
-R_effective = R_rcs × (1 − ECM_penalty)
-
-where:
-  R_rcs  = radar_range_km × performance_mult × (target_rcs / reference_rcs)^0.25
-  ECM_penalty = target.ecm_rating × 0.60   (only beyond burn-through range of 15 km)
-```
-
-Contacts are classified by how close they are relative to the effective detection range:
-
-| Band | Threshold | Classification | Info revealed |
-|---|---|---|---|
-| Outer | > 75% of range | **FAINT** | Position only, grey blip |
-| Middle | 50–75% of range | **PROBABLE** | Position + unit type, amber symbol |
-| Inner | < 50% of range | **CONFIRMED** | Full identity + callsign, red symbol |
-
-Contacts time out after **30 seconds** without a refresh.
-
----
-
-## Electronic Warfare
-
-- **Active ECM jamming** — Automatically enabled on units with `ecm_rating > 0` when threats are detected. Scales radar detection range of the sensor by `1 − (ecm_rating × 0.60)`.
-- **Burn-through** — Jamming is ineffective within **15 km**; the radar overpowers it.
-- **Chaff** — Depletes one bundle per incoming SARH/ARH missile; reduces Pk by **−0.25** per bundle.
-- **Flares** — Depletes one bundle per incoming IR missile; reduces Pk by **−0.25** per bundle.
-- **ECCM** — Weapons have an ECCM rating that partially offsets ECM effects.
-
----
-
-## Airbase & Duty Cycle
-
-Aircraft are assigned a **home airbase** via `home_uid`. Between sorties they exist in one of four duty states:
-
-| State | Meaning |
+| Key | Action |
 |---|---|
-| `READY` | On the ground, fully armed and fuelled — can be launched |
-| `ACTIVE` | Airborne and operating |
-| `REARMING` | On the ground, reloading weapons and refuelling (timer counts down) |
+| `Space` | Pause / Resume |
+| `1` | 1× real time |
+| `2` | 15× compression |
+| `3` | 60× compression |
+| `4` | 300× compression |
+| `5` | Pause |
 
-**Sortie lifecycle:**
+### Selecting Units
 
-1. Player (or scenario file) launches a READY aircraft → state becomes `ACTIVE`, unit climbs to cruise altitude and begins its mission.
-2. When bingo fuel is reached the unit's mission switches to `RTB`. It navigates to the nearest friendly airbase.
-3. On arrival (within 2 km) the unit lands: fuel is restored to full, loadout is reset to default, and state changes to `REARMING` for `rearm_time_s` seconds (120 s for land bases, 90 s for carriers).
-4. After the ground turn completes the unit returns to `READY`.
+- **Left-click** a unit on the map to select it. The bottom panel will update to show that unit's status, loadout, and controls.
+- **Left-click** empty map space to deselect.
+- **Escape** deselects and cancels any pending action.
 
-If the assigned home base is destroyed the unit automatically diverts to the nearest surviving friendly airbase. If no friendly base remains the unit is removed.
-
-**Airbase platforms** (`type: airbase`) are stationary, have very high RCS (making them easy to detect), and carry no weapons. Three variants exist: `AirbaseB` (land base), `AircraftCarrier`, and `MilitaryAirbase`, differing only in display name and rearm time.
-
-When a unit is not `ACTIVE` it is invisible on the map and cannot be targeted.
-
-```
-Pk = base_pk − (launch_distance / 50) × 0.10 − ECM_effect − chaff/flare_penalty
-Pk = clamp(Pk, 0.05, 0.95)
-```
-
-A random roll against Pk determines hit or miss on intercept.
+Only Blue units can be selected and commanded. Red units appear on the map only if they are within your sensor coverage — see the **Sensor Model** section below.
 
 ---
 
-## Platforms
+## Commanding Selected Units
 
-### Blue (Ukraine)
+### Waypoints (All Unit Types)
 
-| Platform | Type | Speed | Radar | Default Weapons |
-|---|---|---|---|---|
-| MiG-29 Fulcrum | Fighter | 2400 km/h | 150 km | R-27R, R-27T, R-73 |
-| Su-27 Flanker-B | Fighter | 2500 km/h | 200 km | R-27R, R-27T, R-73 |
-| F-16AM (MLU) | Fighter | 2150 km/h | 130 km | AIM-120C, AIM-9X |
-| F-16 Block 52 | Fighter | 2150 km/h | 148 km | AIM-120C, AIM-9X |
-| Su-25 Frogfoot | Attacker | 950 km/h | 20 km | R-60, S-8 rockets |
-| Su-24M Fencer-D | Attacker | 1700 km/h | 50 km | Kh-25ML, R-60 |
-| Mirage 2000-5F | Fighter | 2530 km/h | 185 km | MICA EM, MICA IR |
-| Mi-24V Hind-E | Helicopter | 320 km/h | 20 km | Shturm ATGM, S-8 |
-| T-72 (various) | Tank | 60 km/h | 5 km | 125mm gun, Konkurs ATGM |
-| Leopard 2A4/A6 | Tank | 72 km/h | 7 km | 120mm NATO, TOW ATGM |
-| M1A1 Abrams | Tank | 68 km/h | 7 km | 120mm NATO, TOW ATGM |
-| M2 Bradley | IFV | 66 km/h | 5 km | 25mm Bushmaster, TOW |
-| Patriot PAC-3 | SAM | — | 160 km | PAC-3 |
-| NASAMS II | SAM | — | 75 km | AIM-120 (ground-launched) |
-| IRIS-T SLM | SAM | — | 250 km | IRIS-T |
-| Flakpanzer Gepard | SPAAG | 65 km/h | 15 km | 35mm Oerlikon |
-| Airbase / Runway (`AirbaseB`) | Airbase | — | — | — |
-| Military Airbase | Airbase | — | — | — |
-| Aircraft Carrier | Airbase | — | — | — |
+- **Right-click** the map to add a waypoint. The unit will proceed through waypoints in order.
+- **Delete key** clears all waypoints for the selected unit and removes it from any formation.
 
-### Red (Russia)
+### Aircraft and Helicopter Controls
 
-| Platform | Type | Speed | Radar | Default Weapons |
-|---|---|---|---|---|
-| Su-27S Flanker-B | Fighter | 2500 km/h | 240 km | R-27R, R-27T, R-73 |
-| Su-35S Flanker-E | Fighter | 2500 km/h | 300 km | R-77, R-27T, R-73 |
-| MiG-29A Fulcrum-A | Fighter | 2400 km/h | 180 km | R-27R, R-27T, R-73 |
-| Su-30SM Flanker-H | Fighter | 2125 km/h | 280 km | R-77, R-73 |
-| T-90A / T-90M | Tank | 65 km/h | 5 km | 125mm gun, Konkurs ATGM |
-| T-72B3 | Tank | 60 km/h | 5 km | 125mm gun, Konkurs ATGM |
-| BMP-2 | IFV | 65 km/h | 4 km | 30mm autocannon, Konkurs |
-| BTR-82A | APC | 80 km/h | 3 km | 30mm autocannon |
-| BRDM-2 | Recon | 95 km/h | 6 km | Konkurs ATGM |
-| S-400 Triumf | SAM | — | 400 km | 48N6E |
-| Buk-M2 | SAM | — | 120 km | 9M317 |
-| Tor-M1 | SAM | — | 25 km | 9M331 |
+The panel shows dedicated controls when an aircraft is selected.
 
----
+#### Mission Type
+Click **Mission** to cycle through mission types:
+- **CAP** — Combat Air Patrol. The aircraft flies a racetrack orbit at the assigned area and automatically intercepts hostiles that enter sensor range.
+- **STRIKE** — The aircraft navigates to the mission area and engages ground targets.
+- **SEAD** — Suppression of Enemy Air Defenses. The aircraft prioritises radar-emitting SAM systems and airbases.
 
-## Weapons Reference
+#### Loadout
+Click **Loadout** to cycle through weapon configurations:
+- **DEFAULT** — Platform's standard mixed load.
+- **A2A** — Maximises air-to-air missiles.
+- **A2G** — Maximises ground-attack weapons with a self-defence missile.
+- **SEAD** — Maximises anti-radiation missiles (ARM) if available; falls back to A2G otherwise.
 
-| Weapon | Seeker | Range | Base Pk | Notes |
-|---|---|---|---|---|
-| R-77 Adder | ARH | 110 km | 0.84 | Fire-and-forget BVR |
-| AIM-120C AMRAAM | ARH | 105 km | 0.85 | NATO standard BVR |
-| MICA EM | ARH | 80 km | 0.86 | French ARH BVR/WVR |
-| R-27R Alamo-A | SARH | 73 km | 0.82 | Requires radar illumination |
-| R-27T Alamo-B | IR | 70 km | 0.80 | IR BVR variant |
-| MICA IR | IR | 60 km | 0.87 | French IR BVR/WVR |
-| 48N6E (S-400) | SARH | 250 km | 0.85 | Heavy long-range SAM |
-| PAC-3 | ARH | 100 km | 0.90 | Hit-to-kill SAM |
-| AIM-9X Sidewinder | IR | 35 km | 0.90 | High off-boresight WVR |
-| R-73 Archer | IR | 30 km | 0.88 | High-agility dogfight |
-| 9M317 (Buk-M2) | SARH | 45 km | 0.80 | Medium tactical SAM |
-| AIM-120 (NASAMS) | ARH | 30 km | 0.88 | Ground-launched AMRAAM |
-| IRIS-T SLM | IR | 40 km | 0.92 | Imaging IR SAM |
-| Kh-25ML | Laser | 25 km | 0.78 | Air-to-ground AGM |
-| Stugna-P | Laser | 5.5 km | 0.82 | Ukrainian laser ATGM |
-| TOW BGM-71 | SACLOS | 3.7 km | 0.80 | Wire-guided ATGM |
-| 9M113 Konkurs | SACLOS | 4.0 km | 0.78 | Wire-guided ATGM |
-| 120mm NATO APFSDS | Cannon | 4.5 km | 0.82 | Leopard 2 / M1 main gun |
-| 125mm APFSDS | Cannon | 4.0 km | 0.80 | T-72/T-90 main gun |
-| M61A1 Vulcan | Cannon | 0.8 km | 0.65 | 20mm rotary (aircraft) |
+#### Launching Parked Aircraft
+Aircraft start on the ground in **READY** state. Select a parked aircraft from the **Parked Aircraft** list in the combat panel, configure its mission type and loadout, then click **Launch**.
 
----
+#### Altitude
+Use the **+5000 / +1000 / +500** and **−5000 / −1000 / −500** buttons to set the target altitude in feet. The aircraft will climb or descend to the new altitude gradually.
 
-## Scenario File Format
+#### RTB
+Aircraft return to base automatically when fuel drops below the mission RTB threshold, or when they sustain critical damage. They cycle through a rearm/refuel timer on the ground and return to **READY** state automatically.
 
-Scenarios are stored as JSON files. Aircraft units now include `home_uid`, `duty_state`, and `duty_timer` fields:
+### Engaging Targets Manually
 
-```json
-{
-  "name": "Scenario Name",
-  "description": "Brief description",
-  "start_lat": 50.0,
-  "start_lon": 30.0,
-  "start_zoom": 7,
-  "units": [
-    {
-      "id": "base_001",
-      "platform": "AirbaseB",
-      "callsign": "ALPHA BASE 1",
-      "side": "Blue",
-      "lat": 50.08, "lon": 25.57,
-      "loadout": {},
-      "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
-      "duty_timer": 0.0,
-      "waypoints": []
-    },
-    {
-      "id": "unit_001",
-      "platform": "F-16AM",
-      "callsign": "VIPER 1",
-      "side": "Blue",
-      "lat": 50.08, "lon": 25.57,
-      "loadout": {"AIM-120C": 4, "AIM-9X": 2, "M61A1": 1},
-      "roe": "TIGHT",
-      "home_uid": "base_001",
-      "duty_state": "READY",
-      "duty_timer": 0.0,
-      "waypoints": []
-    }
-  ]
-}
-```
+1. **Select** the unit you want to fire from.
+2. **Select a weapon** in the loadout panel (it will highlight). Estimated Pk % is shown.
+3. **Right-click** an enemy contact on the map to fire. The game validates range, domain (air vs. ground), and weapon availability before launching.
+4. To fire without a pre-selected weapon, right-clicking a contact will have the unit automatically choose its best available weapon.
 
-### Supported Mission Types
+**Salvo Mode** (top of the weapon list) controls how many rounds are fired per engagement order:
+- **1 / 2 / 4** — fixed salvo size.
+- **SLS** — Shoot-Look-Shoot. Fires one round and waits to assess the result before firing again.
 
-| Type | Behaviour |
+### Electronic Warfare Controls
+
+When an aircraft or SAM is selected, the following toggles appear in the panel:
+
+| Button | Effect |
 |---|---|
-| `CAP` | Combat Air Patrol — orbits a defined area at set altitude |
-| `PATROL` | Ground patrol — roams within radius of a point |
-| `STRIKE` | Strike mission — orbits target area |
-| `SEAD` | Suppression of enemy air defences |
-| `RTB` | Return to base — navigates to home coordinates |
+| **Auto-Engage** | Unit will autonomously engage contacts within range (on/off) |
+| **ROE** | Cycles through FREE → TIGHT → HOLD. TIGHT requires a CONFIRMED contact; HOLD prevents all firing |
+| **ECM** | Toggles active jamming. Degrades enemy radar detection range but increases your own radar signature |
+| **Radar** | Toggles radar emission. Turning radar off makes you invisible to ESM sensors but limits your own detection range to IR/optical only |
+| **IFF** | Toggles IFF transponder. Turning it off makes you harder to classify but also prevents friendly units from recognising you |
 
 ---
 
-## Project Structure
+## Display Toggles
 
-```
-main.py             — Entry point, event loop, app state
-scenario.py         — Data models, platform/weapon DB, save/load
-simulation.py       — Real-time engine: movement, AI, missile resolution, duty cycle
-sensor.py           — Radar detection, contact classification, ECM
-renderer.py         — All pygame rendering (tiles, units, contacts, HUD)
-ui.py               — pygame-gui panels, buttons, event routing
-geo.py              — Web-Mercator projection, haversine, bearing
-map_tiles.py        — Async CARTO tile fetcher with disk cache
-constants.py        — Shared constants
-airbases.json       — Default Blue deployment (airbases + parked aircraft)
-units.json          — Platform override database (optional)
-weapons.json        — Weapon override database (optional)
-map_cache_en/       — Cached CARTO Voyager tile images (auto-created)
-```
+The combat panel includes three view toggles:
+
+| Button | Effect |
+|---|---|
+| **Air Labels** | Show/hide callsign labels for air units |
+| **Gnd Labels** | Show/hide callsign labels for ground units |
+| **Radar Rings** | Show/hide the teal radar detection rings around units |
+
+**Fog of War** toggle: shows or hides the true positions of all Red units regardless of sensor coverage. Useful for learning the scenario layout, but disables any meaningful challenge.
 
 ---
 
-## AI Behaviour
+## The Sensor Model
 
-Both sides use the same autonomous engagement logic:
+Detection is the core of the game. You only see what your sensors can see.
 
-- Ground units have **auto-engage on by default**; aircraft do not.
-- The AI selects the highest-range available weapon that can reach a contact within 90% of its maximum range.
-- Missile cooldown: **45 seconds** between shots per unit. Gun cooldown: **8 seconds**.
-- ECM jamming is automatically activated when the unit has an `ecm_rating > 0` and enemies are detected.
-- ROE is respected: **TIGHT** requires a CONFIRMED contact before firing; **FREE** allows engagement at PROBABLE; **HOLD** disables all AI fire.
+### Contact Classification
+
+Enemy units appear as contact symbols, not unit icons, until your sensors resolve them:
+
+| Symbol | Colour | Meaning |
+|---|---|---|
+| Small blip | Grey | **FAINT** — Something is there but type is unknown |
+| Blip + type | Amber | **PROBABLE** — Unit type identified, side uncertain |
+| Full icon | Red | **CONFIRMED** — Full resolution, side and type known |
+
+Contacts fade and lose accuracy when the detecting sensor moves away or is destroyed. A stale track will degrade back to FAINT and eventually disappear after 30 seconds without a refresh.
+
+### Sensor Types
+
+Each platform carries multiple sensor types, all operating simultaneously:
+
+| Sensor | Range | What it detects |
+|---|---|---|
+| **Active Radar** | Platform-dependent (shown as teal ring) | Any target within radar horizon; range reduced by target RCS and enemy ECM |
+| **ESM (Passive)** | ~1.5× radar range | Targets that are actively emitting radar; yields PROBABLE classification only |
+| **IR / Optical** | Short range (~8–40 km depending on platform) | Any target; yields CONFIRMED classification but requires close proximity |
+
+### Terrain Masking
+
+Hills and mountains block radar line-of-sight. Low-flying aircraft and ground units in the Carpathians may be invisible to sensors on flat ground even within nominal radar range. AWACS aircraft at altitude have much longer effective radar horizons because they see over terrain.
+
+### Datalink Network
+
+Units do not share contacts automatically. A unit must have line-of-sight to an AWACS or airbase to join the Blue datalink network. When connected, it receives the best available track from any other networked sensor — with the lowest positional error winning the merge. Units that lose datalink (terrain masking, AWACS destroyed) fall back to their own local sensor picture only.
 
 ---
 
-## Map Tiles
+## Damage Model
 
-Map tiles are served by [CARTO Voyager](https://carto.com/basemaps/) (OpenStreetMap data with English place-name labels) and cached to `map_cache_en/` on disk. The in-memory LRU cache holds up to 512 tile surfaces. Subdomains `a`–`d` are rotated to stay within rate limits. Please respect CARTO's [tile usage policy](https://carto.com/legal/).
+Units sustain graduated damage rather than dying instantly.
+
+| Damage State | HP Range | Effect |
+|---|---|---|
+| OK | 75–100% | No degradation |
+| LIGHT | 50–75% | 20% performance reduction |
+| MODERATE | 25–50% | 40% reduction; aircraft trigger emergency RTB |
+| HEAVY | 0–25% | 60% reduction; aircraft trigger emergency RTB |
+| KILLED | 0% | Unit removed |
+
+In addition to the HP pool, three **system slots** can be independently destroyed:
+
+- **Radar** — destroyed radar forces the unit to radar-off; ESM and IR still function.
+- **Mobility** — ground units stop moving; aircraft suffer a severe performance penalty.
+- **Weapons** — unit can no longer fire.
+
+Hits have a chance to start a **fire** on the target. Burning units take continuous damage; crew effectiveness (affected by drunkness and corruption ratings on Red units) determines how quickly they extinguish it.
+
+---
+
+## Crew Quality (Red Forces)
+
+Each Red unit is assigned randomised **Drunkness** and **Corruption** ratings at scenario generation. These are not cosmetic — they directly reduce sensor range, weapon accuracy (Pk), and fire-fighting effectiveness:
+
+| Rating | Drunkness Label | Corruption Label |
+|---|---|---|
+| 1 | Sober | Clean |
+| 2 | Tipsy | Grass Eater |
+| 3 | Intoxicated | Dirty |
+| 4 | Wasted | Meat Eater |
+| 5 | Yeltsin | Shoigu |
+
+A unit with both ratings at 5 suffers a ~64% penalty across all performance metrics. Click a Red unit (with Fog of War on) to see its stats in the info panel.
+
+---
+
+## Saving and Loading
+
+| Action | Control |
+|---|---|
+| Save current game state | `Ctrl+S` during Combat Mode |
+| Load save (on next launch) | The game auto-loads `data/scenarios/ukraine_russia_save.json` if present |
+| Save Blue deployment only | Setup Mode → **Save Deployment** button |
+| Load a deployment | Setup Mode → **Load Deployment** button |
+| Restart scenario | Combat Mode → **Restart** button (regenerates fresh Red order-of-battle) |
+
+---
+
+## Scenario Overview
+
+**Operation East Wind — Donbas 2024**
+
+Red forces (Russia) are entrenched across Luhansk Oblast, Donetsk Oblast, Zaporizhia, and Crimea, anchored around clusters at Donetsk City, Mariupol, Horlivka, Luhansk City, Sevastopol, and several air bases with fighter and AWACS coverage.
+
+Blue forces (Ukraine and allies) deploy from western and central Ukraine — primarily Kyiv, Lviv, Zhytomyr, Odesa, Dnipro, and Kherson — and must project combat power eastward across a contested airspace defended by S-400, Buk-M2, and Tor-M1 batteries.
+
+The Red order-of-battle is **randomly regenerated** every time you click Restart, so no two games are identical.
+
+---
+
+## Tips
+
+- **Deploy airbases before aircraft.** Aircraft snap to the nearest Blue airbase on placement. If no base is within 100 km, the aircraft cannot be placed.
+- **Use AWACS first.** The E-3G Sentry dramatically expands the Blue datalink picture. Place it behind friendly lines at high altitude to maximise horizon coverage.
+- **Turn radar off on strike packages** until they are close to the target area. ESM-equipped Red SAMs will pick up your radar emissions from much further than their own radar can see you.
+- **SEAD before STRIKE.** Set SEAD aircraft to launch first, wait for SAM radars to go offline (contact turns FAINT or disappears from the board), then launch the strike package.
+- **Watch the event log** (bottom-right panel during combat) for splash confirmations, evasion reports, and system damage alerts.
+- **At 300× time compression** missiles still move at correct simulated speeds but the map update rate is reduced. Pause to issue precision orders during a busy engagement.
