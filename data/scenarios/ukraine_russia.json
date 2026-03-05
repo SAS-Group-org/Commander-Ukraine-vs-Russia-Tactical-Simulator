@@ -1,0 +1,3148 @@
+{
+  "name": "Operation East Wind \u2014 Donbas 2024",
+  "description": "Russian forces are entrenched across Donbas and Luhansk.",
+  "start_lat": 48.5,
+  "start_lon": 38.5,
+  "start_zoom": 8,
+  "units": [
+    {
+      "id": "red_001",
+      "platform": "T-72R",
+      "callsign": "IRON 1",
+      "side": "Red",
+      "lat": 48.49032,
+      "lon": 39.59032,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 2,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_002",
+      "platform": "T-80R",
+      "callsign": "BLADE 1",
+      "side": "Red",
+      "lat": 48.57425,
+      "lon": 39.41337,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 2,
+      "loadout": {
+        "GUN_125": 38,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_003",
+      "platform": "T-72R",
+      "callsign": "FIST 1",
+      "side": "Red",
+      "lat": 48.57247,
+      "lon": 39.25125,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 1,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_004",
+      "platform": "T-90R",
+      "callsign": "ARMOR 1",
+      "side": "Red",
+      "lat": 48.33036,
+      "lon": 39.45555,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 3,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_005",
+      "platform": "BMP-1R",
+      "callsign": "WOLF 1",
+      "side": "Red",
+      "lat": 48.39039,
+      "lon": 39.20228,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 300,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_006",
+      "platform": "BMP-1R",
+      "callsign": "COBRA 1",
+      "side": "Red",
+      "lat": 48.52841,
+      "lon": 39.12631,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 300,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_007",
+      "platform": "BMP-2R",
+      "callsign": "COBRA 2",
+      "side": "Red",
+      "lat": 48.64896,
+      "lon": 39.10594,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_008",
+      "platform": "BMP-2R",
+      "callsign": "VIPER 1",
+      "side": "Red",
+      "lat": 48.62254,
+      "lon": 39.231,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_009",
+      "platform": "BTR-70R",
+      "callsign": "BULL 1",
+      "side": "Red",
+      "lat": 48.81662,
+      "lon": 39.22827,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 200
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_010",
+      "platform": "BTR-70R",
+      "callsign": "OX 1",
+      "side": "Red",
+      "lat": 48.56933,
+      "lon": 39.62161,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 200
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_011",
+      "platform": "MTLBR",
+      "callsign": "OX 2",
+      "side": "Red",
+      "lat": 48.60954,
+      "lon": 39.25362,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 150
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_012",
+      "platform": "BRDM2R",
+      "callsign": "HAWK 1",
+      "side": "Red",
+      "lat": 48.58671,
+      "lon": 39.22881,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 3,
+      "loadout": {
+        "ATGM_Konkurs": 6
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_013",
+      "platform": "9P148R",
+      "callsign": "RAPTOR 1",
+      "side": "Red",
+      "lat": 48.52001,
+      "lon": 39.23356,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 4,
+      "loadout": {
+        "ATGM_Konkurs": 20
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_014",
+      "platform": "9P148R",
+      "callsign": "LANCE 1",
+      "side": "Red",
+      "lat": 48.61685,
+      "lon": 39.43775,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 2,
+      "loadout": {
+        "ATGM_Konkurs": 20
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_015",
+      "platform": "Buk-M2",
+      "callsign": "SPIKE 1",
+      "side": "Red",
+      "lat": 48.70159,
+      "lon": 39.25405,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 3,
+      "loadout": {
+        "9M317": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_016",
+      "platform": "Tor-M1",
+      "callsign": "ARROW 1",
+      "side": "Red",
+      "lat": 48.42331,
+      "lon": 39.30578,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 4,
+      "loadout": {
+        "9M331": 8
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_017",
+      "platform": "S-400",
+      "callsign": "ARROW 2",
+      "side": "Red",
+      "lat": 48.48333,
+      "lon": 39.32484,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 2,
+      "loadout": {
+        "48N6": 16
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_018",
+      "platform": "T-55R",
+      "callsign": "HAMMER 1",
+      "side": "Red",
+      "lat": 48.92594,
+      "lon": 38.3092,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 4,
+      "loadout": {
+        "GUN_105": 43
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_019",
+      "platform": "BMP-2R",
+      "callsign": "SHARK 1",
+      "side": "Red",
+      "lat": 49.00075,
+      "lon": 38.69913,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_020",
+      "platform": "BMP-2R",
+      "callsign": "FOX 1",
+      "side": "Red",
+      "lat": 48.88953,
+      "lon": 38.17991,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_021",
+      "platform": "BMP-1R",
+      "callsign": "WOLF 2",
+      "side": "Red",
+      "lat": 48.89864,
+      "lon": 38.44167,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 300,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_022",
+      "platform": "BMP-1R",
+      "callsign": "FOX 2",
+      "side": "Red",
+      "lat": 48.93756,
+      "lon": 38.57989,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 300,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_023",
+      "platform": "MTLBR",
+      "callsign": "MULE 1",
+      "side": "Red",
+      "lat": 48.8194,
+      "lon": 38.40403,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 150
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_024",
+      "platform": "BTR-80R",
+      "callsign": "MULE 2",
+      "side": "Red",
+      "lat": 49.09647,
+      "lon": 38.5577,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 5,
+      "loadout": {
+        "AUTOCANNON_30": 300
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_025",
+      "platform": "BTR-80R",
+      "callsign": "BISON 1",
+      "side": "Red",
+      "lat": 48.92086,
+      "lon": 38.65653,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 4,
+      "loadout": {
+        "AUTOCANNON_30": 300
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_026",
+      "platform": "MTLBR",
+      "callsign": "OX 3",
+      "side": "Red",
+      "lat": 49.00722,
+      "lon": 38.62569,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 150
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_027",
+      "platform": "BRDM2R",
+      "callsign": "SCOUT 1",
+      "side": "Red",
+      "lat": 49.01148,
+      "lon": 38.53784,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 3,
+      "loadout": {
+        "ATGM_Konkurs": 6
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_028",
+      "platform": "9P148R",
+      "callsign": "RAPTOR 2",
+      "side": "Red",
+      "lat": 48.93219,
+      "lon": 38.21927,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 1,
+      "loadout": {
+        "ATGM_Konkurs": 20
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_029",
+      "platform": "Buk-M2",
+      "callsign": "ARROW 3",
+      "side": "Red",
+      "lat": 48.76657,
+      "lon": 38.8891,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 2,
+      "loadout": {
+        "9M317": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_030",
+      "platform": "T-72R",
+      "callsign": "FIST 2",
+      "side": "Red",
+      "lat": 49.11504,
+      "lon": 38.6153,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 3,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_031",
+      "platform": "T-72R",
+      "callsign": "CLAW 1",
+      "side": "Red",
+      "lat": 49.42684,
+      "lon": 38.71181,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 2,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_032",
+      "platform": "T-90R",
+      "callsign": "HAMMER 2",
+      "side": "Red",
+      "lat": 49.04049,
+      "lon": 39.06456,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 4,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_033",
+      "platform": "T-72R",
+      "callsign": "ANVIL 1",
+      "side": "Red",
+      "lat": 49.2705,
+      "lon": 38.67249,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 5,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_034",
+      "platform": "BMP-2R",
+      "callsign": "WOLF 3",
+      "side": "Red",
+      "lat": 49.19752,
+      "lon": 39.21886,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_035",
+      "platform": "BTR-70R",
+      "callsign": "RAM 1",
+      "side": "Red",
+      "lat": 49.21444,
+      "lon": 38.9448,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 200
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_036",
+      "platform": "BTR-80R",
+      "callsign": "BISON 2",
+      "side": "Red",
+      "lat": 49.36046,
+      "lon": 38.72794,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 300
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_037",
+      "platform": "BTR-80R",
+      "callsign": "RAM 2",
+      "side": "Red",
+      "lat": 49.16325,
+      "lon": 38.86418,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 4,
+      "loadout": {
+        "AUTOCANNON_30": 300
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_038",
+      "platform": "MTLBR",
+      "callsign": "MULE 3",
+      "side": "Red",
+      "lat": 49.4042,
+      "lon": 38.92133,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 150
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_039",
+      "platform": "BRDM2R",
+      "callsign": "SCOUT 2",
+      "side": "Red",
+      "lat": 49.26759,
+      "lon": 38.6312,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 2,
+      "loadout": {
+        "ATGM_Konkurs": 6
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_040",
+      "platform": "9P148R",
+      "callsign": "LANCE 2",
+      "side": "Red",
+      "lat": 49.25445,
+      "lon": 39.00702,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 2,
+      "loadout": {
+        "ATGM_Konkurs": 20
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_041",
+      "platform": "9P148R",
+      "callsign": "RAPTOR 3",
+      "side": "Red",
+      "lat": 49.18441,
+      "lon": 39.05562,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 5,
+      "loadout": {
+        "ATGM_Konkurs": 20
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_042",
+      "platform": "Tor-M1",
+      "callsign": "SPEAR 1",
+      "side": "Red",
+      "lat": 49.30302,
+      "lon": 39.28897,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 4,
+      "loadout": {
+        "9M331": 8
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_043",
+      "platform": "S-400",
+      "callsign": "SPIKE 2",
+      "side": "Red",
+      "lat": 49.20299,
+      "lon": 38.93488,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 3,
+      "loadout": {
+        "48N6": 16
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_044",
+      "platform": "T-80R",
+      "callsign": "IRON 2",
+      "side": "Red",
+      "lat": 48.11758,
+      "lon": 39.41366,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 3,
+      "loadout": {
+        "GUN_125": 38,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_045",
+      "platform": "T-72R",
+      "callsign": "BLADE 2",
+      "side": "Red",
+      "lat": 48.21302,
+      "lon": 39.43755,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 2,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_046",
+      "platform": "T-62R",
+      "callsign": "IRON 3",
+      "side": "Red",
+      "lat": 48.13535,
+      "lon": 39.35683,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 4,
+      "loadout": {
+        "GUN_125": 40
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_047",
+      "platform": "BMP-1R",
+      "callsign": "WOLF 4",
+      "side": "Red",
+      "lat": 48.07046,
+      "lon": 39.57233,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 4,
+      "loadout": {
+        "AUTOCANNON_30": 300,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_048",
+      "platform": "BMP-1R",
+      "callsign": "SHARK 2",
+      "side": "Red",
+      "lat": 48.12483,
+      "lon": 39.34516,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 4,
+      "loadout": {
+        "AUTOCANNON_30": 300,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_049",
+      "platform": "BMP-2R",
+      "callsign": "SHARK 3",
+      "side": "Red",
+      "lat": 48.14908,
+      "lon": 39.22752,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 5,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_050",
+      "platform": "BMP-1R",
+      "callsign": "LYNX 1",
+      "side": "Red",
+      "lat": 48.06399,
+      "lon": 39.24349,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 300,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_051",
+      "platform": "BTR-80R",
+      "callsign": "BULL 2",
+      "side": "Red",
+      "lat": 48.07127,
+      "lon": 39.25483,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 5,
+      "loadout": {
+        "AUTOCANNON_30": 300
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_052",
+      "platform": "BTR-80R",
+      "callsign": "BULL 3",
+      "side": "Red",
+      "lat": 48.10651,
+      "lon": 39.31181,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 300
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_053",
+      "platform": "BRDM2R",
+      "callsign": "SCOUT 3",
+      "side": "Red",
+      "lat": 48.07154,
+      "lon": 39.44572,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 2,
+      "loadout": {
+        "ATGM_Konkurs": 6
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_054",
+      "platform": "9P148R",
+      "callsign": "LANCE 3",
+      "side": "Red",
+      "lat": 48.06881,
+      "lon": 39.51729,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 3,
+      "loadout": {
+        "ATGM_Konkurs": 20
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_055",
+      "platform": "9P148R",
+      "callsign": "LANCE 4",
+      "side": "Red",
+      "lat": 48.02133,
+      "lon": 39.39028,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 5,
+      "loadout": {
+        "ATGM_Konkurs": 20
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_056",
+      "platform": "Buk-M2",
+      "callsign": "SPIKE 3",
+      "side": "Red",
+      "lat": 48.16713,
+      "lon": 39.29673,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 3,
+      "loadout": {
+        "9M317": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_057",
+      "platform": "Tor-M1",
+      "callsign": "SPEAR 2",
+      "side": "Red",
+      "lat": 48.18137,
+      "lon": 39.34757,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 3,
+      "loadout": {
+        "9M331": 8
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_058",
+      "platform": "T-90R",
+      "callsign": "ARMOR 2",
+      "side": "Red",
+      "lat": 48.08837,
+      "lon": 37.60936,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 2,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_059",
+      "platform": "T-80R",
+      "callsign": "FIST 3",
+      "side": "Red",
+      "lat": 48.22034,
+      "lon": 37.65793,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 3,
+      "loadout": {
+        "GUN_125": 38,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_060",
+      "platform": "T-64R",
+      "callsign": "ANVIL 2",
+      "side": "Red",
+      "lat": 48.00013,
+      "lon": 37.70305,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 1,
+      "loadout": {
+        "GUN_125": 36,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_061",
+      "platform": "T-80R",
+      "callsign": "BLADE 3",
+      "side": "Red",
+      "lat": 48.19778,
+      "lon": 37.73683,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 2,
+      "loadout": {
+        "GUN_125": 38,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_062",
+      "platform": "BMP-2R",
+      "callsign": "SHARK 4",
+      "side": "Red",
+      "lat": 47.90679,
+      "lon": 37.78614,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_063",
+      "platform": "BMP-3R",
+      "callsign": "WOLF 5",
+      "side": "Red",
+      "lat": 48.0408,
+      "lon": 38.00583,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_064",
+      "platform": "BMD-2R",
+      "callsign": "VIPER 2",
+      "side": "Red",
+      "lat": 48.04202,
+      "lon": 37.78331,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 300,
+        "ATGM_Konkurs": 2
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_065",
+      "platform": "BMP-3R",
+      "callsign": "WOLF 6",
+      "side": "Red",
+      "lat": 47.85642,
+      "lon": 37.39409,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 4,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_066",
+      "platform": "BMP-2R",
+      "callsign": "LYNX 2",
+      "side": "Red",
+      "lat": 48.12047,
+      "lon": 37.98893,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_067",
+      "platform": "BMP-1R",
+      "callsign": "VIPER 3",
+      "side": "Red",
+      "lat": 47.8803,
+      "lon": 37.89681,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 300,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_068",
+      "platform": "BTR-80R",
+      "callsign": "RAM 3",
+      "side": "Red",
+      "lat": 47.97214,
+      "lon": 38.06525,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 300
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_069",
+      "platform": "BTR-70R",
+      "callsign": "OX 4",
+      "side": "Red",
+      "lat": 48.07145,
+      "lon": 37.93082,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 200
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_070",
+      "platform": "BRDM2R",
+      "callsign": "SHADOW 1",
+      "side": "Red",
+      "lat": 48.02529,
+      "lon": 37.96225,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 3,
+      "loadout": {
+        "ATGM_Konkurs": 6
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_071",
+      "platform": "9P148R",
+      "callsign": "LANCE 5",
+      "side": "Red",
+      "lat": 47.89398,
+      "lon": 37.89801,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 1,
+      "loadout": {
+        "ATGM_Konkurs": 20
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_072",
+      "platform": "Tor-M1",
+      "callsign": "SHIELD 1",
+      "side": "Red",
+      "lat": 47.95757,
+      "lon": 37.77249,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 4,
+      "loadout": {
+        "9M331": 8
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_073",
+      "platform": "Buk-M2",
+      "callsign": "DOME 1",
+      "side": "Red",
+      "lat": 47.82431,
+      "lon": 37.42904,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 2,
+      "loadout": {
+        "9M317": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_074",
+      "platform": "Buk-M2",
+      "callsign": "SPEAR 3",
+      "side": "Red",
+      "lat": 47.87386,
+      "lon": 37.65934,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 5,
+      "loadout": {
+        "9M317": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_075",
+      "platform": "T-64R",
+      "callsign": "BLADE 4",
+      "side": "Red",
+      "lat": 47.1992,
+      "lon": 37.55749,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 1,
+      "loadout": {
+        "GUN_125": 36,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_076",
+      "platform": "T-90R",
+      "callsign": "CLAW 2",
+      "side": "Red",
+      "lat": 47.11643,
+      "lon": 37.65684,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 1,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_077",
+      "platform": "BMP-2R",
+      "callsign": "WOLF 7",
+      "side": "Red",
+      "lat": 47.09382,
+      "lon": 37.21527,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_078",
+      "platform": "BMP-2R",
+      "callsign": "VIPER 4",
+      "side": "Red",
+      "lat": 47.08102,
+      "lon": 37.52881,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 5,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_079",
+      "platform": "BTR-70R",
+      "callsign": "RAM 4",
+      "side": "Red",
+      "lat": 47.28216,
+      "lon": 37.58336,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 200
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_080",
+      "platform": "MTLBR",
+      "callsign": "BULL 4",
+      "side": "Red",
+      "lat": 47.13861,
+      "lon": 37.76554,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 150
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_081",
+      "platform": "BTR-70R",
+      "callsign": "MULE 4",
+      "side": "Red",
+      "lat": 47.147,
+      "lon": 37.93501,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 4,
+      "loadout": {
+        "AUTOCANNON_30": 200
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_082",
+      "platform": "BTR-70R",
+      "callsign": "BISON 3",
+      "side": "Red",
+      "lat": 47.26282,
+      "lon": 37.54873,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 200
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_083",
+      "platform": "MTLBR",
+      "callsign": "MULE 5",
+      "side": "Red",
+      "lat": 47.27658,
+      "lon": 37.50268,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 4,
+      "loadout": {
+        "AUTOCANNON_30": 150
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_084",
+      "platform": "BRDM2R",
+      "callsign": "GHOST 1",
+      "side": "Red",
+      "lat": 47.18392,
+      "lon": 37.47066,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 2,
+      "loadout": {
+        "ATGM_Konkurs": 6
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_085",
+      "platform": "BRDM2R",
+      "callsign": "SCOUT 4",
+      "side": "Red",
+      "lat": 47.06073,
+      "lon": 37.72866,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 3,
+      "loadout": {
+        "ATGM_Konkurs": 6
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_086",
+      "platform": "9P148R",
+      "callsign": "RAPTOR 4",
+      "side": "Red",
+      "lat": 47.18773,
+      "lon": 37.62625,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 3,
+      "loadout": {
+        "ATGM_Konkurs": 20
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_087",
+      "platform": "9P148R",
+      "callsign": "RAPTOR 5",
+      "side": "Red",
+      "lat": 47.1049,
+      "lon": 37.44467,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 2,
+      "loadout": {
+        "ATGM_Konkurs": 20
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_088",
+      "platform": "Buk-M2",
+      "callsign": "DOME 2",
+      "side": "Red",
+      "lat": 47.19144,
+      "lon": 37.28127,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 3,
+      "loadout": {
+        "9M317": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_089",
+      "platform": "T-62R",
+      "callsign": "IRON 4",
+      "side": "Red",
+      "lat": 48.196,
+      "lon": 37.95194,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 5,
+      "loadout": {
+        "GUN_125": 40
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_090",
+      "platform": "T-72R",
+      "callsign": "STEEL 1",
+      "side": "Red",
+      "lat": 48.31701,
+      "lon": 37.87998,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 3,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_091",
+      "platform": "T-72R",
+      "callsign": "FIST 4",
+      "side": "Red",
+      "lat": 48.2629,
+      "lon": 37.88455,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 3,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_092",
+      "platform": "BMP-2R",
+      "callsign": "FOX 3",
+      "side": "Red",
+      "lat": 48.32327,
+      "lon": 38.04468,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 4,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_093",
+      "platform": "BMP-2R",
+      "callsign": "LYNX 3",
+      "side": "Red",
+      "lat": 48.25891,
+      "lon": 38.29701,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_094",
+      "platform": "BMP-1R",
+      "callsign": "SHARK 5",
+      "side": "Red",
+      "lat": 48.31822,
+      "lon": 37.93925,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 4,
+      "loadout": {
+        "AUTOCANNON_30": 300,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_095",
+      "platform": "BMP-1R",
+      "callsign": "SHARK 6",
+      "side": "Red",
+      "lat": 48.30153,
+      "lon": 38.16854,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 5,
+      "loadout": {
+        "AUTOCANNON_30": 300,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_096",
+      "platform": "BTR-80R",
+      "callsign": "BISON 4",
+      "side": "Red",
+      "lat": 48.33987,
+      "lon": 37.99866,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 4,
+      "loadout": {
+        "AUTOCANNON_30": 300
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_097",
+      "platform": "BRDM2R",
+      "callsign": "SCOUT 5",
+      "side": "Red",
+      "lat": 48.37327,
+      "lon": 37.96294,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 3,
+      "loadout": {
+        "ATGM_Konkurs": 6
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_098",
+      "platform": "9P148R",
+      "callsign": "HUNTER 1",
+      "side": "Red",
+      "lat": 48.23082,
+      "lon": 38.31681,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 3,
+      "loadout": {
+        "ATGM_Konkurs": 20
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_099",
+      "platform": "9P148R",
+      "callsign": "HUNTER 2",
+      "side": "Red",
+      "lat": 48.40474,
+      "lon": 37.98451,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 3,
+      "loadout": {
+        "ATGM_Konkurs": 20
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_100",
+      "platform": "Buk-M2",
+      "callsign": "SPIKE 4",
+      "side": "Red",
+      "lat": 48.48702,
+      "lon": 38.08649,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 4,
+      "loadout": {
+        "9M317": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_101",
+      "platform": "T-62R",
+      "callsign": "FIST 5",
+      "side": "Red",
+      "lat": 47.57201,
+      "lon": 37.74827,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 3,
+      "loadout": {
+        "GUN_125": 40
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_102",
+      "platform": "T-72R",
+      "callsign": "HAMMER 3",
+      "side": "Red",
+      "lat": 47.52305,
+      "lon": 37.32895,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 4,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_103",
+      "platform": "BMP-1R",
+      "callsign": "VIPER 5",
+      "side": "Red",
+      "lat": 47.76419,
+      "lon": 37.22916,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 300,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_104",
+      "platform": "BMP-3R",
+      "callsign": "WOLF 8",
+      "side": "Red",
+      "lat": 47.70684,
+      "lon": 37.55042,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_105",
+      "platform": "BMP-2R",
+      "callsign": "WOLF 9",
+      "side": "Red",
+      "lat": 47.76071,
+      "lon": 37.464,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_106",
+      "platform": "BTR-80R",
+      "callsign": "OX 5",
+      "side": "Red",
+      "lat": 47.54379,
+      "lon": 37.6074,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 300
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_107",
+      "platform": "BTR-70R",
+      "callsign": "BISON 5",
+      "side": "Red",
+      "lat": 47.58616,
+      "lon": 37.5678,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 200
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_108",
+      "platform": "BTR-80R",
+      "callsign": "OX 6",
+      "side": "Red",
+      "lat": 47.63278,
+      "lon": 37.44817,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 300
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_109",
+      "platform": "BTR-70R",
+      "callsign": "RAM 5",
+      "side": "Red",
+      "lat": 47.58788,
+      "lon": 37.41708,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 200
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_110",
+      "platform": "BRDM2R",
+      "callsign": "SHADOW 2",
+      "side": "Red",
+      "lat": 47.56312,
+      "lon": 37.51431,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 4,
+      "loadout": {
+        "ATGM_Konkurs": 6
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_111",
+      "platform": "9P148R",
+      "callsign": "LANCE 6",
+      "side": "Red",
+      "lat": 47.59716,
+      "lon": 37.49175,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 3,
+      "loadout": {
+        "ATGM_Konkurs": 20
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_112",
+      "platform": "Tor-M1",
+      "callsign": "ARROW 4",
+      "side": "Red",
+      "lat": 47.54299,
+      "lon": 37.42823,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 2,
+      "loadout": {
+        "9M331": 8
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_113",
+      "platform": "Buk-M2",
+      "callsign": "SPEAR 4",
+      "side": "Red",
+      "lat": 47.48491,
+      "lon": 37.63134,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 2,
+      "loadout": {
+        "9M317": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_114",
+      "platform": "T-62R",
+      "callsign": "HAMMER 4",
+      "side": "Red",
+      "lat": 47.22585,
+      "lon": 35.91028,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 1,
+      "loadout": {
+        "GUN_125": 40
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_115",
+      "platform": "T-72R",
+      "callsign": "HAMMER 5",
+      "side": "Red",
+      "lat": 47.24706,
+      "lon": 35.81973,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 2,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_116",
+      "platform": "BMP-2R",
+      "callsign": "FOX 4",
+      "side": "Red",
+      "lat": 47.30606,
+      "lon": 35.73905,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_117",
+      "platform": "BMP-2R",
+      "callsign": "COBRA 3",
+      "side": "Red",
+      "lat": 47.45631,
+      "lon": 35.65921,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_118",
+      "platform": "MTLBR",
+      "callsign": "RAM 6",
+      "side": "Red",
+      "lat": 47.0715,
+      "lon": 35.67838,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 1,
+      "loadout": {
+        "AUTOCANNON_30": 150
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_119",
+      "platform": "BTR-70R",
+      "callsign": "BULL 5",
+      "side": "Red",
+      "lat": 47.14496,
+      "lon": 35.9074,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 4,
+      "loadout": {
+        "AUTOCANNON_30": 200
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_120",
+      "platform": "BRM-1",
+      "callsign": "HAWK 2",
+      "side": "Red",
+      "lat": 47.35062,
+      "lon": 35.57934,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 3,
+      "loadout": {
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_121",
+      "platform": "9P148R",
+      "callsign": "HUNTER 3",
+      "side": "Red",
+      "lat": 47.22708,
+      "lon": 35.80078,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 2,
+      "loadout": {
+        "ATGM_Konkurs": 20
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_122",
+      "platform": "Buk-M2",
+      "callsign": "SPEAR 5",
+      "side": "Red",
+      "lat": 47.37315,
+      "lon": 35.59271,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 1,
+      "loadout": {
+        "9M317": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_123",
+      "platform": "Tor-M1",
+      "callsign": "ARROW 5",
+      "side": "Red",
+      "lat": 47.05248,
+      "lon": 35.4677,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 2,
+      "loadout": {
+        "9M331": 8
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_124",
+      "platform": "Buk-M2",
+      "callsign": "SPIKE 5",
+      "side": "Red",
+      "lat": 47.28939,
+      "lon": 35.51103,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 2,
+      "loadout": {
+        "9M317": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_125",
+      "platform": "AirbaseR",
+      "callsign": "STRATEGIC 1",
+      "side": "Red",
+      "lat": 48.93,
+      "lon": 40.39,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 1,
+      "loadout": {},
+      "waypoints": []
+    },
+    {
+      "id": "red_126",
+      "platform": "MiG-29A",
+      "callsign": "FALCON 1",
+      "side": "Red",
+      "lat": 48.93,
+      "lon": 40.39,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 3,
+      "loadout": {
+        "R-27R": 2,
+        "R-27T": 2,
+        "R-73": 4,
+        "GSh-30-1": 2000
+      },
+      "waypoints": [],
+      "mission": {
+        "name": "Patrol FALCON 1",
+        "type": "CAP",
+        "lat": 48.61375833800211,
+        "lon": 39.91141131813677,
+        "radius": 40.0,
+        "alt": 30000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_125",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_127",
+      "platform": "Su-30SM",
+      "callsign": "EAGLE 1",
+      "side": "Red",
+      "lat": 48.93,
+      "lon": 40.39,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 3,
+      "loadout": {
+        "R-77": 4,
+        "R-73": 4,
+        "GSh-30-1": 2000
+      },
+      "waypoints": [],
+      "leader_uid": "red_126",
+      "formation_slot": 1,
+      "mission": {
+        "name": "Patrol EAGLE 1",
+        "type": "CAP",
+        "lat": 48.94453457291251,
+        "lon": 40.05741851067564,
+        "radius": 40.0,
+        "alt": 30000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_125",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_128",
+      "platform": "Su-35S",
+      "callsign": "CROW 1",
+      "side": "Red",
+      "lat": 48.93,
+      "lon": 40.39,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "loadout": {
+        "R-77": 4,
+        "R-27T": 2,
+        "R-73": 6,
+        "GSh-30-1": 2000
+      },
+      "waypoints": [],
+      "leader_uid": "red_126",
+      "formation_slot": 2,
+      "mission": {
+        "name": "Patrol CROW 1",
+        "type": "CAP",
+        "lat": 49.192865485129204,
+        "lon": 40.43976489361255,
+        "radius": 40.0,
+        "alt": 30000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_125",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_129",
+      "platform": "Su-25UA",
+      "callsign": "SNAKE 1",
+      "side": "Red",
+      "lat": 48.93,
+      "lon": 40.39,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 4,
+      "loadout": {
+        "R-60M": 2,
+        "S-8": 2,
+        "GSh-30-2": 2000
+      },
+      "waypoints": [],
+      "mission": {
+        "name": "Patrol SNAKE 1",
+        "type": "STRIKE",
+        "lat": 48.571049054961314,
+        "lon": 39.823025417648644,
+        "radius": 40.0,
+        "alt": 15000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_125",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_130",
+      "platform": "Buk-M2",
+      "callsign": "DOME 3",
+      "side": "Red",
+      "lat": 48.91886,
+      "lon": 40.42576,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 3,
+      "loadout": {
+        "9M317": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_131",
+      "platform": "Buk-M2",
+      "callsign": "ARROW 6",
+      "side": "Red",
+      "lat": 48.97941,
+      "lon": 40.47248,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 3,
+      "loadout": {
+        "9M317": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_132",
+      "platform": "Buk-M2",
+      "callsign": "SPEAR 6",
+      "side": "Red",
+      "lat": 48.84518,
+      "lon": 40.42713,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 1,
+      "loadout": {
+        "9M317": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_133",
+      "platform": "AirbaseR",
+      "callsign": "STRATEGIC 2",
+      "side": "Red",
+      "lat": 48.35,
+      "lon": 41.83,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 4,
+      "loadout": {},
+      "waypoints": []
+    },
+    {
+      "id": "red_134",
+      "platform": "Su-35S",
+      "callsign": "FALCON 2",
+      "side": "Red",
+      "lat": 48.35,
+      "lon": 41.83,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 2,
+      "loadout": {
+        "R-77": 4,
+        "R-27T": 2,
+        "R-73": 6,
+        "GSh-30-1": 2000
+      },
+      "waypoints": [],
+      "mission": {
+        "name": "Patrol FALCON 2",
+        "type": "CAP",
+        "lat": 48.40467213651306,
+        "lon": 41.6118513547149,
+        "radius": 40.0,
+        "alt": 30000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_133",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_135",
+      "platform": "Su-30SM",
+      "callsign": "BANDIT 1",
+      "side": "Red",
+      "lat": 48.35,
+      "lon": 41.83,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 2,
+      "loadout": {
+        "R-77": 4,
+        "R-73": 4,
+        "GSh-30-1": 2000
+      },
+      "waypoints": [],
+      "leader_uid": "red_134",
+      "formation_slot": 1,
+      "mission": {
+        "name": "Patrol BANDIT 1",
+        "type": "CAP",
+        "lat": 48.07270808989471,
+        "lon": 41.48902074969569,
+        "radius": 40.0,
+        "alt": 30000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_133",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_136",
+      "platform": "Su-35S",
+      "callsign": "EAGLE 2",
+      "side": "Red",
+      "lat": 48.35,
+      "lon": 41.83,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 1,
+      "loadout": {
+        "R-77": 4,
+        "R-27T": 2,
+        "R-73": 6,
+        "GSh-30-1": 2000
+      },
+      "waypoints": [],
+      "leader_uid": "red_134",
+      "formation_slot": 2,
+      "mission": {
+        "name": "Patrol EAGLE 2",
+        "type": "CAP",
+        "lat": 48.52912237752438,
+        "lon": 41.48197664704004,
+        "radius": 40.0,
+        "alt": 30000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_133",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_137",
+      "platform": "MiG-29A",
+      "callsign": "FALCON 3",
+      "side": "Red",
+      "lat": 48.35,
+      "lon": 41.83,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 4,
+      "loadout": {
+        "R-27R": 2,
+        "R-27T": 2,
+        "R-73": 4,
+        "GSh-30-1": 2000
+      },
+      "waypoints": [],
+      "leader_uid": "red_134",
+      "formation_slot": 3,
+      "mission": {
+        "name": "Patrol FALCON 3",
+        "type": "CAP",
+        "lat": 48.245853357389635,
+        "lon": 41.279919827316284,
+        "radius": 40.0,
+        "alt": 30000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_133",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_138",
+      "platform": "Su-30SM",
+      "callsign": "EAGLE 3",
+      "side": "Red",
+      "lat": 48.35,
+      "lon": 41.83,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 3,
+      "loadout": {
+        "R-77": 4,
+        "R-73": 4,
+        "GSh-30-1": 2000
+      },
+      "waypoints": [],
+      "leader_uid": "red_134",
+      "formation_slot": 4,
+      "mission": {
+        "name": "Patrol EAGLE 3",
+        "type": "CAP",
+        "lat": 48.161729331943036,
+        "lon": 42.28363489844108,
+        "radius": 40.0,
+        "alt": 30000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_133",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_139",
+      "platform": "S-400",
+      "callsign": "SPEAR 7",
+      "side": "Red",
+      "lat": 48.34548,
+      "lon": 41.7402,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 4,
+      "loadout": {
+        "48N6": 16
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_140",
+      "platform": "Tor-M1",
+      "callsign": "SPIKE 6",
+      "side": "Red",
+      "lat": 48.38055,
+      "lon": 41.83856,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 3,
+      "loadout": {
+        "9M331": 8
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_141",
+      "platform": "A-50U_Mainstay",
+      "callsign": "MAINSTAY 1",
+      "side": "Red",
+      "lat": 48.35,
+      "lon": 41.83,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 2,
+      "loadout": {},
+      "waypoints": [],
+      "mission": {
+        "name": "Patrol MAINSTAY 1",
+        "type": "CAP",
+        "lat": 48.52280166804214,
+        "lon": 42.25594523570322,
+        "radius": 40.0,
+        "alt": 30000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_133",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_142",
+      "platform": "T-90R",
+      "callsign": "ARMOR 3",
+      "side": "Red",
+      "lat": 45.16192,
+      "lon": 33.70914,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 1,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_143",
+      "platform": "T-80R",
+      "callsign": "ANVIL 3",
+      "side": "Red",
+      "lat": 45.35041,
+      "lon": 34.11821,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 3,
+      "loadout": {
+        "GUN_125": 38,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_144",
+      "platform": "T-72R",
+      "callsign": "HAMMER 6",
+      "side": "Red",
+      "lat": 45.18247,
+      "lon": 33.89142,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 4,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_145",
+      "platform": "T-72R",
+      "callsign": "CLAW 3",
+      "side": "Red",
+      "lat": 45.44194,
+      "lon": 34.02807,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 2,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_146",
+      "platform": "T-72R",
+      "callsign": "ARMOR 4",
+      "side": "Red",
+      "lat": 45.36626,
+      "lon": 34.00638,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 3,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_147",
+      "platform": "BMP-1R",
+      "callsign": "VIPER 6",
+      "side": "Red",
+      "lat": 45.51048,
+      "lon": 34.10002,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 1,
+      "loadout": {
+        "AUTOCANNON_30": 300,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_148",
+      "platform": "BMP-2R",
+      "callsign": "VIPER 7",
+      "side": "Red",
+      "lat": 45.1733,
+      "lon": 33.69591,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 5,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_149",
+      "platform": "BMP-2R",
+      "callsign": "COBRA 4",
+      "side": "Red",
+      "lat": 45.32771,
+      "lon": 33.61344,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_150",
+      "platform": "BMD-2R",
+      "callsign": "COBRA 5",
+      "side": "Red",
+      "lat": 45.31545,
+      "lon": 34.42193,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 300,
+        "ATGM_Konkurs": 2
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_151",
+      "platform": "BMP-2R",
+      "callsign": "FOX 5",
+      "side": "Red",
+      "lat": 45.36979,
+      "lon": 34.48196,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 3,
+      "loadout": {
+        "AUTOCANNON_30": 500,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_152",
+      "platform": "BTR-70R",
+      "callsign": "OX 7",
+      "side": "Red",
+      "lat": 45.29644,
+      "lon": 34.12629,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 200
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_153",
+      "platform": "MTLBR",
+      "callsign": "RAM 7",
+      "side": "Red",
+      "lat": 45.30621,
+      "lon": 33.72349,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 4,
+      "loadout": {
+        "AUTOCANNON_30": 150
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_154",
+      "platform": "BTR-80R",
+      "callsign": "BISON 6",
+      "side": "Red",
+      "lat": 45.32135,
+      "lon": 34.19726,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 2,
+      "loadout": {
+        "AUTOCANNON_30": 300
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_155",
+      "platform": "MTLBR",
+      "callsign": "BISON 7",
+      "side": "Red",
+      "lat": 45.41765,
+      "lon": 34.07384,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 4,
+      "loadout": {
+        "AUTOCANNON_30": 150
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_156",
+      "platform": "BRDM2R",
+      "callsign": "SHADOW 3",
+      "side": "Red",
+      "lat": 45.22107,
+      "lon": 34.13162,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 1,
+      "loadout": {
+        "ATGM_Konkurs": 6
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_157",
+      "platform": "BRDM2R",
+      "callsign": "HAWK 3",
+      "side": "Red",
+      "lat": 45.13121,
+      "lon": 33.71298,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 5,
+      "loadout": {
+        "ATGM_Konkurs": 6
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_158",
+      "platform": "Buk-M2",
+      "callsign": "ARROW 7",
+      "side": "Red",
+      "lat": 45.31262,
+      "lon": 33.9232,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 1,
+      "loadout": {
+        "9M317": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_159",
+      "platform": "Buk-M2",
+      "callsign": "ARROW 8",
+      "side": "Red",
+      "lat": 45.40795,
+      "lon": 33.77712,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "loadout": {
+        "9M317": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_160",
+      "platform": "Tor-M1",
+      "callsign": "ARROW 9",
+      "side": "Red",
+      "lat": 44.64504,
+      "lon": 33.4987,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 2,
+      "loadout": {
+        "9M331": 8
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_161",
+      "platform": "Tor-M1",
+      "callsign": "SHIELD 2",
+      "side": "Red",
+      "lat": 44.57421,
+      "lon": 33.45614,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 3,
+      "loadout": {
+        "9M331": 8
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_162",
+      "platform": "Buk-M2",
+      "callsign": "SHIELD 3",
+      "side": "Red",
+      "lat": 44.59424,
+      "lon": 33.50624,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 4,
+      "loadout": {
+        "9M317": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_163",
+      "platform": "AirbaseR",
+      "callsign": "STRATEGIC 3",
+      "side": "Red",
+      "lat": 44.61,
+      "lon": 33.52,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 5,
+      "loadout": {},
+      "waypoints": []
+    },
+    {
+      "id": "red_164",
+      "platform": "MiG-29A",
+      "callsign": "BANDIT 2",
+      "side": "Red",
+      "lat": 44.61,
+      "lon": 33.52,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 3,
+      "loadout": {
+        "R-27R": 2,
+        "R-27T": 2,
+        "R-73": 4,
+        "GSh-30-1": 2000
+      },
+      "waypoints": [],
+      "mission": {
+        "name": "Patrol BANDIT 2",
+        "type": "CAP",
+        "lat": 44.70539287966945,
+        "lon": 33.75952556253156,
+        "radius": 40.0,
+        "alt": 30000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_163",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_165",
+      "platform": "Su-35S",
+      "callsign": "CROW 2",
+      "side": "Red",
+      "lat": 44.61,
+      "lon": 33.52,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 2,
+      "loadout": {
+        "R-77": 4,
+        "R-27T": 2,
+        "R-73": 6,
+        "GSh-30-1": 2000
+      },
+      "waypoints": [],
+      "leader_uid": "red_164",
+      "formation_slot": 1,
+      "mission": {
+        "name": "Patrol CROW 2",
+        "type": "CAP",
+        "lat": 44.96336385217994,
+        "lon": 33.047646552128114,
+        "radius": 40.0,
+        "alt": 30000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_163",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_166",
+      "platform": "MiG-29A",
+      "callsign": "CROW 3",
+      "side": "Red",
+      "lat": 44.68,
+      "lon": 33.56,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 4,
+      "loadout": {
+        "R-27R": 2,
+        "R-27T": 2,
+        "R-73": 4,
+        "GSh-30-1": 2000
+      },
+      "waypoints": [],
+      "leader_uid": "red_164",
+      "formation_slot": 2,
+      "mission": {
+        "name": "Patrol CROW 3",
+        "type": "CAP",
+        "lat": 45.02199791128227,
+        "lon": 33.83795774266504,
+        "radius": 40.0,
+        "alt": 30000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_178",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_167",
+      "platform": "AirbaseR",
+      "callsign": "STRATEGIC 4",
+      "side": "Red",
+      "lat": 45.7,
+      "lon": 34.42,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 3,
+      "loadout": {},
+      "waypoints": []
+    },
+    {
+      "id": "red_168",
+      "platform": "Mi-24V",
+      "callsign": "HIND 1",
+      "side": "Red",
+      "lat": 45.7,
+      "lon": 34.42,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 4,
+      "loadout": {
+        "Shturm": 4,
+        "S-8": 2,
+        "Yak-B": 1000
+      },
+      "waypoints": [],
+      "mission": {
+        "name": "Patrol HIND 1",
+        "type": "STRIKE",
+        "lat": 45.601540578911845,
+        "lon": 34.76125313465453,
+        "radius": 40.0,
+        "alt": 15000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_167",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_169",
+      "platform": "Mi-8UA",
+      "callsign": "HIND 2",
+      "side": "Red",
+      "lat": 45.7,
+      "lon": 34.42,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 2,
+      "loadout": {
+        "S-8": 4
+      },
+      "waypoints": [],
+      "leader_uid": "red_168",
+      "formation_slot": 1,
+      "mission": {
+        "name": "Patrol HIND 2",
+        "type": "STRIKE",
+        "lat": 45.70626030317312,
+        "lon": 34.444337168168566,
+        "radius": 40.0,
+        "alt": 15000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_167",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_170",
+      "platform": "Mi-8UA",
+      "callsign": "BEAR 1",
+      "side": "Red",
+      "lat": 45.7,
+      "lon": 34.42,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 1,
+      "loadout": {
+        "S-8": 4
+      },
+      "waypoints": [],
+      "leader_uid": "red_168",
+      "formation_slot": 2,
+      "mission": {
+        "name": "Patrol BEAR 1",
+        "type": "STRIKE",
+        "lat": 45.47059362625172,
+        "lon": 34.910672284283905,
+        "radius": 40.0,
+        "alt": 15000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_167",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_171",
+      "platform": "Mi-8UA",
+      "callsign": "SWIFT 1",
+      "side": "Red",
+      "lat": 45.7,
+      "lon": 34.42,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "loadout": {
+        "S-8": 4
+      },
+      "waypoints": [],
+      "leader_uid": "red_168",
+      "formation_slot": 3,
+      "mission": {
+        "name": "Patrol SWIFT 1",
+        "type": "STRIKE",
+        "lat": 46.186156624398635,
+        "lon": 34.723050537899226,
+        "radius": 40.0,
+        "alt": 15000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_167",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_172",
+      "platform": "Mi-8UA",
+      "callsign": "BEAR 2",
+      "side": "Red",
+      "lat": 45.7,
+      "lon": 34.42,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 2,
+      "loadout": {
+        "S-8": 4
+      },
+      "waypoints": [],
+      "leader_uid": "red_168",
+      "formation_slot": 4,
+      "mission": {
+        "name": "Patrol BEAR 2",
+        "type": "STRIKE",
+        "lat": 45.769414122765646,
+        "lon": 34.71683659518707,
+        "radius": 40.0,
+        "alt": 15000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_167",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_173",
+      "platform": "Tor-M1",
+      "callsign": "SPIKE 7",
+      "side": "Red",
+      "lat": 45.59013,
+      "lon": 34.66071,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 2,
+      "loadout": {
+        "9M331": 8
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_174",
+      "platform": "Tor-M1",
+      "callsign": "SHIELD 4",
+      "side": "Red",
+      "lat": 45.71008,
+      "lon": 34.23501,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 2,
+      "loadout": {
+        "9M331": 8
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_175",
+      "platform": "T-64R",
+      "callsign": "BLADE 5",
+      "side": "Red",
+      "lat": 45.69353,
+      "lon": 34.33515,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 1,
+      "loadout": {
+        "GUN_125": 36,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_176",
+      "platform": "T-72R",
+      "callsign": "ARMOR 5",
+      "side": "Red",
+      "lat": 45.72433,
+      "lon": 34.15684,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 5,
+      "corruption": 4,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_177",
+      "platform": "T-90R",
+      "callsign": "STEEL 2",
+      "side": "Red",
+      "lat": 45.72032,
+      "lon": 34.20751,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 4,
+      "loadout": {
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_178",
+      "platform": "AirbaseR",
+      "callsign": "STRATEGIC 5",
+      "side": "Red",
+      "lat": 44.68,
+      "lon": 33.56,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 4,
+      "loadout": {},
+      "waypoints": []
+    },
+    {
+      "id": "red_179",
+      "platform": "Su-35S",
+      "callsign": "EAGLE 4",
+      "side": "Red",
+      "lat": 44.68,
+      "lon": 33.56,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 3,
+      "loadout": {
+        "R-77": 4,
+        "R-27T": 2,
+        "R-73": 6,
+        "GSh-30-1": 2000
+      },
+      "waypoints": [],
+      "mission": {
+        "name": "Patrol EAGLE 4",
+        "type": "CAP",
+        "lat": 44.47305672062959,
+        "lon": 33.27172072729955,
+        "radius": 40.0,
+        "alt": 30000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_178",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_180",
+      "platform": "Su-35S",
+      "callsign": "EAGLE 5",
+      "side": "Red",
+      "lat": 44.61,
+      "lon": 33.52,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 2,
+      "loadout": {
+        "R-77": 4,
+        "R-27T": 2,
+        "R-73": 6,
+        "GSh-30-1": 2000
+      },
+      "waypoints": [],
+      "leader_uid": "red_179",
+      "formation_slot": 1,
+      "mission": {
+        "name": "Patrol EAGLE 5",
+        "type": "CAP",
+        "lat": 44.65067930800752,
+        "lon": 33.071826035539765,
+        "radius": 40.0,
+        "alt": 30000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_163",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_181",
+      "platform": "Su-35S",
+      "callsign": "FALCON 4",
+      "side": "Red",
+      "lat": 44.68,
+      "lon": 33.56,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 4,
+      "corruption": 2,
+      "loadout": {
+        "R-77": 4,
+        "R-27T": 2,
+        "R-73": 6,
+        "GSh-30-1": 2000
+      },
+      "waypoints": [],
+      "leader_uid": "red_179",
+      "formation_slot": 2,
+      "mission": {
+        "name": "Patrol FALCON 4",
+        "type": "CAP",
+        "lat": 44.937761670215984,
+        "lon": 34.20158910131506,
+        "radius": 40.0,
+        "alt": 30000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_178",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_182",
+      "platform": "Su-35S",
+      "callsign": "FALCON 5",
+      "side": "Red",
+      "lat": 44.68,
+      "lon": 33.56,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 2,
+      "corruption": 3,
+      "loadout": {
+        "R-77": 4,
+        "R-27T": 2,
+        "R-73": 6,
+        "GSh-30-1": 2000
+      },
+      "waypoints": [],
+      "leader_uid": "red_179",
+      "formation_slot": 3,
+      "mission": {
+        "name": "Patrol FALCON 5",
+        "type": "CAP",
+        "lat": 44.59246305907166,
+        "lon": 34.003562153168495,
+        "radius": 40.0,
+        "alt": 30000.0,
+        "rtb_fuel": 0.25
+      },
+      "home_uid": "red_178",
+      "duty_state": "ACTIVE"
+    },
+    {
+      "id": "red_183",
+      "platform": "S-400",
+      "callsign": "SPEAR 8",
+      "side": "Red",
+      "lat": 44.75422,
+      "lon": 33.55779,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 3,
+      "corruption": 5,
+      "loadout": {
+        "48N6": 16
+      },
+      "waypoints": []
+    },
+    {
+      "id": "red_184",
+      "platform": "Buk-M2",
+      "callsign": "SPIKE 8",
+      "side": "Red",
+      "lat": 44.59251,
+      "lon": 33.47768,
+      "image_path": "assets/red_jet.png",
+      "drunkness": 1,
+      "corruption": 4,
+      "loadout": {
+        "9M317": 4
+      },
+      "waypoints": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_01",
+      "condition_type": "TIME",
+      "condition_val": "180",
+      "action_type": "LOG",
+      "action_val": "Intel indicates massive Russian resupply convoy en route to Melitopol.",
+      "triggered": false
+    }
+  ]
+}
