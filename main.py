@@ -19,13 +19,14 @@ from constants import (
 )
 from geo import lat_lon_to_pixel, pixel_to_lat_lon, world_to_screen
 from renderer import Renderer
-from scenario import Database, Unit, Mission, load_scenario, save_scenario, save_deployment, load_deployment
+from scenario import Database, Unit, Mission, GameEvent, load_scenario, save_scenario, save_deployment, load_deployment
 from simulation import SimulationEngine
 from ui import GameUI
 
 _HERE         = pathlib.Path(__file__).parent
 SCENARIO_PATH = str(_HERE / "data" / "scenarios" / "ukraine_russia.json")
 SAVE_PATH     = str(_HERE / "data" / "scenarios" / "ukraine_russia_save.json")
+BGM_PATH      = str(_HERE / "assets" / "cc_style_bgm.mp3") 
 
 _UID_COUNTER = 0
 
@@ -59,15 +60,17 @@ class CameraState:
         self.lat, self.lon = pixel_to_lat_lon(px - dx, py - dy, self.zoom)
 
     def zoom_by(self, delta: int, sx: float, sy: float) -> None:
-        old_zoom = self.zoom
-        self.zoom = max(4, min(12, self.zoom + delta))
-        if self.zoom == old_zoom: return
+        target_zoom = max(4, min(12, self.zoom + delta))
+        if target_zoom == self.zoom: 
+            return
             
         target_lat, target_lon = self.screen_to_world(sx, sy)
+        self.zoom = target_zoom
         tx, ty = lat_lon_to_pixel(target_lat, target_lon, self.zoom)
         
         cam_px = tx - sx + self.win_w / 2
         cam_py = ty - sy + self.map_h / 2
+        
         self.lat, self.lon = pixel_to_lat_lon(cam_px, cam_py, self.zoom)
 
     def screen_to_world(self, sx, sy):
@@ -77,9 +80,6 @@ class CameraState:
     def world_to_screen(self, lat, lon):
         px, py = self.pixel_xy
         return world_to_screen(lat, lon, px, py, self.zoom, self.win_w, self.map_h)
-
-
-# ── Scenario generation & Geography ───────────────────────────────────────────
 
 import random as _random
 from geo import haversine
@@ -231,6 +231,17 @@ def _generate_scenario(db: "Database") -> dict:
                 u["lat"], u["lon"] = closest["lat"], closest["lon"]
                 u["duty_state"] = "ACTIVE"
 
+    events = [
+        {
+            "id": "ev_01",
+            "condition_type": "TIME",
+            "condition_val": "180",
+            "action_type": "LOG",
+            "action_val": "Intel indicates massive Russian resupply convoy en route to Melitopol.",
+            "triggered": False
+        }
+    ]
+
     return {
         "name":        "Operation East Wind — Donbas 2024",
         "description": "Russian forces are entrenched across Donbas and Luhansk.",
@@ -238,6 +249,7 @@ def _generate_scenario(db: "Database") -> dict:
         "start_lon":   38.5,
         "start_zoom":  8,
         "units":       units,
+        "events":      events,
     }
 
 def _write_default_scenario(path: str, db: "Database") -> None:
@@ -385,14 +397,28 @@ def _handle_right_click(screen_pos, cam: CameraState,
         sim.log(f"{selected.callsign}: waypoint → ({lat:.2f}°, {lon:.2f}°).")
 
 
-# ── Main ─────────────────────────────────────────────────────────────────────
-
 def main() -> None:
     pygame.init()
+    pygame.mixer.init() 
+    
     win_w, win_h = WINDOW_WIDTH_DEFAULT, WINDOW_HEIGHT_DEFAULT
     window = pygame.display.set_mode((win_w, win_h), pygame.RESIZABLE)
     pygame.display.set_caption("Command: Ukraine–Russia  |  Tactical Simulator")
     clock  = pygame.time.Clock()
+
+    bgm_enabled = False
+    bgm_loaded = False
+    try:
+        if os.path.exists(BGM_PATH):
+            pygame.mixer.music.load(BGM_PATH)
+            pygame.mixer.music.set_volume(0.4) 
+            pygame.mixer.music.play(loops=-1) 
+            bgm_enabled = True
+            bgm_loaded = True
+        else:
+            print(f"Notice: Background music not found at {BGM_PATH}. Skipping playback.")
+    except pygame.error as e:
+        print(f"Warning: Could not play background music: {e}")
 
     db = Database(
         weapons_path = str(_HERE / "weapons.json"),
@@ -400,13 +426,13 @@ def main() -> None:
     )
     _write_default_scenario(SCENARIO_PATH, db)
     
-    all_units, meta = load_scenario(SCENARIO_PATH, db)
+    all_units, meta, events = load_scenario(SCENARIO_PATH, db)
     red_units  = [u for u in all_units if u.side == "Red"]
     blue_units = [u for u in all_units if u.side == "Blue"]
 
     placement_counts: dict[str, int] = {}
 
-    sim      = SimulationEngine(list(red_units) + list(blue_units), db)
+    sim      = SimulationEngine(list(red_units) + list(blue_units), db, events)
     sim.set_compression(0)   
 
     renderer = Renderer(window)
@@ -419,6 +445,7 @@ def main() -> None:
     placing_remaining: int             = 0         
     selected_unit:     Unit | None     = None
     assigning_mission: str | None      = None
+    assigning_package_state: dict | None = None
     is_dragging:       bool            = False
     show_all_enemies:  bool            = False
     game_over_triggered: bool          = False
@@ -457,7 +484,13 @@ def main() -> None:
 
             action = ui.process_events(event)
 
-            if action.get("type") == "speed_change":
+            if action.get("type") == "open_pkg_window" and selected_unit:
+                ui._create_strike_package_window(selected_unit, sim)
+            elif action.get("type") == "prep_launch_package":
+                assigning_package_state = action["state"]
+                sim.log("Click map to set package target and launch...")
+
+            elif action.get("type") == "speed_change":
                 sim.set_compression(TIME_SPEEDS[action["speed_idx"]])
             elif action.get("type") == "toggle_air_labels":
                 show_air_labels = not show_air_labels
@@ -465,6 +498,16 @@ def main() -> None:
                 show_ground_labels = not show_ground_labels
             elif action.get("type") == "toggle_radar_rings":
                 show_radar_rings = not show_radar_rings
+            elif action.get("type") == "toggle_bgm":
+                if bgm_loaded:
+                    bgm_enabled = not bgm_enabled
+                    if bgm_enabled:
+                        pygame.mixer.music.unpause()
+                    else:
+                        pygame.mixer.music.pause()
+            elif action.get("type") == "set_volume":
+                if bgm_loaded:
+                    pygame.mixer.music.set_volume(action["value"])
             elif action.get("type") == "place_unit":
                 placing_type      = action["platform_key"]
                 placing_remaining = action.get("quantity", 1)
@@ -506,12 +549,14 @@ def main() -> None:
                 sim.set_compression(0)
                 sim.log("Simulation paused for reinforcements.")
             elif action.get("type") == "restart_scenario":
-                fresh_units, meta = load_scenario(SCENARIO_PATH, db)
+                fresh_units, meta, events = load_scenario(SCENARIO_PATH, db)
                 sim.units = fresh_units
+                sim.events = events
                 sim.missiles.clear()
                 sim.salvos.clear()
                 sim.game_time = 0.0
                 sim.event_log.clear()
+                sim.game_over_reason = None
                 sim.blue_contacts.clear()
                 sim.set_compression(0)
                 app_mode, selected_unit, placing_type, placing_remaining, assigning_mission, game_over_triggered = "setup", None, None, 0, None, False
@@ -520,15 +565,13 @@ def main() -> None:
             elif action.get("type") == "toggle_fow": show_all_enemies = not show_all_enemies
             elif action.get("type") == "toggle_auto_engage" and selected_unit:
                 selected_unit.auto_engage = not getattr(selected_unit, 'auto_engage', False)
-            elif action.get("type") == "toggle_ecm" and selected_unit:
-                selected_unit.is_jamming = not getattr(selected_unit, 'is_jamming', False)
-            elif action.get("type") == "toggle_radar" and selected_unit:
-                selected_unit.radar_active = not getattr(selected_unit, 'radar_active', True)
-            elif action.get("type") == "toggle_iff" and selected_unit:
-                selected_unit.iff_active = not getattr(selected_unit, 'iff_active', True)
             elif action.get("type") == "toggle_roe" and selected_unit:
                 roes = ["FREE", "TIGHT", "HOLD"]
                 selected_unit.roe = roes[(roes.index(selected_unit.roe) + 1) % 3]
+            elif action.get("type") == "cycle_emcon" and selected_unit:
+                states = ["SILENT", "ACTIVE", "BLINDING"]
+                cur = getattr(selected_unit, 'emcon_state', "ACTIVE")
+                selected_unit.set_emcon(states[(states.index(cur) + 1) % len(states)])
             elif action.get("type") == "select_parked":
                 p_unit = sim.get_unit_by_uid(action["uid"])
                 if p_unit:
@@ -571,7 +614,7 @@ def main() -> None:
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    placing_type, placing_remaining, assigning_mission = None, 0, None
+                    placing_type, placing_remaining, assigning_mission, assigning_package_state = None, 0, None, None
                     if selected_unit:
                         selected_unit.selected = False
                         selected_unit = None
@@ -580,7 +623,7 @@ def main() -> None:
                     selected_unit.clear_waypoints()
                     selected_unit.leader_uid = "" 
                 elif event.key == pygame.K_s and (event.mod & pygame.KMOD_CTRL) and app_mode == "combat":
-                    save_scenario(SAVE_PATH, sim.units, meta, sim.game_time)
+                    save_scenario(SAVE_PATH, sim.units, meta, sim.events, sim.game_time)
                 elif event.key == pygame.K_SPACE and app_mode == "combat":
                     sim.set_compression(0 if not sim.paused else 1)
                 elif (event.key in (pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5) and app_mode == "combat"):
@@ -633,12 +676,33 @@ def main() -> None:
                             selected_unit.altitude_ft = selected_unit.platform.cruise_alt_ft
                         continue
 
+                    if assigning_package_state:
+                        lat, lon = cam.screen_to_world(*event.pos)
+                        pkg_id = f"PKG_{int(sim.game_time)}_{_random.randint(100,999)}"
+                        count_launched = 0
+                        for uid, state in assigning_package_state.items():
+                            if state["included"]:
+                                u = sim.get_unit_by_uid(uid)
+                                if u and u.duty_state == "READY":
+                                    u.set_loadout_role(db, state["loadout"])
+                                    u.mission = Mission(f"{pkg_id} {state['role']}", state["role"], lat, lon, 30.0, u.platform.cruise_alt_ft, 0.25, package_id=pkg_id)
+                                    u.duty_state = "ACTIVE"
+                                    u.altitude_ft = u.platform.cruise_alt_ft
+                                    u.target_altitude_ft = u.platform.cruise_alt_ft
+                                    u.clear_waypoints()
+                                    count_launched += 1
+                        ui.rebuild_weapon_buttons(selected_unit, sim)
+                        sim.log(f"Strike Package '{pkg_id}' launched ({count_launched} aircraft).")
+                        assigning_package_state = None
+                        continue
+
                     hit = _pick_unit(event.pos, cam, sim.units, show_all_enemies=show_all_enemies, app_mode=app_mode)
                     if hit:
                         if selected_unit: selected_unit.selected = False
                         selected_unit = hit
                         selected_unit.selected = True
                         assigning_mission = None
+                        assigning_package_state = None
                         ui.rebuild_weapon_buttons(selected_unit, sim)
                     else:
                         if selected_unit:
@@ -658,6 +722,7 @@ def main() -> None:
                                 ui.rebuild_weapon_buttons(None, sim)
                     elif selected_unit and app_mode == "combat":
                         if assigning_mission: assigning_mission = None
+                        elif assigning_package_state: assigning_package_state = None
                         elif selected_unit.duty_state == "READY":
                             lat, lon = cam.screen_to_world(*event.pos)
                             if not selected_unit.mission: selected_unit.mission = Mission("Configured Mission", "CAP", lat, lon, 30.0, selected_unit.platform.cruise_alt_ft, 0.25)
@@ -694,13 +759,17 @@ def main() -> None:
                     sim.set_compression(0)
                     game_over_triggered = True
 
+        cursor_type = placing_type
+        if assigning_mission: cursor_type = assigning_mission
+        if assigning_package_state: cursor_type = "STRIKE PACKAGE TARGET"
+
         renderer.draw_frame(cam_px, cam_py, cam.zoom,
                             sim.units, sim.missiles,
                             cam.win_w, cam.map_h,
                             blue_contacts=sim.blue_contacts,
-                            placing_type=assigning_mission if assigning_mission else placing_type,
+                            placing_type=cursor_type,
                             placing_remaining=placing_remaining,
-                            mouse_pos=pygame.mouse.get_pos() if (placing_type or assigning_mission) else None,
+                            mouse_pos=pygame.mouse.get_pos() if cursor_type else None,
                             show_all_enemies=show_all_enemies,
                             show_air_labels=show_air_labels,
                             show_ground_labels=show_ground_labels,
@@ -708,7 +777,7 @@ def main() -> None:
 
         ui.update(real_delta, sim, selected_unit, placing_type, placing_remaining, show_all_enemies,
                   blue_contacts=sim.blue_contacts, show_air_labels=show_air_labels, show_ground_labels=show_ground_labels,
-                  show_radar_rings=show_radar_rings)
+                  show_radar_rings=show_radar_rings, bgm_enabled=bgm_enabled)
         ui.draw()
         pygame.display.flip()
 

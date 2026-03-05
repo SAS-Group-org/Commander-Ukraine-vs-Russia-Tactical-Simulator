@@ -1,0 +1,42 @@
+{
+    "window.#settings_window": {
+        "colours": {
+            "dark_bg": "#2b302c",
+            "normal_bg": "#363c37",
+            "window_bg": "#2b302c",
+            "border": "#555d56"
+        },
+        "misc": {
+            "border_width": "2",
+            "shadow_width": "5",
+            "title_bar_disabled": "0"
+        }
+    },
+    "label.#settings_label": {
+        "colours": {
+            "normal_text": "#e0d8c0"
+        },
+        "font": {
+            "name": "noto_sans",
+            "size": "16",
+            "bold": "1"
+        },
+        "misc": {
+            "text_alignment": "left"
+        }
+    },
+    "button.#toggle_btn": {
+        "colours": {
+            "normal_bg": "#4a4336",
+            "hovered_bg": "#5c5343",
+            "active_bg": "#3a3429",
+            "normal_text": "#e0d8c0",
+            "normal_border": "#222222"
+        },
+        "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "12",
+            "border_width": "2"
+        }
+    }
+}

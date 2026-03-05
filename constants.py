@@ -4,7 +4,7 @@
 WINDOW_WIDTH_DEFAULT    = 1920
 WINDOW_HEIGHT_DEFAULT   = 1080
 BOTTOM_PANEL_FRACTION   = 0.30
-BOTTOM_PANEL_MIN_HEIGHT = 220
+BOTTOM_PANEL_MIN_HEIGHT = 320  # FIXED: Increased from 220 to prevent text-box starvation
 FPS                     = 60
 TILE_SIZE               = 256
 

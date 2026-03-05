@@ -70,6 +70,15 @@ class Mission:
     time_on_target: float = 0.0
     package_id: str = ""
 
+@dataclass
+class GameEvent:
+    id: str
+    condition_type: str # 'TIME', 'UNIT_DEAD', 'AREA_ENTERED'
+    condition_val: str  
+    action_type: str    # 'LOG', 'VICTORY'
+    action_val: str     
+    triggered: bool = False
+
 class Missile:
     def __init__(self, shooter: "Unit", target: "Unit", weapon_def: WeaponDef):
         self.shooter    = shooter
@@ -161,10 +170,9 @@ class Missile:
             
         pk = (self.wdef.base_pk * (1.0 - penalty) * structural_mult) - (range_fraction * 0.15)
         
-        # DATALINK POSITIONAL ERROR PENALTY: Pk tanks if the track is stale or fuzzy
         track = getattr(self.shooter, 'merged_contacts', {}).get(self.target.uid)
         if track:
-            pk -= (track.pos_error_km * 0.05) # -5% hit chance per 1km of positional uncertainty
+            pk -= (track.pos_error_km * 0.05) 
         
         if self.target.platform.unit_type in ("fighter", "attacker", "helicopter", "awacs"):
             g_load = getattr(self.target, 'current_g_load', 1.0)
@@ -256,9 +264,11 @@ class Unit:
         self.duty_state: str = "ACTIVE"  
         self.duty_timer: float = 0.0
 
+        self.emcon_state: str = "ACTIVE" 
         self.is_jamming: bool = False
         self.radar_active: bool = True
-        self.iff_active: bool = True # IFF TRANSPONDER
+        self.iff_active: bool = True 
+        
         self.chaff: int = platform.chaff_capacity
         self.flare: int = platform.flare_capacity
 
@@ -284,6 +294,21 @@ class Unit:
         self.formation_slot: int = 0 
         self.is_intercepting: bool = False
         self.saved_waypoints: list[tuple[float, float]] = []
+
+    def set_emcon(self, state: str) -> None:
+        self.emcon_state = state
+        if state == "SILENT":
+            self.radar_active = False
+            self.is_jamming = False
+            self.iff_active = False
+        elif state == "ACTIVE":
+            self.radar_active = True
+            self.is_jamming = False
+            self.iff_active = True
+        elif state == "BLINDING":
+            self.radar_active = True
+            self.is_jamming = True
+            self.iff_active = True
 
     @property
     def alive(self) -> bool: return self.hp > 0.0
@@ -387,7 +412,6 @@ class Unit:
             if abs(alt_diff) <= step: self.altitude_ft = self.target_altitude_ft
             else: self.altitude_ft += math.copysign(step, alt_diff)
 
-        # TIME ON TARGET (ToT) SPEED MODULATION
         target_spd = self.platform.speed_kmh * self.performance_mult
         if self.mission and self.mission.time_on_target > game_time and self.waypoints and not self.is_evading:
             dist_to_tgt = 0.0
@@ -400,7 +424,7 @@ class Unit:
             if time_rem > 0:
                 req_speed_kmh = (dist_to_tgt / (time_rem / 3600.0))
                 target_spd = min(target_spd, req_speed_kmh)
-                target_spd = max(350.0, target_spd) # Cannot fly below stall speed
+                target_spd = max(350.0, target_spd)
 
         if self.platform.unit_type in ("fighter", "attacker", "helicopter", "awacs"):
             spd_mps = max(10.0, self.current_speed_kmh / 3.6)
@@ -515,6 +539,14 @@ class Unit:
         self.weapon_cooldowns = {k: 0.0 for k in self.loadout.keys()}
         return new_role
 
+    def set_loadout_role(self, db: "Database", role: str) -> None:
+        roles = ["DEFAULT", "A2A", "A2G", "SEAD"]
+        target = role if role in roles else "DEFAULT"
+        attempts = 0
+        while self.current_loadout_role != target and attempts < 5:
+            self.cycle_loadout(db)
+            attempts += 1
+
     def best_weapon_for(self, db: "Database", target: "Unit") -> Optional[str]:
         if self.systems["weapons"] == "DESTROYED": return None
         
@@ -602,8 +634,7 @@ class Database:
                 max_g=float(mg)
             )
 
-# Load/Save handlers dynamically infer the new properties with safe fallback defaults
-def load_scenario(path: str, db: Database) -> tuple[list[Unit], dict]:
+def load_scenario(path: str, db: Database) -> tuple[list[Unit], dict, list[GameEvent]]:
     with open(path, encoding="utf-8") as fh:
         data = json.load(fh)
 
@@ -632,8 +663,10 @@ def load_scenario(path: str, db: Database) -> tuple[list[Unit], dict]:
         unit.systems = ud.get("systems", {"radar": "OK", "mobility": "OK", "weapons": "OK"})
         unit.fire_intensity = ud.get("fire_intensity", 0.0)
         unit.roe = ud.get("roe", "FREE" if unit.side == "Red" else "TIGHT")
-        unit.radar_active = ud.get("radar_active", True)
-        unit.iff_active = ud.get("iff_active", True)
+        
+        unit.emcon_state = ud.get("emcon_state", "ACTIVE")
+        unit.set_emcon(unit.emcon_state)
+        
         unit.home_uid = ud.get("home_uid", "")
         unit.duty_state = ud.get("duty_state", "ACTIVE")
         unit.duty_timer = ud.get("duty_timer", 0.0)
@@ -664,10 +697,17 @@ def load_scenario(path: str, db: Database) -> tuple[list[Unit], dict]:
         "start_lon":   data.get("start_lon",   30.0),
         "start_zoom":  data.get("start_zoom",  7),
     }
-    return units, meta
+    
+    events = []
+    for ed in data.get("events", []):
+        events.append(GameEvent(
+            id=ed["id"], condition_type=ed["condition_type"], condition_val=str(ed["condition_val"]),
+            action_type=ed["action_type"], action_val=str(ed["action_val"]), triggered=ed.get("triggered", False)
+        ))
+        
+    return units, meta, events
 
-def save_scenario(path: str, units: list[Unit], meta: dict,
-                  game_time: float = 0.0) -> None:
+def save_scenario(path: str, units: list[Unit], meta: dict, events: list[GameEvent], game_time: float = 0.0) -> None:
     units_data = []
     for u in units:
         entry = {
@@ -684,8 +724,7 @@ def save_scenario(path: str, units: list[Unit], meta: dict,
             "fire_intensity": u.fire_intensity,
             "loadout":    u.loadout,
             "roe":        u.roe,
-            "radar_active": u.radar_active,
-            "iff_active":   u.iff_active,
+            "emcon_state": u.emcon_state,
             "home_uid":   u.home_uid,
             "duty_state": u.duty_state,
             "duty_timer": round(u.duty_timer, 1),
@@ -706,10 +745,16 @@ def save_scenario(path: str, units: list[Unit], meta: dict,
             }
         units_data.append(entry)
 
+    events_data = [{
+        "id": e.id, "condition_type": e.condition_type, "condition_val": e.condition_val,
+        "action_type": e.action_type, "action_val": e.action_val, "triggered": e.triggered
+    } for e in events]
+
     payload = {
         **meta,
         "game_time_seconds": round(game_time, 1),
         "units": units_data,
+        "events": events_data
     }
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     with open(path, "w", encoding="utf-8") as fh:
@@ -733,8 +778,7 @@ def save_deployment(path: str, units: list[Unit]) -> None:
             "fire_intensity": u.fire_intensity,
             "loadout":    u.loadout,
             "roe":        u.roe,
-            "radar_active": u.radar_active,
-            "iff_active":   u.iff_active,
+            "emcon_state": u.emcon_state,
             "home_uid":   u.home_uid,
             "duty_state": u.duty_state,
             "duty_timer": round(u.duty_timer, 1),
@@ -788,8 +832,10 @@ def load_deployment(path: str, db: Database) -> list[Unit]:
         unit.systems = ud.get("systems", {"radar": "OK", "mobility": "OK", "weapons": "OK"})
         unit.fire_intensity = ud.get("fire_intensity", 0.0)
         unit.roe = ud.get("roe", "TIGHT")
-        unit.radar_active = ud.get("radar_active", True)
-        unit.iff_active = ud.get("iff_active", True)
+        
+        unit.emcon_state = ud.get("emcon_state", "ACTIVE")
+        unit.set_emcon(unit.emcon_state)
+        
         unit.home_uid = ud.get("home_uid", "")
         unit.duty_state = ud.get("duty_state", "ACTIVE")
         unit.duty_timer = ud.get("duty_timer", 0.0)

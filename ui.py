@@ -7,7 +7,7 @@ import pygame
 import pygame_gui
 from pygame_gui.elements import (
     UIButton, UIPanel, UITextBox, UISelectionList, UILabel,
-    UITextEntryLine,
+    UITextEntryLine, UIWindow, UIHorizontalSlider, UIScrollingContainer
 )
 
 from constants import BOTTOM_PANEL_FRACTION, BOTTOM_PANEL_MIN_HEIGHT, TIME_SPEEDS, TIME_SPEED_LABELS, DEFAULT_SPEED_IDX
@@ -30,6 +30,7 @@ class GameUI:
         self._speed_idx  = DEFAULT_SPEED_IDX
         self._last_log_len = 0
         self._last_parked_count = -1
+        self._bgm_volume = 0.4
 
         self._roster_items: list[str] = []   
         self._roster_keys:  list[str] = []   
@@ -50,20 +51,30 @@ class GameUI:
         
         self._nav_box:      UITextBox      = None        # type: ignore
         self._log_box:      UITextBox      = None        # type: ignore
-        self._fow_btn:      UIButton       = None        # type: ignore
         
-        self._air_lbl_btn:   UIButton      = None        # type: ignore
-        self._gnd_lbl_btn:   UIButton      = None        # type: ignore
-        self._radar_rings_btn: UIButton    = None        # type: ignore
+        # Settings elements
+        self._settings_btn:    UIButton           = None # type: ignore
+        self._settings_window: UIWindow           = None # type: ignore
+        self._fow_btn:         UIButton           = None # type: ignore
+        self._air_lbl_btn:     UIButton           = None # type: ignore
+        self._gnd_lbl_btn:     UIButton           = None # type: ignore
+        self._radar_rings_btn: UIButton           = None # type: ignore
+        self._bgm_btn:         UIButton           = None # type: ignore
+        self._bgm_vol_slider:  UIHorizontalSlider = None # type: ignore
+        
+        # Strike Package Elements
+        self._strike_pkg_btn:  UIButton           = None # type: ignore
+        self._pkg_window:      UIWindow           = None # type: ignore
+        self._pkg_launch_btn:  UIButton           = None # type: ignore
+        self._pkg_ui_map:      dict               = {}   # Maps UI Elements -> (uid, action)
+        self._pkg_state:       dict               = {}   # Tracks selected aircraft state
         
         self._reinforce_btn: UIButton      = None        # type: ignore
         self._restart_btn:   UIButton      = None        # type: ignore
         
         self._auto_engage_btn: UIButton    = None        # type: ignore
         self._roe_btn:      UIButton       = None        # type: ignore
-        self._ecm_btn:      UIButton       = None        # type: ignore
-        self._radar_btn:    UIButton       = None        # type: ignore
-        self._iff_btn:      UIButton       = None        # type: ignore
+        self._emcon_btn:    UIButton       = None        # type: ignore
         
         self._assign_cap_btn: UIButton     = None        # type: ignore
         self._clear_msn_btn:  UIButton     = None        # type: ignore
@@ -127,14 +138,23 @@ class GameUI:
 
     def _col_widths(self) -> tuple[int, int, int]:
         avail = self._win_w - _PAD * 4
+        if avail < 860:
+            return int(avail * 0.36), int(avail * 0.41), int(avail * 0.23)
+        
         c1 = max(310, int(avail * 0.30))
         c2 = max(350, int(avail * 0.40))
         c3 = max(180, avail - c1 - c2)
         return c1, c2, c3
 
     def _build(self) -> None:
-        self.manager = pygame_gui.UIManager((self._win_w, self._win_h))
+        self._settings_window = None
+        self._pkg_window = None
+        self._pkg_ui_map.clear()
+        self._pkg_state.clear()
+        
+        self.manager = pygame_gui.UIManager((self._win_w, self._win_h), "theme.json")
         self.manager.preload_fonts([{"name": "noto_sans", "point_size": 13, "style": "bold", "antialiased": "1"}])
+        
         self._speed_btns = []
         self._weap_btns  = []
         self._weap_keys  = []
@@ -163,7 +183,7 @@ class GameUI:
             item_list=self._roster_items, manager=self.manager, container=self._panel,
         )
 
-        info_h = max(20, panel_h - (_BTN_H + _BTN_PAD) * 7 - _PAD * 3)
+        info_h = max(20, panel_h - (_BTN_H + _BTN_PAD) * 6 - _PAD * 3)
         self._setup_info = UITextBox(
             html_text=(
                 "<b>UNIT DEPLOYMENT</b><br>"
@@ -198,16 +218,8 @@ class GameUI:
         self._load_deploy_btn = UIButton(relative_rect=pygame.Rect(ctrl_x + btn_w_half + _BTN_PAD, btn_y, btn_w_half, _BTN_H), text="Load Deployment", manager=self.manager, container=self._panel)
         btn_y += _BTN_H + _BTN_PAD
 
-        self._auto_deploy_btn = UIButton(relative_rect=pygame.Rect(ctrl_x, btn_y, ctrl_w, _BTN_H), text="Auto Deploy Blue", manager=self.manager, container=self._panel)
-        btn_y += _BTN_H + _BTN_PAD
-
-        # 2x2 Layout for Toggles
-        self._radar_rings_btn = UIButton(relative_rect=pygame.Rect(ctrl_x, btn_y, btn_w_half, _BTN_H), text="RADAR RINGS: ON", manager=self.manager, container=self._panel)
-        self._fow_btn = UIButton(relative_rect=pygame.Rect(ctrl_x + btn_w_half + _BTN_PAD, btn_y, btn_w_half, _BTN_H), text="FOG OF WAR: ON", manager=self.manager, container=self._panel)
-        btn_y += _BTN_H + _BTN_PAD
-
-        self._air_lbl_btn = UIButton(relative_rect=pygame.Rect(ctrl_x, btn_y, btn_w_half, _BTN_H), text="AIR LABELS: ON", manager=self.manager, container=self._panel)
-        self._gnd_lbl_btn = UIButton(relative_rect=pygame.Rect(ctrl_x + btn_w_half + _BTN_PAD, btn_y, btn_w_half, _BTN_H), text="GROUND LABELS: ON", manager=self.manager, container=self._panel)
+        self._auto_deploy_btn = UIButton(relative_rect=pygame.Rect(ctrl_x, btn_y, btn_w_half, _BTN_H), text="Auto Deploy Blue", manager=self.manager, container=self._panel)
+        self._settings_btn = UIButton(relative_rect=pygame.Rect(ctrl_x + btn_w_half + _BTN_PAD, btn_y, btn_w_half, _BTN_H), text="SETTINGS", manager=self.manager, container=self._panel)
         btn_y += _BTN_H + _BTN_PAD
 
         self._start_btn = UIButton(relative_rect=pygame.Rect(ctrl_x, btn_y, ctrl_w, _BTN_H), text="▶  START SIMULATION", manager=self.manager, container=self._panel)
@@ -231,7 +243,6 @@ class GameUI:
         
         btn_w_third = int((c1 - _BTN_PAD * 2) / 3) - 1
         btn_w_half  = int((c1 - _BTN_PAD) / 2)
-        btn_w_fifth = int((c1 - _BTN_PAD * 4) / 5) - 1
 
         self._climb_5k_btn = UIButton(relative_rect=pygame.Rect(col1_x, row1_y, btn_w_third, _BTN_H), text="▲ +5k ft", tool_tip_text="Climb 5,000 feet", manager=self.manager, container=self._panel)
         self._climb_1k_btn = UIButton(relative_rect=pygame.Rect(col1_x + btn_w_third + _BTN_PAD, row1_y, btn_w_third, _BTN_H), text="▲ +1k ft", tool_tip_text="Climb 1,000 feet", manager=self.manager, container=self._panel)
@@ -241,11 +252,9 @@ class GameUI:
         self._dive_1k_btn = UIButton(relative_rect=pygame.Rect(col1_x + btn_w_third + _BTN_PAD, row2_y, btn_w_third, _BTN_H), text="▼ -1k ft", tool_tip_text="Dive 1,000 feet", manager=self.manager, container=self._panel)
         self._dive_500_btn = UIButton(relative_rect=pygame.Rect(col1_x + (btn_w_third + _BTN_PAD)*2, row2_y, btn_w_third, _BTN_H), text="▼ -500 ft", tool_tip_text="Dive 500 feet", manager=self.manager, container=self._panel)
 
-        self._auto_engage_btn = UIButton(relative_rect=pygame.Rect(col1_x, row3_y, btn_w_fifth, _BTN_H), text="AUTO", manager=self.manager, container=self._panel)
-        self._roe_btn         = UIButton(relative_rect=pygame.Rect(col1_x + btn_w_fifth + _BTN_PAD, row3_y, btn_w_fifth, _BTN_H), text="ROE", manager=self.manager, container=self._panel)
-        self._ecm_btn         = UIButton(relative_rect=pygame.Rect(col1_x + (btn_w_fifth + _BTN_PAD)*2, row3_y, btn_w_fifth, _BTN_H), text="ECM", manager=self.manager, container=self._panel)
-        self._radar_btn       = UIButton(relative_rect=pygame.Rect(col1_x + (btn_w_fifth + _BTN_PAD)*3, row3_y, btn_w_fifth, _BTN_H), text="RDR", manager=self.manager, container=self._panel)
-        self._iff_btn         = UIButton(relative_rect=pygame.Rect(col1_x + (btn_w_fifth + _BTN_PAD)*4, row3_y, btn_w_fifth, _BTN_H), text="IFF", manager=self.manager, container=self._panel)
+        self._auto_engage_btn = UIButton(relative_rect=pygame.Rect(col1_x, row3_y, btn_w_third, _BTN_H), text="AUTO", manager=self.manager, container=self._panel)
+        self._roe_btn         = UIButton(relative_rect=pygame.Rect(col1_x + btn_w_third + _BTN_PAD, row3_y, btn_w_third, _BTN_H), text="ROE", manager=self.manager, container=self._panel)
+        self._emcon_btn       = UIButton(relative_rect=pygame.Rect(col1_x + (btn_w_third + _BTN_PAD)*2, row3_y, btn_w_third, _BTN_H), text="EMCON", manager=self.manager, container=self._panel)
 
         self._assign_cap_btn = UIButton(relative_rect=pygame.Rect(col1_x, row4_y, btn_w_half, _BTN_H), text="ASSIGN CAP", tool_tip_text="Click map to set CAP center", manager=self.manager, container=self._panel)
         self._clear_msn_btn  = UIButton(relative_rect=pygame.Rect(col1_x + btn_w_half + _BTN_PAD, row4_y, btn_w_half, _BTN_H), text="CLEAR MISSION", manager=self.manager, container=self._panel)
@@ -256,9 +265,7 @@ class GameUI:
 
         self._auto_engage_btn.hide()
         self._roe_btn.hide()
-        self._ecm_btn.hide()
-        self._radar_btn.hide()
-        self._iff_btn.hide()
+        self._emcon_btn.hide()
         self._assign_cap_btn.hide()
         self._clear_msn_btn.hide()
         self._cycle_msn_btn.hide()
@@ -275,6 +282,10 @@ class GameUI:
                            text=smode, manager=self.manager, container=self._panel)
             self._salvo_btns.append(btn)
         self.refresh_salvo_buttons()
+        
+        # Strike Package button exactly overlays the salvo buttons
+        self._strike_pkg_btn = UIButton(relative_rect=pygame.Rect(col2_x, salvo_y, c2, _BTN_H), text="CREATE STRIKE PACKAGE", manager=self.manager, container=self._panel)
+        self._strike_pkg_btn.hide()
 
         n       = len(TIME_SPEED_LABELS)
         btn_w   = max(44, (c3 - _BTN_PAD * (n - 1)) // n)
@@ -291,20 +302,116 @@ class GameUI:
         self._reinforce_btn = UIButton(relative_rect=pygame.Rect(col3_x, btn_y, btn_w_half_col3, _BTN_H), text="REINFORCE", tool_tip_text="Pause and open deployment menu", manager=self.manager, container=self._panel)
         self._restart_btn = UIButton(relative_rect=pygame.Rect(col3_x + btn_w_half_col3 + _BTN_PAD, btn_y, btn_w_half_col3, _BTN_H), text="RESTART", tool_tip_text="Reset scenario to start", manager=self.manager, container=self._panel)
 
-        # 2x2 Layout for Toggles
-        row_y = btn_y + _BTN_H + _BTN_PAD
-        self._radar_rings_btn = UIButton(relative_rect=pygame.Rect(col3_x, row_y, btn_w_half_col3, _BTN_H), text="RADAR RINGS: ON", manager=self.manager, container=self._panel)
-        self._fow_btn = UIButton(relative_rect=pygame.Rect(col3_x + btn_w_half_col3 + _BTN_PAD, row_y, btn_w_half_col3, _BTN_H), text="FOG OF WAR: ON", manager=self.manager, container=self._panel)
+        set_y = btn_y + _BTN_H + _BTN_PAD
+        self._settings_btn = UIButton(relative_rect=pygame.Rect(col3_x, set_y, c3, _BTN_H), text="SETTINGS", manager=self.manager, container=self._panel)
 
-        lbl_y = row_y + _BTN_H + _BTN_PAD
-        self._air_lbl_btn = UIButton(relative_rect=pygame.Rect(col3_x, lbl_y, btn_w_half_col3, _BTN_H), text="AIR LABELS: ON", manager=self.manager, container=self._panel)
-        self._gnd_lbl_btn = UIButton(relative_rect=pygame.Rect(col3_x + btn_w_half_col3 + _BTN_PAD, lbl_y, btn_w_half_col3, _BTN_H), text="GROUND LABELS: ON", manager=self.manager, container=self._panel)
-
-        log_y = lbl_y + _BTN_H + _BTN_PAD
+        log_y = set_y + _BTN_H + _BTN_PAD
         self._log_box = UITextBox(
             html_text="<b>EVENT LOG</b>",
             relative_rect=pygame.Rect(col3_x, log_y, c3, panel_h - log_y - _PAD),
             manager=self.manager, container=self._panel,
+        )
+
+    def _create_settings_window(self) -> None:
+        if getattr(self, "_settings_window", None) is not None:
+            return
+            
+        w, h = 340, 340
+        x = (self._win_w - w) // 2
+        y = (self._win_h - h) // 2
+        
+        self._settings_window = UIWindow(
+            rect=pygame.Rect(x, y, w, h),
+            manager=self.manager,
+            window_display_title="GAME SETTINGS",
+            object_id="#settings_window"
+        )
+        
+        lbl_w = 180
+        btn_w = 60
+        btn_x = w - btn_w - 40 
+        by = 10
+        row_pad = 42
+        
+        UILabel(relative_rect=pygame.Rect(10, by, lbl_w, 30), text="AIR LABELS", manager=self.manager, container=self._settings_window, object_id="#settings_label")
+        self._air_lbl_btn = UIButton(relative_rect=pygame.Rect(btn_x, by, btn_w, 30), text="ON", manager=self.manager, container=self._settings_window, object_id="#toggle_btn")
+        by += row_pad
+        
+        UILabel(relative_rect=pygame.Rect(10, by, lbl_w, 30), text="GROUND LABELS", manager=self.manager, container=self._settings_window, object_id="#settings_label")
+        self._gnd_lbl_btn = UIButton(relative_rect=pygame.Rect(btn_x, by, btn_w, 30), text="ON", manager=self.manager, container=self._settings_window, object_id="#toggle_btn")
+        by += row_pad
+        
+        UILabel(relative_rect=pygame.Rect(10, by, lbl_w, 30), text="FOG OF WAR", manager=self.manager, container=self._settings_window, object_id="#settings_label")
+        self._fow_btn = UIButton(relative_rect=pygame.Rect(btn_x, by, btn_w, 30), text="ON", manager=self.manager, container=self._settings_window, object_id="#toggle_btn")
+        by += row_pad
+        
+        UILabel(relative_rect=pygame.Rect(10, by, lbl_w, 30), text="RADAR CIRCLES", manager=self.manager, container=self._settings_window, object_id="#settings_label")
+        self._radar_rings_btn = UIButton(relative_rect=pygame.Rect(btn_x, by, btn_w, 30), text="ON", manager=self.manager, container=self._settings_window, object_id="#toggle_btn")
+        by += row_pad
+        
+        UILabel(relative_rect=pygame.Rect(10, by, lbl_w, 30), text="MUSIC ON / OFF", manager=self.manager, container=self._settings_window, object_id="#settings_label")
+        self._bgm_btn = UIButton(relative_rect=pygame.Rect(btn_x, by, btn_w, 30), text="ON", manager=self.manager, container=self._settings_window, object_id="#toggle_btn")
+        by += row_pad
+        
+        UILabel(relative_rect=pygame.Rect(10, by, lbl_w, 30), text="MUSIC VOLUME", manager=self.manager, container=self._settings_window, object_id="#settings_label")
+        self._bgm_vol_slider = UIHorizontalSlider(
+            relative_rect=pygame.Rect(btn_x - 50, by + 5, btn_w + 50, 20),
+            start_value=self._bgm_volume,
+            value_range=(0.0, 1.0),
+            manager=self.manager,
+            container=self._settings_window
+        )
+
+    def _create_strike_package_window(self, base_unit: Unit, sim: SimulationEngine) -> None:
+        if getattr(self, "_pkg_window", None) is not None:
+            return
+            
+        w, h = 580, 420
+        x = (self._win_w - w) // 2
+        y = (self._win_h - h) // 2
+        
+        self._pkg_window = UIWindow(
+            rect=pygame.Rect(x, y, w, h),
+            manager=self.manager,
+            window_display_title="STRIKE PACKAGE PLANNER"
+        )
+        
+        self._pkg_ui_map.clear()
+        self._pkg_state.clear()
+        
+        parked = [u for u in sim.units if u.home_uid == base_unit.uid and u.duty_state == "READY" and u.alive]
+        
+        if not parked:
+            UILabel(relative_rect=pygame.Rect(10, 50, w-50, 30), text="NO READY AIRCRAFT AT THIS BASE", manager=self.manager, container=self._pkg_window)
+            return
+
+        scroll_rect = pygame.Rect(10, 10, w - 50, h - 90)
+        scroll_container = UIScrollingContainer(relative_rect=scroll_rect, manager=self.manager, container=self._pkg_window)
+        
+        lbl_w = 160
+        inc_w = 80
+        msn_w = 110
+        ldt_w = 140
+        
+        for i, u in enumerate(parked):
+            self._pkg_state[u.uid] = {"included": False, "role": "STRIKE", "loadout": "DEFAULT"}
+            row_y = i * 40
+            
+            UILabel(relative_rect=pygame.Rect(5, row_y, lbl_w, 32), text=f"{u.callsign[:12]} ({u.platform.unit_type[:3].upper()})", manager=self.manager, container=scroll_container)
+            
+            btn_inc = UIButton(relative_rect=pygame.Rect(5 + lbl_w, row_y, inc_w, 32), text="[ ] INC", manager=self.manager, container=scroll_container)
+            btn_msn = UIButton(relative_rect=pygame.Rect(5 + lbl_w + inc_w + _PAD, row_y, msn_w, 32), text="MSN: STRIKE", manager=self.manager, container=scroll_container)
+            btn_ldt = UIButton(relative_rect=pygame.Rect(5 + lbl_w + inc_w + msn_w + _PAD*2, row_y, ldt_w, 32), text="LDT: DEFAULT", manager=self.manager, container=scroll_container)
+            
+            self._pkg_ui_map[btn_inc] = (u.uid, "toggle_incl")
+            self._pkg_ui_map[btn_msn] = (u.uid, "cycle_role")
+            self._pkg_ui_map[btn_ldt] = (u.uid, "cycle_ldt")
+
+        self._pkg_launch_btn = UIButton(
+            relative_rect=pygame.Rect(10, h - 70, w - 50, 40),
+            text="SET TARGET & LAUNCH PACKAGE",
+            manager=self.manager,
+            container=self._pkg_window
         )
 
     def refresh_salvo_buttons(self) -> None:
@@ -380,8 +487,60 @@ class GameUI:
 
     def process_events(self, event: pygame.event.Event) -> dict:
         self.manager.process_events(event)
+        
+        if event.type == pygame_gui.UI_WINDOW_CLOSE:
+            if event.ui_element == getattr(self, "_settings_window", None):
+                self._settings_window = None
+                self._air_lbl_btn = None
+                self._gnd_lbl_btn = None
+                self._fow_btn = None
+                self._radar_rings_btn = None
+                self._bgm_btn = None
+                self._bgm_vol_slider = None
+            if event.ui_element == getattr(self, "_pkg_window", None):
+                self._pkg_window = None
+                self._pkg_ui_map.clear()
+                
+        if event.type == pygame_gui.UI_HORIZONTAL_SLIDER_MOVED:
+            if event.ui_element == getattr(self, "_bgm_vol_slider", None):
+                self._bgm_volume = event.value
+                return {"type": "set_volume", "value": event.value}
 
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
+            # Internal logic for the Strike Package planner popup
+            if event.ui_element in self._pkg_ui_map:
+                uid, action = self._pkg_ui_map[event.ui_element]
+                state = self._pkg_state[uid]
+                if action == "toggle_incl":
+                    state["included"] = not state["included"]
+                    event.ui_element.set_text("[X] INC" if state["included"] else "[ ] INC")
+                elif action == "cycle_role":
+                    roles = ["CAP", "STRIKE", "SEAD"]
+                    state["role"] = roles[(roles.index(state["role"]) + 1) % len(roles)]
+                    event.ui_element.set_text(f"MSN: {state['role']}")
+                elif action == "cycle_ldt":
+                    ldts = ["DEFAULT", "A2A", "A2G", "SEAD"]
+                    state["loadout"] = ldts[(ldts.index(state["loadout"]) + 1) % len(ldts)]
+                    event.ui_element.set_text(f"LDT: {state['loadout']}")
+                return {} # Handled internally
+
+            if getattr(self, "_pkg_launch_btn", None) and event.ui_element == self._pkg_launch_btn:
+                if any(s["included"] for s in self._pkg_state.values()):
+                    pkg_state_copy = dict(self._pkg_state)
+                    self._pkg_window.kill()
+                    self._pkg_window = None
+                    self._pkg_ui_map.clear()
+                    return {"type": "prep_launch_package", "state": pkg_state_copy}
+                return {} # Do nothing if no aircraft selected
+
+            if getattr(self, "_strike_pkg_btn", None) and event.ui_element == self._strike_pkg_btn:
+                return {"type": "open_pkg_window"}
+
+            if getattr(self, "_settings_btn", None) and event.ui_element == self._settings_btn:
+                self._create_settings_window()
+                return {}
+            
+            if event.ui_element == getattr(self, "_bgm_btn", None): return {"type": "toggle_bgm"}
             if event.ui_element == getattr(self, "_radar_rings_btn", None): return {"type": "toggle_radar_rings"}
             if event.ui_element == getattr(self, "_fow_btn", None): return {"type": "toggle_fow"}
             if event.ui_element == getattr(self, "_air_lbl_btn", None): return {"type": "toggle_air_labels"}
@@ -389,9 +548,7 @@ class GameUI:
             
             if event.ui_element == getattr(self, "_auto_engage_btn", None): return {"type": "toggle_auto_engage"}
             if event.ui_element == getattr(self, "_roe_btn", None): return {"type": "toggle_roe"}
-            if event.ui_element == getattr(self, "_ecm_btn", None): return {"type": "toggle_ecm"}
-            if event.ui_element == getattr(self, "_radar_btn", None): return {"type": "toggle_radar"}
-            if event.ui_element == getattr(self, "_iff_btn", None): return {"type": "toggle_iff"}
+            if event.ui_element == getattr(self, "_emcon_btn", None): return {"type": "cycle_emcon"}
             if event.ui_element == getattr(self, "_assign_cap_btn", None): return {"type": "assign_cap"}
             if event.ui_element == getattr(self, "_clear_msn_btn", None): return {"type": "clear_mission"}
             
@@ -448,11 +605,13 @@ class GameUI:
                placing_type: Optional[str] = None, placing_remaining: int = 0, 
                show_all_enemies: bool = False, blue_contacts: dict | None = None,
                show_air_labels: bool = True, show_ground_labels: bool = True,
-               show_radar_rings: bool = True) -> None:
+               show_radar_rings: bool = True, bgm_enabled: bool = True) -> None:
         
-        if getattr(self, "_radar_rings_btn", None): self._radar_rings_btn.set_text(f"RADAR RINGS: {'ON' if show_radar_rings else 'OFF'}")
-        if getattr(self, "_air_lbl_btn", None): self._air_lbl_btn.set_text(f"AIR LABELS: {'ON' if show_air_labels else 'OFF'}")
-        if getattr(self, "_gnd_lbl_btn", None): self._gnd_lbl_btn.set_text(f"GROUND LABELS: {'ON' if show_ground_labels else 'OFF'}")
+        if getattr(self, "_bgm_btn", None): self._bgm_btn.set_text("ON" if bgm_enabled else "OFF")
+        if getattr(self, "_radar_rings_btn", None): self._radar_rings_btn.set_text("ON" if show_radar_rings else "OFF")
+        if getattr(self, "_air_lbl_btn", None): self._air_lbl_btn.set_text("ON" if show_air_labels else "OFF")
+        if getattr(self, "_gnd_lbl_btn", None): self._gnd_lbl_btn.set_text("ON" if show_ground_labels else "OFF")
+        if getattr(self, "_fow_btn", None): self._fow_btn.set_text("OFF" if show_all_enemies else "ON")
 
         if self._mode == "setup":
             if self._setup_info:
@@ -502,13 +661,6 @@ class GameUI:
                 for btn in alt_btns:
                     if btn: btn.show() if is_flying else btn.hide()
                     
-                if getattr(self, "_radar_btn", None):
-                    if selected.side == "Blue" and p.radar_range_km > 0:
-                        self._radar_btn.show()
-                        self._radar_btn.set_text(f"RDR: {'ON' if getattr(selected, 'radar_active', True) else 'OFF'}")
-                    else:
-                        self._radar_btn.hide()
-
                 if is_parked:
                     self._cycle_msn_btn.show()
                     self._cycle_ldt_btn.show()
@@ -543,22 +695,17 @@ class GameUI:
                         self._auto_engage_btn.hide()
                         self._roe_btn.hide()
                         
-                has_ecm = selected.side == "Blue" and getattr(p, 'ecm_rating', 0.0) > 0.0
-                if getattr(self, "_ecm_btn", None):
-                    if has_ecm:
-                        self._ecm_btn.show()
-                        self._ecm_btn.set_text(f"ECM: {'ACTV' if selected.is_jamming else 'PASS'}")
-                    else:
-                        self._ecm_btn.hide()
-                        
-                if getattr(self, "_iff_btn", None):
+                if getattr(self, "_emcon_btn", None):
                     if selected.side == "Blue":
-                        self._iff_btn.show()
-                        self._iff_btn.set_text(f"IFF: {'ON' if getattr(selected, 'iff_active', True) else 'OFF'}")
+                        self._emcon_btn.show()
+                        self._emcon_btn.set_text(f"EMCON: {getattr(selected, 'emcon_state', 'ACTIVE')[:3]}")
                     else:
-                        self._iff_btn.hide()
+                        self._emcon_btn.hide()
                         
-                if selected.platform.unit_type == "airbase":
+                if selected.platform.unit_type == "airbase" and selected.side == "Blue":
+                    for btn in self._salvo_btns: btn.hide()
+                    if getattr(self, "_strike_pkg_btn", None): self._strike_pkg_btn.show()
+                    
                     parked = [u for u in sim.units if u.home_uid == selected.uid and u.duty_state != "ACTIVE" and u.alive]
                     parked_count = len(parked)
                     if parked_count != getattr(self, "_last_parked_count", -1):
@@ -578,6 +725,8 @@ class GameUI:
                                     btn.set_text(f"⏳ {p_unit.callsign} (REARM {int(p_unit.duty_timer)}s)")
                                     btn.disable()
                 else:
+                    for btn in self._salvo_btns: btn.show()
+                    if getattr(self, "_strike_pkg_btn", None): self._strike_pkg_btn.hide()
                     self._last_parked_count = -1
 
                 alt_display = f"{int(selected.altitude_ft):,} ft"
@@ -651,14 +800,13 @@ class GameUI:
                     
                 if getattr(self, "_auto_engage_btn", None): self._auto_engage_btn.hide()
                 if getattr(self, "_roe_btn", None): self._roe_btn.hide()
-                if getattr(self, "_ecm_btn", None): self._ecm_btn.hide()
-                if getattr(self, "_radar_btn", None): self._radar_btn.hide()
-                if getattr(self, "_iff_btn", None): self._iff_btn.hide()
+                if getattr(self, "_emcon_btn", None): self._emcon_btn.hide()
                 if getattr(self, "_assign_cap_btn", None): self._assign_cap_btn.hide()
                 if getattr(self, "_clear_msn_btn", None): self._clear_msn_btn.hide()
                 if getattr(self, "_cycle_msn_btn", None): self._cycle_msn_btn.hide()
                 if getattr(self, "_cycle_ldt_btn", None): self._cycle_ldt_btn.hide()
                 if getattr(self, "_launch_btn", None): self._launch_btn.hide()
+                if getattr(self, "_strike_pkg_btn", None): self._strike_pkg_btn.hide()
                 self._last_parked_count = -1
                 
                 t  = SimulationEngine._fmt_time(sim.game_time)
@@ -669,8 +817,6 @@ class GameUI:
                 self._last_log_len = len(sim.event_log)
                 recent = list(reversed(list(sim.event_log)[-6:]))
                 self._log_box.set_text("<br>".join(f'<font color="#90D090">› {e}</font>' for e in recent))
-
-        if getattr(self, "_fow_btn", None): self._fow_btn.set_text(f"FOG OF WAR: {'OFF' if show_all_enemies else 'ON'}")
 
         self.manager.update(time_delta)
 

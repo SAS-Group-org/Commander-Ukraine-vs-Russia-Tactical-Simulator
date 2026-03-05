@@ -7,7 +7,7 @@ from collections import deque
 from typing import Optional
 
 from geo import haversine, slant_range_km, bearing, check_line_of_sight
-from scenario import Database, Missile, Unit, WeaponDef, Mission
+from scenario import Database, Missile, Unit, WeaponDef, Mission, GameEvent
 from sensor import Contact, update_local_contacts
 
 _MAX_LOG = 60
@@ -21,6 +21,45 @@ _MIN_EVASION_SPEED_KMH = 350.0
 
 _GROUND_TYPES = {"tank", "ifv", "apc", "recon", "tank_destroyer", "sam", "airbase", "artillery"}
 
+class PackageManager:
+    def __init__(self, engine: "SimulationEngine"):
+        self.engine = engine
+
+    def update_packages(self, game_time: float, sim_delta: float):
+        # Evaluate package sequencing every 5 simulation seconds
+        if int(game_time) % 5 != 0: return
+        
+        packages = {}
+        for u in self.engine.units:
+            if u.alive and u.duty_state == "ACTIVE" and u.mission and u.mission.package_id:
+                packages.setdefault(u.mission.package_id, []).append(u)
+                
+        for pid, members in packages.items():
+            if len(members) <= 1: continue
+            
+            # Check if ToT is already set for the package
+            max_tot = max((u.mission.time_on_target for u in members), default=0.0)
+            
+            if max_tot == 0.0:
+                max_eta = 0.0
+                for u in members:
+                    dist = haversine(u.lat, u.lon, u.mission.target_lat, u.mission.target_lon)
+                    # Allow a generous speed assumption to sync everything up
+                    spd_kms = (max(300.0, u.platform.speed_kmh * u.performance_mult)) / 3600.0
+                    eta = dist / spd_kms
+                    if eta > max_eta: max_eta = eta
+                
+                # Set base ToT to allow the slowest craft to arrive, plus 2 minutes of slack
+                base_tot = game_time + max_eta + 120.0
+                
+                for u in members:
+                    if u.mission.mission_type == "SEAD":
+                        # SEAD leads by exactly 1 minute to suppress defenses for the strike pkg
+                        u.mission.time_on_target = base_tot - 60.0 
+                    else:
+                        u.mission.time_on_target = base_tot
+                self.engine.log(f"Package '{pid}' sequenced. ToT: {self.engine._fmt_time(base_tot)}.")
+
 class SalvoMission:
     def __init__(self, shooter: Unit, target: Unit, weapon_key: str, count: int, doctrine: str):
         self.shooter = shooter
@@ -31,27 +70,33 @@ class SalvoMission:
         self.active_missiles: list[Missile] = []
 
 class SimulationEngine:
-    def __init__(self, units: list[Unit], db: Database):
+    def __init__(self, units: list[Unit], db: Database, events: list[GameEvent] = None):
         self.units:    list[Unit]    = units
         self.missiles: list[Missile] = []
         self.salvos:   list[SalvoMission] = []
         self.db:       Database      = db
+        self.events:   list[GameEvent] = events or []
+        
         self.game_time:        float = 0.0
         self.time_compression: int   = 1
         self.paused:           bool  = False
         self.event_log: deque[str] = deque(maxlen=_MAX_LOG)
+        self.game_over_reason: Optional[str] = None
         
         self.blue_network: dict[str, Contact] = {}
         self.red_network:  dict[str, Contact] = {}
         
         self.blue_contacts = self.blue_network 
         
+        self._units_by_uid: dict[str, Unit] = {u.uid: u for u in self.units}
+        self.package_manager = PackageManager(self)
+        
         self.log(f"Scenario loaded — {len(units)} units ready.")
 
     def get_unit_by_uid(self, uid: str) -> Optional[Unit]:
-        for u in self.units:
-            if u.uid == uid: return u
-        return None
+        if len(self.units) != len(self._units_by_uid):
+            self._units_by_uid = {u.uid: u for u in self.units}
+        return self._units_by_uid.get(uid)
 
     def set_compression(self, factor: int) -> None:
         self.time_compression = factor
@@ -71,14 +116,48 @@ class SimulationEngine:
         self._process_unit_status(sim_delta) 
         self._process_unit_missions(sim_delta)
         self._unit_defensive_ai(sim_delta)
+        self.package_manager.update_packages(self.game_time, sim_delta)
+        
         self._update_contacts()
         self._red_ai(sim_delta)
         self._blue_ai(sim_delta)
+        
         self._process_salvos(sim_delta)
         self._move_missiles(sim_delta)
         self._resolve_missile_outcomes()
+        
+        self._process_events()
         self._purge_dead()
         self._tick_flashes()
+
+    def _process_events(self) -> None:
+        for e in self.events:
+            if e.triggered: continue
+            
+            triggered = False
+            if e.condition_type == "TIME":
+                if self.game_time >= float(e.condition_val): triggered = True
+            elif e.condition_type == "UNIT_DEAD":
+                u = self.get_unit_by_uid(e.condition_val)
+                if u is None or not u.alive: triggered = True
+            elif e.condition_type == "AREA_ENTERED":
+                try:
+                    lat_str, lon_str, rad_str = e.condition_val.split(",")
+                    tgt_lat, tgt_lon, tgt_rad = float(lat_str), float(lon_str), float(rad_str)
+                    for u in self.units:
+                        if u.alive and u.side == "Blue" and haversine(u.lat, u.lon, tgt_lat, tgt_lon) <= tgt_rad:
+                            triggered = True
+                            break
+                except Exception:
+                    pass
+
+            if triggered:
+                e.triggered = True
+                if e.action_type == "LOG":
+                    self.log(f"EVENT: {e.action_val}")
+                elif e.action_type == "VICTORY":
+                    self.log(f"*** {e.action_val.upper()} WINS BY EVENT OBJECTIVE ***")
+                    self.game_over_reason = f"{e.action_val} wins"
 
     def _process_unit_status(self, sim_delta: float) -> None:
         for u in self.units:
@@ -118,9 +197,10 @@ class SimulationEngine:
                 u.is_evading = True
                 u.last_evasion_time = self.game_time
                 
+                # EMCON STATE OVERRIDE: AI goes blinding when shot at
                 if getattr(u.platform, 'ecm_rating', 0.0) > 0 and not u.is_jamming:
-                    u.is_jamming = True
-                    if u.side == "Blue": self.log(f"{u.callsign}: Jammer active!")
+                    u.set_emcon("BLINDING")
+                    if u.side == "Blue": self.log(f"{u.callsign}: Threat detected! EMCON BLINDING (ECM Active)!")
                 
                 penalty = getattr(u, 'inefficiency_penalty', 0.0)
                 
@@ -151,15 +231,22 @@ class SimulationEngine:
             else:
                 if getattr(u, 'is_evading', False) and (self.game_time - u.last_evasion_time) > 8.0:
                     u.is_evading = False
-                    if u.mission: u.target_altitude_ft = u.mission.altitude_ft
+                    u.set_emcon("ACTIVE") # Reset EMCON
+                    u.target_altitude_ft = u.mission.altitude_ft if u.mission else u.platform.cruise_alt_ft
                     u._recalc_heading()
 
     def queue_salvo(self, shooter: Unit, target: Unit, weapon_key: str, count: int, doctrine: str) -> None:
         wdef = self.db.weapons.get(weapon_key)
         if not wdef: return
         target_is_air = target.platform.unit_type in ("fighter", "attacker", "helicopter", "awacs")
-        if wdef.domain == "air" and not target_is_air: return
-        if wdef.domain == "ground" and target_is_air: return
+        
+        if wdef.domain == "air" and not target_is_air:
+            self.log(f"{shooter.callsign}: Cannot fire air-to-air weapon at a ground target.")
+            return
+        if wdef.domain == "ground" and target_is_air:
+            self.log(f"{shooter.callsign}: Cannot fire air-to-ground weapon at an air target.")
+            return
+            
         self.salvos.append(SalvoMission(shooter, target, weapon_key, count, doctrine))
 
     def _process_salvos(self, sim_delta: float) -> None:
@@ -173,9 +260,15 @@ class SimulationEngine:
             if s.shooter.weapon_cooldowns.get(s.weapon_key, 0.0) <= 0:
                 wdef = self.db.weapons[s.weapon_key]
                 dist = slant_range_km(s.shooter.lat, s.shooter.lon, s.shooter.altitude_ft, s.target.lat, s.target.lon, s.target.altitude_ft)
+                
+                if dist > wdef.range_km * 1.5:
+                    self.log(f"Salvo aborted: {s.target.callsign} is out of range.")
+                    continue
+                    
                 if dist > wdef.range_km or dist < wdef.min_range_km:
                     active_salvos.append(s)
                     continue
+                    
                 if s.shooter.expend_round(s.weapon_key):
                     m = Missile(s.shooter, s.target, wdef)
                     self.missiles.append(m)
@@ -189,7 +282,6 @@ class SimulationEngine:
 
     def _move_units(self, sim_delta: float) -> None:
         for u in self.units:
-            # FIX: Pass game_time so Unit can calculate ToT speed modulations
             u.update(sim_delta, self.game_time)
             
             if getattr(u, 'leader_uid', "") and u.duty_state == "ACTIVE":
@@ -242,7 +334,6 @@ class SimulationEngine:
                         u.waypoints = [(lat1, lon1), (lat2, lon2)]
                         u._recalc_heading()
                 else:
-                    # Look for targets that we perceived as Hostile
                     enemy_side = "Red" if u.side == "Blue" else "Blue"
                     has_hostiles = any(c.perceived_side == enemy_side for c in u.merged_contacts.values() if c.unit_type in ("fighter", "attacker", "helicopter", "awacs"))
                     if not has_hostiles:
@@ -264,7 +355,6 @@ class SimulationEngine:
             if blue.side == "Blue" and blue.alive and getattr(blue, 'auto_engage', False):
                 if getattr(blue, 'leader_uid', ""): continue 
                 
-                # IFF TARGETING: Only target perceived Hostiles (or Unknowns if ROE is FREE)
                 valid_targets = []
                 for uid, c in blue.merged_contacts.items():
                     if c.perceived_side == "Red" or (blue.roe == "FREE" and c.perceived_side == "UNKNOWN"):
@@ -317,7 +407,6 @@ class SimulationEngine:
             wkey = shooter.best_weapon_for(self.db, host)
             if wkey:
                 wdef = self.db.weapons[wkey]
-                # Target range checks against the ESTIMATED position from the datalink
                 dist = slant_range_km(shooter.lat, shooter.lon, shooter.altitude_ft, contact.est_lat, contact.est_lon, contact.altitude_ft)
                 if dist < wdef.range_km * _AI_ENGAGE_FRAC:
                     
@@ -376,7 +465,6 @@ class SimulationEngine:
             if connected:
                 for uid, local_c in u.local_contacts.items():
                     net_c = master_net.get(uid)
-                    # Merge preferencing the lowest positional error
                     if net_c is None or local_c.pos_error_km < net_c.pos_error_km:
                         master_net[uid] = local_c
 
@@ -397,12 +485,20 @@ class SimulationEngine:
 
     def _purge_dead(self) -> None:
         self.missiles = [m for m in self.missiles if m.active]
-        self.units    = [u for u in self.units    if u.alive]
+        alive_units = []
+        for u in self.units:
+            if u.alive:
+                alive_units.append(u)
+            else:
+                self._units_by_uid.pop(u.uid, None)
+                
+        self.units = alive_units
 
     def blue_units(self) -> list[Unit]: return [u for u in self.units if u.side == "Blue"]
     def red_units(self) -> list[Unit]: return [u for u in self.units if u.side == "Red"]
 
     def is_game_over(self) -> Optional[str]:
+        if self.game_over_reason: return self.game_over_reason
         blues = any(u.side == "Blue" for u in self.units)
         reds = any(u.side == "Red" for u in self.units)
         if not blues: return "Red wins"
