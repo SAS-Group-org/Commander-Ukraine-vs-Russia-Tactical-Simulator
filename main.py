@@ -2,7 +2,6 @@
 # main.py — entry point
 
 from __future__ import annotations
-
 import sys
 import os
 import json
@@ -10,6 +9,7 @@ import pathlib
 import tkinter as tk
 from tkinter import filedialog
 import math
+import random as _random
 
 import pygame
 import pygame_gui
@@ -18,9 +18,13 @@ from constants import (
     WINDOW_WIDTH_DEFAULT, WINDOW_HEIGHT_DEFAULT,
     BOTTOM_PANEL_FRACTION, BOTTOM_PANEL_MIN_HEIGHT, FPS, TIME_SPEEDS,
 )
-from geo import lat_lon_to_pixel, pixel_to_lat_lon, world_to_screen
+from geo import lat_lon_to_pixel, pixel_to_lat_lon, world_to_screen, get_elevation_ft, haversine, bearing
 from renderer import Renderer
-from scenario import Database, Unit, Mission, GameEvent, load_scenario, save_scenario, save_deployment, load_deployment
+from scenario import (
+    Database, Unit, Mission, GameEvent, PlatformDef, 
+    load_scenario, save_scenario, save_deployment, load_deployment, 
+    CampaignBuilder, is_water, dist_to_loc, get_front_line_coords, DENSE_LOC
+)
 from simulation import SimulationEngine
 from ui import GameUI
 
@@ -82,247 +86,131 @@ class CameraState:
         px, py = self.pixel_xy
         return world_to_screen(lat, lon, px, py, self.zoom, self.win_w, self.map_h)
 
-import random as _random
-from geo import haversine
-
-def _is_water(lat: float, lon: float) -> bool:
-    if 45.3 < lat < 47.05 and 34.8 < lon < 38.5: return True
-    if lat < 46.2 and lon < 32.8: return True
-    if lat < 45.0 and lon < 33.4: return True
-    if lat < 44.38: return True
-    if lat < 44.8 and lon > 34.5: return True
-    if lat < 45.0 and lon > 35.3: return True
-    if 45.8 < lat < 46.2 and 34.0 < lon < 35.0: return True
-    return False
-
-_AO_BOUNDS = {
-    "Luhansk":   {"lat": (48.5, 49.5), "lon": (38.0, 40.0)},
-    "Donetsk":   {"lat": (47.6, 48.8), "lon": (37.0, 39.5)},
-    "Zaporizhia":{"lat": (47.1, 47.9), "lon": (35.5, 37.8)},
-}
-
-_CLUSTERS = [
-    {"name": "LUHANSK CITY",      "lat": 48.57, "lon": 39.34, "spread": 0.12, "mix": {"tank":3,"ifv":4,"apc":3,"recon":2,"tank_destroyer":1, "sam":2}},
-    {"name": "SEVERODONETSK",     "lat": 48.95, "lon": 38.49, "spread": 0.10, "mix": {"tank":2,"ifv":3,"apc":4,"recon":1,"tank_destroyer":1, "sam":1}},
-    {"name": "STAROBILSK",        "lat": 49.27, "lon": 38.92, "spread": 0.12, "mix": {"tank":3,"ifv":2,"apc":3,"recon":2,"tank_destroyer":2, "sam":1}},
-    {"name": "ROVENKY",           "lat": 48.09, "lon": 39.37, "spread": 0.10, "mix": {"tank":2,"ifv":3,"apc":2,"recon":2,"tank_destroyer":1, "sam":1}},
-    {"name": "DONETSK CITY",      "lat": 47.99, "lon": 37.80, "spread": 0.15, "mix": {"tank":4,"ifv":5,"apc":3,"recon":2,"tank_destroyer":2, "sam":2}},
-    {"name": "MARIUPOL",          "lat": 47.10, "lon": 37.55, "spread": 0.12, "mix": {"tank":3,"ifv":3,"apc":4,"recon":1,"tank_destroyer":1, "sam":1}},
-    {"name": "HORLIVKA",          "lat": 48.33, "lon": 38.06, "spread": 0.10, "mix": {"tank":3,"ifv":4,"apc":2,"recon":2,"tank_destroyer":1, "sam":1}},
-    {"name": "VOLNOVAKHA",        "lat": 47.60, "lon": 37.50, "spread": 0.10, "mix": {"tank":2,"ifv":3,"apc":3,"recon":1,"tank_destroyer":1, "sam":1}},
-    {"name": "TOKMAK",            "lat": 47.25, "lon": 35.71, "spread": 0.10, "mix": {"tank":2,"ifv":2,"apc":3,"recon":2,"tank_destroyer":1, "sam":2}},
-    {"name": "MILLEROVO AIR",     "lat": 48.93, "lon": 40.39, "spread": 0.05, "mix": {"airbase":1, "fighter":4,"attacker":2, "sam":2}},
-    {"name": "MOROZOVSK AIR",     "lat": 48.35, "lon": 41.83, "spread": 0.05, "mix": {"airbase":1, "fighter":4, "sam":2, "awacs":1}},
-    {"name": "CRIMEA CENTRAL",    "lat": 45.28, "lon": 34.03, "spread": 0.15, "mix": {"tank":4,"ifv":5,"apc":4,"recon":2,"sam":3}},
-    {"name": "SEVASTOPOL NAVAL",  "lat": 44.61, "lon": 33.52, "spread": 0.05, "mix": {"sam":2, "airbase":1, "fighter":2}},
-    {"name": "DZHANKOI AIR",      "lat": 45.70, "lon": 34.42, "spread": 0.08, "mix": {"airbase":1, "helicopter":4, "sam":2, "tank": 2}},
-    {"name": "BELBEK AIR",        "lat": 44.68, "lon": 33.56, "spread": 0.05, "mix": {"airbase":1, "fighter":3, "sam":1}},
-]
-
-_RED_GROUND_POOLS: dict[str, list[str]] = {
-    "tank":           ["T-72R","T-72R","T-72R","T-80R","T-80R","T-64R","T-90R","T-62R","T-55R"],
-    "ifv":            ["BMP-2R","BMP-2R","BMP-2R","BMP-1R","BMP-1R","BMP-3R","BMD-2R"],
-    "apc":            ["BTR-80R","BTR-80R","BTR-70R","BTR-70R","MTLBR","MTLBR"],
-    "recon":          ["BRDM2R","BRDM2R","BRM-1"],
-    "tank_destroyer": ["9P148R","9P148R"],
-    "fighter":        ["Su-35S","Su-35S","Su-30SM","MiG-29A"],
-    "attacker":       ["Su-25UA"], 
-    "helicopter":     ["Mi-24V", "Mi-8UA"],
-    "sam":            ["S-400", "Buk-M2", "Buk-M2", "Tor-M1", "Tor-M1"],
-    "airbase":        ["AirbaseR"],
-    "awacs":          ["A-50U_Mainstay"],
-}
-
-_GROUND_CALLSIGNS: dict[str, list[str]] = {
-    "tank":           ["HAMMER","ANVIL","IRON","STEEL","ARMOR","FIST","CLAW","BLADE"],
-    "ifv":            ["WOLF","LYNX","FOX","VIPER","COBRA","SHARK"],
-    "apc":            ["MULE","BISON","OX","RAM","BULL"],
-    "recon":          ["SCOUT","HAWK","SHADOW","GHOST"],
-    "tank_destroyer": ["HUNTER","RAPTOR","LANCE"],
-    "sam":            ["SPIKE", "SHIELD", "DOME", "SPEAR", "ARROW"],
-    "fighter":        ["BANDIT","FALCON","EAGLE","CROW"],
-    "attacker":       ["FROG","SNAKE","JACKAL"],
-    "helicopter":     ["HIND","BEAR","SWIFT"],
-    "airbase":        ["STRATEGIC"],
-    "awacs":          ["MAINSTAY", "EYE", "WATCHER"],
-}
-
-_GROUND_SIDE_NUMBERS: dict[str, int] = {} 
-
-def _gen_red_callsign(unit_type: str) -> str:
-    names = _GROUND_CALLSIGNS.get(unit_type, ["UNIT"])
-    prefix = _random.choice(names)
-    n = _GROUND_SIDE_NUMBERS.get(prefix, 0) + 1
-    _GROUND_SIDE_NUMBERS[prefix] = n
-    return f"{prefix} {n}"
-
-def _generate_scenario(db: "Database") -> dict:
-    _GROUND_SIDE_NUMBERS.clear()
-    rng = _random.Random()   
-
-    units = []
-    uid   = 0
-
-    for cluster in _CLUSTERS:
-        clat, clon = cluster["lat"], cluster["lon"]
-        spread     = cluster["spread"]
-
-        for utype, count in cluster["mix"].items():
-            pool = _RED_GROUND_POOLS.get(utype, [])
-            if not pool: continue
-
-            actual = max(1, count + rng.randint(-1, 1)) if utype != "airbase" else count
-            flight_leader_uid = ""
-            
-            for _ in range(actual):
-                uid += 1
-                platform_key = rng.choice(pool)
-                if platform_key not in db.platforms: continue
-                plat = db.platforms[platform_key]
-
-                lat, lon = clat, clon
-                if utype != "airbase":
-                    for _attempt in range(50):
-                        test_lat = clat + rng.gauss(0, spread)
-                        test_lon = clon + rng.gauss(0, spread * 1.4)
-                        if plat.unit_type in ("tank", "ifv", "apc", "recon", "tank_destroyer", "sam", "artillery"):
-                            if _is_water(test_lat, test_lon): continue 
-                        lat, lon = test_lat, test_lon
-                        break
-
-                callsign = _gen_red_callsign(utype)
-                entry: dict = {
-                    "id":         f"red_{uid:03d}",
-                    "platform":   platform_key,
-                    "callsign":   callsign,
-                    "side":       "Red",
-                    "lat":        round(lat, 5),
-                    "lon":        round(lon, 5),
-                    "image_path": "assets/red_jet.png",
-                    "drunkness":  rng.choices([1, 2, 3, 4, 5], weights=[20, 30, 25, 15, 10])[0],
-                    "corruption": rng.choices([1, 2, 3, 4, 5], weights=[10, 30, 30, 20, 10])[0],
-                    "loadout":    dict(plat.default_loadout),
-                    "waypoints":  [],
-                }
-
-                if utype in ("fighter", "attacker", "helicopter", "awacs"):
-                    if _ == 0:
-                        flight_leader_uid = entry["id"]
-                    else:
-                        entry["leader_uid"] = flight_leader_uid
-                        entry["formation_slot"] = _
-
-                    entry["mission"] = {
-                        "name": f"Patrol {callsign}",
-                        "type": "CAP" if utype in ("fighter", "awacs") else "STRIKE",
-                        "lat": lat + rng.uniform(-0.5, 0.5),
-                        "lon": lon + rng.uniform(-0.5, 0.5),
-                        "radius": 40.0,
-                        "alt": 30000.0 if utype in ("fighter", "awacs") else 15000.0,
-                        "rtb_fuel": 0.25
-                    }
-                units.append(entry)
-
-    red_bases = [u for u in units if db.platforms[u["platform"]].unit_type == "airbase"]
-    for u in units:
-        if db.platforms[u["platform"]].unit_type in ("fighter", "attacker", "helicopter", "awacs"):
-            if red_bases:
-                closest = min(red_bases, key=lambda b: haversine(b["lat"], b["lon"], u["lat"], u["lon"]))
-                u["home_uid"] = closest["id"]
-                u["lat"], u["lon"] = closest["lat"], closest["lon"]
-                u["duty_state"] = "ACTIVE"
-
-    events = [
-        {
-            "id": "ev_01",
-            "condition_type": "TIME",
-            "condition_val": "180",
-            "action_type": "LOG",
-            "action_val": "Intel indicates massive Russian resupply convoy en route to Melitopol.",
-            "triggered": False
-        }
+# ── Dynamic Infrastructure Injection ─────────────────────────────────────────
+def _inject_infrastructure(db: Database) -> None:
+    """Dynamically adds critical infrastructure High-Value Targets to the Database."""
+    infra_types = [
+        ("Red_Refinery", "Oil Refinery", 500, 1000.0),
+        ("Red_AmmoDepot", "Ammunition Depot", 300, 200.0),
+        ("Red_PowerPlant", "Power Plant", 400, 600.0),
+        ("Red_CommandCenter", "Command Center", 600, 50.0),
+        ("Red_Kremlin", "The Kremlin", 5000, 500.0) # Massive point value for the decapitation strike
     ]
-
-    return {
-        "name":        "Operation East Wind — Donbas 2024",
-        "description": "Russian forces are entrenched across Donbas and Luhansk.",
-        "start_lat":   48.5,
-        "start_lon":   38.5,
-        "start_zoom":  8,
-        "units":       units,
-        "events":      events,
-    }
+    for key, name, pts, rcs in infra_types:
+        if key not in db.platforms:
+            db.platforms[key] = PlatformDef(
+                key=key, display_name=name, unit_type="airbase", # Renders as a base symbol
+                speed_kmh=0, ceiling_ft=0, ecm_rating=0.0, chaff_capacity=0, flare_capacity=0,
+                fuel_capacity_kg=0, fuel_burn_rate_kg_h=0, radar_range_km=0, radar_type="None",
+                radar_modes=(), radar_band="none", esm_range_km=0, ir_range_km=0,
+                default_loadout={}, available_weapons=(), fleet_count=0, player_side="Red",
+                rcs_m2=rcs, cruise_alt_ft=0, rearm_time_s=0, max_g=1.0, value_points=pts
+            )
 
 def _write_default_scenario(path: str, db: "Database") -> None:
-    scenario = _generate_scenario(db)
+    scenario = CampaignBuilder.generate_historical_campaign(db)
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(scenario, fh, indent=2)
 
 def _auto_deploy_blue(db: Database, sim: SimulationEngine, placement_counts: dict[str, int]) -> None:
-    blue_clusters = [
-        {"name": "STAROKOSTIANTYNIV", "lat": 49.74, "lon": 27.27, "mix": {"AirbaseB": 1, "Patriot": 1, "F-16A": 4, "Su-24M": 2}},
-        {"name": "LVIV", "lat": 49.83, "lon": 24.02, "mix": {"AirbaseB": 1, "IRIS-T_SLM": 1, "MiG-29UA": 4}},
-        {"name": "KYIV", "lat": 50.45, "lon": 30.52, "mix": {"AirbaseB": 1, "Patriot": 2, "NASAMS": 2, "F-16C": 4, "M142_HIMARS": 2, "E-3G_Sentry": 1}},
-        {"name": "ODESA", "lat": 46.48, "lon": 30.72, "mix": {"AirbaseB": 1, "Patriot": 1, "MiG-29UA": 2, "Gepard": 2, "M777": 4}},
-        {"name": "ZHYTOMYR", "lat": 50.25, "lon": 28.65, "mix": {"AirbaseB": 1, "Su-27UA": 2, "Mi-24V": 2, "IRIS-T_SLM": 1, "M270_MLRS": 1}},
-        {"name": "DNIPRO", "lat": 48.46, "lon": 35.04, "mix": {"Leopard2": 2, "Bradley": 4, "Gepard": 2, "PzH2000": 3}},
-        {"name": "KHERSON", "lat": 46.63, "lon": 32.61, "mix": {"M1Abrams": 2, "Stryker": 3, "Gepard": 1, "T-72": 2, "CAESAR": 2}}
-    ]
-    
     rng = _random.Random()
     
-    for cluster in blue_clusters:
-        clat, clon = cluster["lat"], cluster["lon"]
-        base_uid = ""
-        
-        if "AirbaseB" in cluster["mix"]:
-            count = cluster["mix"]["AirbaseB"]
-            for _ in range(count):
-                n = placement_counts.get("AirbaseB", 0) + 1
-                placement_counts["AirbaseB"] = n
-                callsign = _callsign_for("AirbaseB", n)
-                unit = _make_blue_unit("AirbaseB", clat, clon, db, callsign)
-                if unit:
-                    sim.units.append(unit)
-                    base_uid = unit.uid
-        
-        for utype, count in cluster["mix"].items():
-            if utype == "AirbaseB": continue
-            plat = db.platforms.get(utype)
-            if not plat: continue
-            
-            flight_leader_uid = ""
-            for _ in range(count):
-                lat = clat + rng.gauss(0, 0.05)
-                lon = clon + rng.gauss(0, 0.05)
-                
-                if plat.unit_type in ("tank", "ifv", "apc", "recon", "tank_destroyer", "sam", "artillery"):
-                    if _is_water(lat, lon): lat, lon = clat, clon 
-                if plat.unit_type in ("fighter", "attacker", "helicopter", "awacs"):
-                    lat, lon = clat, clon 
-                    
-                n = placement_counts.get(utype, 0) + 1
-                placement_counts[utype] = n
-                callsign = _callsign_for(utype, n)
-                
-                unit = _make_blue_unit(utype, lat, lon, db, callsign)
-                if unit:
-                    if plat.unit_type in ("fighter", "attacker", "helicopter", "awacs"):
-                        if _ == 0:
-                            flight_leader_uid = unit.uid
-                        else:
-                            unit.leader_uid = flight_leader_uid
-                            unit.formation_slot = _
-                            
-                    if plat.unit_type in ("fighter", "attacker", "helicopter", "awacs") and base_uid:
-                        unit.home_uid = base_uid
-                        unit.duty_state = "READY"
-                        unit.altitude_ft = 0
-                    sim.units.append(unit)
-                    
-    sim.log("Blue forces automatically deployed across Western/Central Ukraine.")
+    blue_bases = [
+        {"id": "base_west", "lat": 49.83, "lon": 24.02, "name": "LVIV AIR"},
+        {"id": "base_central", "lat": 50.45, "lon": 30.52, "name": "KYIV HUB"},
+        {"id": "base_south", "lat": 46.48, "lon": 30.72, "name": "ODESA AIR"},
+        {"id": "base_east", "lat": 48.46, "lon": 35.04, "name": "DNIPRO AIR"},
+        {"id": "base_north", "lat": 51.50, "lon": 31.30, "name": "CHERNIHIV AIR"} 
+    ]
+    
+    base_map = {}
+    for b in blue_bases:
+        n = placement_counts.get("AirbaseB", 0) + 1
+        placement_counts["AirbaseB"] = n
+        unit = _make_blue_unit("AirbaseB", b["lat"], b["lon"], db, b["name"])
+        if unit:
+            sim.units.append(unit)
+            base_map[b["id"]] = unit.uid
 
+    # Base Defenses
+    for b in blue_bases:
+        for _ in range(2):
+            n = placement_counts.get("Patriot", 0) + 1
+            placement_counts["Patriot"] = n
+            plat, plon = b["lat"] + rng.uniform(-0.05, 0.05), b["lon"] + rng.uniform(-0.05, 0.05)
+            unit = _make_blue_unit("Patriot", plat, plon, db, _callsign_for("Patriot", n))
+            if unit: sim.units.append(unit)
+            
+        n = placement_counts.get("Flamingo_TEL", 0) + 1
+        placement_counts["Flamingo_TEL"] = n
+        flat, flon = b["lat"] + rng.uniform(-0.02, 0.02), b["lon"] + rng.uniform(-0.02, 0.02)
+        unit = _make_blue_unit("Flamingo_TEL", flat, flon, db, _callsign_for("Flamingo_TEL", n))
+        if unit: sim.units.append(unit)
+
+    # Blue Brigade Heavy Clusters (South/East)
+    for b_idx in range(36):
+        clat, clon = get_front_line_coords("Blue", 25.0, 35.0, segment_range=(0, 18))
+        brigade_mix = [("Leopard2", 2, 25.0), ("Bradley", 4, 20.0), ("Gepard", 1, 20.0), ("M777", 2, 30.0), ("Stryker", 2, 20.0)]
+        
+        for p_key, qty, min_d in brigade_mix:
+            for _ in range(qty):
+                placed = False
+                for _attempt in range(50):
+                    u_lat = clat + rng.uniform(-0.08, 0.08)
+                    u_lon = clon + rng.uniform(-0.08, 0.08)
+                    if is_water(u_lat, u_lon) or dist_to_loc(u_lat, u_lon) < min_d: continue 
+                    n = placement_counts.get(p_key, 0) + 1
+                    placement_counts[p_key] = n
+                    unit = _make_blue_unit(p_key, u_lat, u_lon, db, _callsign_for(p_key, n))
+                    if unit: sim.units.append(unit)
+                    placed = True
+                    break
+                if not placed:
+                    flat, flon = get_front_line_coords("Blue", min_d, min_d + 10.0, segment_range=(0, 18))
+                    n = placement_counts.get(p_key, 0) + 1
+                    placement_counts[p_key] = n
+                    unit = _make_blue_unit(p_key, flat, flon, db, _callsign_for(p_key, n))
+                    if unit: sim.units.append(unit)
+
+    # Blue Brigade Light Clusters (North)
+    for b_idx in range(9):
+        clat, clon = get_front_line_coords("Blue", 25.0, 35.0, segment_range=(19, 24))
+        brigade_mix = [("Leopard2", 1, 25.0), ("Bradley", 2, 20.0), ("Gepard", 1, 20.0), ("M777", 1, 30.0)]
+        
+        for p_key, qty, min_d in brigade_mix:
+            for _ in range(qty):
+                flat, flon = get_front_line_coords("Blue", min_d, min_d + 10.0, segment_range=(19, 24))
+                n = placement_counts.get(p_key, 0) + 1
+                placement_counts[p_key] = n
+                unit = _make_blue_unit(p_key, flat, flon, db, _callsign_for(p_key, n))
+                if unit: sim.units.append(unit)
+
+    # Strategic Patriots (Remaining 5 out of 15 total)
+    for _ in range(5):
+        n = placement_counts.get("Patriot", 0) + 1
+        placement_counts["Patriot"] = n
+        flat, flon = get_front_line_coords("Blue", 70.0, 100.0, segment_range=(0, 24))
+        unit = _make_blue_unit("Patriot", flat, flon, db, _callsign_for("Patriot", n))
+        if unit: sim.units.append(unit)
+
+    strategic_assets = [("IRIS-T_SLM", 6), ("NASAMS", 6), ("E-3G_Sentry", 3), ("F-16C", 20), ("Su-24M", 12)]
+    for utype, qty in strategic_assets:
+        for _ in range(qty):
+            target_base = rng.choice(blue_bases)
+            n = placement_counts.get(utype, 0) + 1
+            placement_counts[utype] = n
+            
+            unit = _make_blue_unit(utype, target_base["lat"], target_base["lon"], db, _callsign_for(utype, n))
+            if unit:
+                if unit.platform.unit_type in ("fighter", "attacker", "awacs"):
+                    unit.home_uid = base_map[target_base["id"]]
+                    unit.duty_state = "READY"
+                    unit.altitude_ft = get_elevation_ft(unit.lat, unit.lon) + 15.0
+                    unit.target_altitude_ft = unit.altitude_ft 
+                sim.units.append(unit)
+
+    sim.log("Full theater Blue forces deployed. Variable density established.")
 
 def _pick_unit(screen_pos, cam: CameraState, units: list[Unit],
                blue_only: bool = False,
@@ -341,6 +229,11 @@ def _pick_unit(screen_pos, cam: CameraState, units: list[Unit],
 def _make_blue_unit(platform_key: str, lat: float, lon: float, db: Database, callsign: str) -> Unit | None:
     plat = db.platforms.get(platform_key)
     if plat is None: return None
+    
+    # FIX: Ensure only fixed-wing/rotary aircraft get the jet icon. Ground units get NTDS symbols.
+    is_air = plat.unit_type.lower() in ("fighter", "attacker", "helicopter", "awacs")
+    img_path = "assets/blue_jet.png" if is_air else None
+    
     return Unit(
         uid        = _next_uid("blue"),
         callsign   = callsign,
@@ -349,7 +242,7 @@ def _make_blue_unit(platform_key: str, lat: float, lon: float, db: Database, cal
         side       = "Blue",
         platform   = plat,
         loadout    = dict(plat.default_loadout),
-        image_path = "assets/blue_jet.png",
+        image_path = img_path,
         drunkness  = 1, 
         corruption = 1
     )
@@ -359,8 +252,8 @@ def _callsign_for(platform_key: str, index: int) -> str:
         "MiG-29UA":     "GHOST", "Su-27UA":      "PHANTOM", "F-16AM":       "VIPER", "F-16A":        "FALCON",
         "F-16C":        "FALCON", "F-16UA":       "FALCON", "Su-25UA":      "WARTHOG", "Su-24M":       "SWORD", 
         "Mirage2000-5F":"ANGEL", "Mi-8UA":       "BEAR", "Mi-24V":       "HIND", "Mi-2UA":       "SWIFT", 
-        "Ka-27":        "SHARK", "Mi-14":        "HAZE", "SeaKing":      "KING", "AirbaseB":     "ALPHA BASE", 
-        "CarrierB":     "NIMITZ", "Bayraktar_TB2": "DRONE", "E-3G_Sentry": "SENTRY", "A-50U_Mainstay": "MAINSTAY"
+        "AirbaseB":     "ALPHA BASE", "E-3G_Sentry": "SENTRY", "Leopard2": "LEO", "Bradley": "BRAD",
+        "Gepard": "FLAK", "M777": "ARCHER", "Patriot": "CASTLE", "Stryker": "GHOST", "Flamingo_TEL": "FLAMINGO"
     }
     return f"{prefixes.get(platform_key, 'UNIT')} {index}"
 
@@ -396,7 +289,7 @@ def _handle_right_click(screen_pos, cam: CameraState,
         lat, lon = cam.screen_to_world(screen_pos[0], screen_pos[1])
         
         if selected.platform.unit_type in ("tank", "ifv", "apc", "recon", "tank_destroyer", "sam", "artillery"):
-            if _is_water(lat, lon):
+            if is_water(lat, lon):
                 sim.log(f"{selected.callsign}: COMMAND REJECTED. Cannot route ground units over water.")
                 return
                 
@@ -409,7 +302,10 @@ def main() -> None:
     pygame.mixer.init() 
     
     win_w, win_h = WINDOW_WIDTH_DEFAULT, WINDOW_HEIGHT_DEFAULT
-    window = pygame.display.set_mode((win_w, win_h), pygame.RESIZABLE)
+    
+    display_flags = pygame.RESIZABLE | pygame.HWSURFACE | pygame.DOUBLEBUF
+    window = pygame.display.set_mode((win_w, win_h), display_flags)
+    
     pygame.display.set_caption("Command: Ukraine–Russia  |  Tactical Simulator")
     clock  = pygame.time.Clock()
 
@@ -431,6 +327,8 @@ def main() -> None:
         weapons_path = str(_HERE / "weapons.json"),
         units_path   = str(_HERE / "units.json"),
     )
+    
+    _inject_infrastructure(db)
     _write_default_scenario(SCENARIO_PATH, db)
     
     all_units, meta, events = load_scenario(SCENARIO_PATH, db)
@@ -466,6 +364,7 @@ def main() -> None:
     show_air_labels:   bool            = True
     show_ground_labels:bool            = True
     show_radar_rings:  bool            = True
+    is_fullscreen:     bool            = False
 
     running = True
     while running:
@@ -477,16 +376,17 @@ def main() -> None:
             if event.type == pygame.QUIT: 
                 running = False
 
-            elif event.type == pygame.VIDEORESIZE:
+            elif event.type == pygame.VIDEORESIZE and not is_fullscreen:
                 win_w, win_h = event.w, event.h
-                window = pygame.display.set_mode((win_w, win_h), pygame.RESIZABLE)
+                display_flags = pygame.RESIZABLE | pygame.HWSURFACE | pygame.DOUBLEBUF
+                window = pygame.display.set_mode((win_w, win_h), display_flags)
                 renderer.update_surface(window)
                 ui.resize(window, win_w, win_h)
                 cam.win_w, cam.win_h = win_w, win_h
                 sim.time_compression = TIME_SPEEDS[ui.active_speed_idx]
                 sim.paused = (sim.time_compression == 0)
                 
-            elif event.type == pygame.WINDOWRESIZED:
+            elif event.type == pygame.WINDOWRESIZED and not is_fullscreen:
                 win_w, win_h = event.x, event.y
                 window = pygame.display.get_surface()
                 renderer.update_surface(window)
@@ -523,6 +423,43 @@ def main() -> None:
                         else: pygame.mixer.music.pause()
                 elif action.get("type") == "set_volume":
                     if bgm_loaded: pygame.mixer.music.set_volume(action["value"])
+                
+                elif action.get("type") == "cycle_weather":
+                    weathers = ["CLEAR", "OVERCAST", "RAIN", "STORM"]
+                    sim.weather = weathers[(weathers.index(sim.weather) + 1) % len(weathers)]
+                    sim.log(f"*** WEATHER CHANGED TO {sim.weather} ***")
+                elif action.get("type") == "cycle_time":
+                    times = ["DAY", "NIGHT"]
+                    sim.time_of_day = times[(times.index(sim.time_of_day) + 1) % len(times)]
+                    sim.log(f"*** TIME ADVANCED TO {sim.time_of_day} ***")
+                
+                elif action.get("type") == "cycle_throttle" and selected_unit:
+                    states = ["LOITER", "CRUISE", "FLANK"]
+                    cur = getattr(selected_unit, 'throttle_state', "CRUISE")
+                    selected_unit.throttle_state = states[(states.index(cur) + 1) % len(states)]
+                    
+                elif action.get("type") == "cycle_wra_rng" and selected_unit:
+                    pcts = [0.90, 0.75, 0.50, 0.25]
+                    tgt = action["tgt"]
+                    cur = selected_unit.wra.get(tgt, {"range": 0.90})["range"]
+                    new_val = pcts[(pcts.index(cur) + 1) % len(pcts)]
+                    if tgt == "ALL":
+                        for k in selected_unit.wra: selected_unit.wra[k]["range"] = new_val
+                    else:
+                        if tgt not in selected_unit.wra: selected_unit.wra[tgt] = {"range": 0.90, "qty": 1}
+                        selected_unit.wra[tgt]["range"] = new_val
+                        
+                elif action.get("type") == "cycle_wra_qty" and selected_unit:
+                    qtys = [1, 2, 4]
+                    tgt = action["tgt"]
+                    cur = selected_unit.wra.get(tgt, {"qty": 1})["qty"]
+                    new_val = qtys[(qtys.index(cur) + 1) % len(qtys)]
+                    if tgt == "ALL":
+                        for k in selected_unit.wra: selected_unit.wra[k]["qty"] = new_val
+                    else:
+                        if tgt not in selected_unit.wra: selected_unit.wra[tgt] = {"range": 0.90, "qty": 1}
+                        selected_unit.wra[tgt]["qty"] = new_val
+
                 elif action.get("type") == "place_unit":
                     placing_type      = action["platform_key"]
                     placing_remaining = action.get("quantity", 1)
@@ -530,21 +467,54 @@ def main() -> None:
                     pass   
                 elif action.get("type") == "auto_deploy_blue":
                     _auto_deploy_blue(db, sim, placement_counts)
-                elif action.get("type") == "save_deployment":
+                elif action.get("type") == "save_scenario":
                     root = tk.Tk()
                     root.withdraw()
-                    path = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("JSON files", "*.json")], title="Save Blue Deployment")
-                    if path: save_deployment(path, [u for u in sim.units if u.side == "Blue"])
+                    path = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("JSON files", "*.json")], title="Save Scenario")
+                    if path:
+                        save_scenario(path, sim.units, meta, sim.events, sim.game_time)
+                        sim.log("Game saved successfully.")
                     root.destroy()
-                elif action.get("type") == "load_deployment":
+                elif action.get("type") == "load_scenario":
                     root = tk.Tk()
                     root.withdraw()
-                    path = filedialog.askopenfilename(filetypes=[("JSON files", "*.json")], title="Load Blue Deployment")
+                    path = filedialog.askopenfilename(filetypes=[("JSON files", "*.json")], title="Load Scenario")
                     if path and os.path.exists(path):
-                        loaded_blues = load_deployment(path, db)
-                        sim.units.extend(loaded_blues)
-                        sim.log(f"Deployed {len(loaded_blues)} reinforcement units.")
+                        fresh_units, loaded_meta, loaded_events = load_scenario(path, db)
+                        sim.units = fresh_units
+                        sim.events = loaded_events
+                        sim.missiles.clear()
+                        sim.explosions.clear()
+                        sim.salvos.clear()
+                        sim.game_time = loaded_meta.get("game_time_seconds", 0.0)
+                        sim.event_log.clear()
+                        sim.total_log_count = 0  
+                        sim.game_over_reason = None
+                        sim.score_blue = 0
+                        sim.score_red = 0
+                        sim.aar_log.clear()
+                        sim.blue_contacts.clear()
+                        sim.set_compression(0)
+                        selected_unit = None
+                        ui.rebuild_weapon_buttons(None, sim)
+                        meta = loaded_meta
+                        cam.lat = meta.get("start_lat", cam.lat)
+                        cam.lon = meta.get("start_lon", cam.lon)
+                        cam.zoom = meta.get("start_zoom", cam.zoom)
+                        sim.log("Game loaded successfully.")
                     root.destroy()
+                elif action.get("type") == "toggle_fullscreen":
+                    is_fullscreen = not is_fullscreen
+                    if is_fullscreen:
+                        display_flags = pygame.FULLSCREEN | pygame.HWSURFACE | pygame.DOUBLEBUF
+                        window = pygame.display.set_mode((0, 0), display_flags)
+                    else:
+                        display_flags = pygame.RESIZABLE | pygame.HWSURFACE | pygame.DOUBLEBUF
+                        window = pygame.display.set_mode((WINDOW_WIDTH_DEFAULT, WINDOW_HEIGHT_DEFAULT), display_flags)
+                    win_w, win_h = window.get_width(), window.get_height()
+                    renderer.update_surface(window)
+                    ui.resize(window, win_w, win_h)
+                    cam.win_w, cam.win_h = win_w, win_h
                 elif action.get("type") == "remove_selected":
                     if selected_unit and selected_unit.side == "Blue":
                         selected_unit.take_damage(999.0)
@@ -579,6 +549,7 @@ def main() -> None:
                     sim.salvos.clear()
                     sim.game_time = 0.0
                     sim.event_log.clear()
+                    sim.total_log_count = 0  
                     sim.game_over_reason = None
                     sim.score_blue = 0
                     sim.score_red = 0
@@ -600,12 +571,6 @@ def main() -> None:
                     states = ["SILENT", "SEARCH_ONLY", "ACTIVE", "BLINDING"]
                     cur = getattr(selected_unit, 'emcon_state', "ACTIVE")
                     selected_unit.set_emcon(states[(states.index(cur) + 1) % len(states)])
-                elif action.get("type") == "cycle_wra_rng" and selected_unit:
-                    pcts = [0.90, 0.75, 0.50, 0.25]
-                    selected_unit.wra_range_pct = pcts[(pcts.index(selected_unit.wra_range_pct) + 1) % len(pcts)]
-                elif action.get("type") == "cycle_wra_qty" and selected_unit:
-                    qtys = [1, 2, 4]
-                    selected_unit.wra_qty = qtys[(qtys.index(selected_unit.wra_qty) + 1) % len(qtys)]
                 elif action.get("type") == "cycle_formation" and selected_unit:
                     forms = ["WEDGE", "LINE", "TRAIL"]
                     selected_unit.formation = forms[(forms.index(selected_unit.formation) + 1) % len(forms)]
@@ -625,6 +590,8 @@ def main() -> None:
                         ui.rebuild_weapon_buttons(selected_unit, sim)
                 elif action.get("type") == "cycle_mission" and selected_unit:
                     msns = ["CAP", "STRIKE", "SEAD"]
+                    if "Storm_Shadow" in selected_unit.platform.available_weapons:
+                        msns.append("DEEP STRIKE")
                     cur = selected_unit.mission.mission_type if selected_unit.mission else "CAP"
                     if selected_unit.mission: selected_unit.mission.mission_type = msns[(msns.index(cur) + 1) % len(msns)]
                 elif action.get("type") == "cycle_loadout" and selected_unit:
@@ -639,6 +606,14 @@ def main() -> None:
                         sim.log(f"{selected_unit.callsign}: Launched for {selected_unit.mission.mission_type if selected_unit.mission else 'Patrol'}.")
                         ui.rebuild_weapon_buttons(selected_unit, sim)
                 elif action.get("type") == "assign_cap" and selected_unit: assigning_mission = "CAP"
+                elif action.get("type") == "command_rtb" and selected_unit:
+                    base = sim.get_unit_by_uid(selected_unit.home_uid)
+                    if base:
+                        selected_unit.mission = Mission("Manual RTB", "RTB", base.lat, base.lon, 0, selected_unit.altitude_ft, 0)
+                        selected_unit.clear_waypoints()
+                        sim.log(f"{selected_unit.callsign}: Manual RTB commanded. Returning to base.")
+                    else:
+                        sim.log(f"{selected_unit.callsign}: COMMAND REJECTED. No home base available.")
                 elif action.get("type") == "clear_mission" and selected_unit:
                     selected_unit.mission = None
                     selected_unit.clear_waypoints()
@@ -672,8 +647,6 @@ def main() -> None:
                 elif event.key == pygame.K_DELETE and selected_unit:
                     selected_unit.clear_waypoints()
                     selected_unit.leader_uid = "" 
-                elif event.key == pygame.K_s and (event.mod & pygame.KMOD_CTRL) and app_mode == "combat":
-                    save_scenario(SAVE_PATH, sim.units, meta, sim.events, sim.game_time)
                 elif event.key == pygame.K_SPACE and app_mode == "combat":
                     sim.set_compression(0 if not sim.paused else 1)
                 elif (event.key in (pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5) and app_mode == "combat"):
@@ -681,8 +654,15 @@ def main() -> None:
                     if 0 <= idx < len(TIME_SPEEDS): sim.set_compression(TIME_SPEEDS[idx])
                 continue   
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if ui.is_mouse_over_ui(event.pos): continue  
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                current_state = "MAP_STATE" if (placing_type or assigning_mission or assigning_package_state) else "UI_STATE"
+                
+                if current_state == "UI_STATE":
+                    if ui.is_mouse_over_ui(event.pos): 
+                        continue  
+                elif current_state == "MAP_STATE":
+                    if event.pos[1] >= cam.map_h:
+                        continue
 
                 if event.button == 1:
                     if placing_type and app_mode == "setup":
@@ -691,7 +671,7 @@ def main() -> None:
                         if not plat: continue
                         
                         if plat.unit_type in ("tank", "ifv", "apc", "recon", "tank_destroyer", "sam", "artillery"):
-                            if _is_water(lat, lon): continue
+                            if is_water(lat, lon): continue
 
                         home_uid = ""
                         if plat.unit_type in ("fighter", "attacker", "helicopter", "awacs"):
@@ -709,7 +689,8 @@ def main() -> None:
                             unit.home_uid = home_uid
                             if home_uid:
                                 unit.duty_state = "READY"
-                                unit.altitude_ft = 0
+                                unit.altitude_ft = get_elevation_ft(lat, lon) + 15.0
+                                unit.target_altitude_ft = unit.altitude_ft 
                             sim.units.append(unit)
                             
                         placing_remaining -= 1
@@ -733,6 +714,9 @@ def main() -> None:
                         
                         target_tot = sim.game_time + (assigning_package_tot * 60.0) if assigning_package_tot > 0 else 0.0
                         
+                        flight_leader = None
+                        formation_slot = 1
+                        
                         for uid, state in assigning_package_state.items():
                             if state["included"]:
                                 u = sim.get_unit_by_uid(uid)
@@ -745,15 +729,25 @@ def main() -> None:
                                         
                                     u.mission = Mission(f"{pkg_id} {state['role']}", state["role"], lat, lon, 30.0, u.platform.cruise_alt_ft, 0.25, time_on_target=unit_tot, package_id=pkg_id)
                                     u.duty_state = "ACTIVE"
-                                    u.auto_engage = True  # FIX: Auto-enable engagement for launched package units
+                                    u.auto_engage = True
                                     u.altitude_ft = u.platform.cruise_alt_ft
                                     u.target_altitude_ft = u.platform.cruise_alt_ft
                                     u.clear_waypoints()
                                     
-                                    for wlat, wlon, walt in assigning_package_waypoints:
-                                        u.add_waypoint(wlat, wlon, walt)
-                                        
-                                    u.add_waypoint(lat, lon, -1.0)
+                                    if flight_leader is None:
+                                        flight_leader = u
+                                        u.leader_uid = ""
+                                        u.leader_unit = None
+                                        u.formation_slot = 0
+                                        for wlat, wlon, walt in assigning_package_waypoints:
+                                            u.add_waypoint(wlat, wlon, walt)
+                                        u.add_waypoint(lat, lon, -1.0)
+                                    else:
+                                        u.leader_uid = flight_leader.uid
+                                        u.leader_unit = flight_leader
+                                        u.formation_slot = formation_slot
+                                        formation_slot += 1
+                                    
                                     count_launched += 1
                                     
                         ui.rebuild_weapon_buttons(selected_unit, sim)
@@ -808,11 +802,19 @@ def main() -> None:
                     cam.zoom_by(1 if event.button == 4 else -1, mx, my)
 
             elif event.type == pygame.MOUSEBUTTONUP:
-                if ui.is_mouse_over_ui(event.pos):
-                    is_dragging = False
-                    drag_start_pos = None
-                    continue
-                    
+                current_state = "MAP_STATE" if (placing_type or assigning_mission or assigning_package_state) else "UI_STATE"
+                
+                if current_state == "UI_STATE":
+                    if ui.is_mouse_over_ui(event.pos):
+                        is_dragging = False
+                        drag_start_pos = None
+                        continue
+                elif current_state == "MAP_STATE":
+                    if event.pos[1] >= cam.map_h:
+                        is_dragging = False
+                        drag_start_pos = None
+                        continue
+                        
                 if event.button == 1: 
                     if is_dragging and drag_start_pos:
                         dist = math.hypot(event.pos[0] - drag_start_pos[0], event.pos[1] - drag_start_pos[1])
@@ -829,8 +831,14 @@ def main() -> None:
 
             elif event.type == pygame.MOUSEWHEEL:
                 mx, my = pygame.mouse.get_pos()
-                if not ui.is_mouse_over_ui((mx, my)):
-                    cam.zoom_by(event.y, mx, my)
+                current_state = "MAP_STATE" if (placing_type or assigning_mission or assigning_package_state) else "UI_STATE"
+                
+                if current_state == "UI_STATE":
+                    if not ui.is_mouse_over_ui((mx, my)):
+                        cam.zoom_by(event.y, mx, my)
+                elif current_state == "MAP_STATE":
+                    if my < cam.map_h:
+                        cam.zoom_by(event.y, mx, my)
 
         if app_mode == "combat":
             sim.update(real_delta)
@@ -851,8 +859,11 @@ def main() -> None:
         if assigning_mission: cursor_type = assigning_mission
         if assigning_package_state: cursor_type = "STRIKE PACKAGE TARGET"
 
+        filtered_units = [u for u in sim.units if ui.is_unit_visible(u)]
+
         renderer.draw_frame(cam_px, cam_py, cam.zoom,
-                            sim.units, sim.missiles,
+                            filtered_units,
+                            sim.missiles,
                             cam.win_w, cam.map_h,
                             blue_contacts=sim.blue_contacts,
                             explosions=sim.explosions,
@@ -863,7 +874,10 @@ def main() -> None:
                             show_air_labels=show_air_labels,
                             show_ground_labels=show_ground_labels,
                             show_radar_rings=show_radar_rings,
-                            package_waypoints=assigning_package_waypoints)
+                            package_waypoints=assigning_package_waypoints,
+                            loc_points=DENSE_LOC,
+                            air_label_zoom_threshold=ui.air_label_zoom_threshold,
+                            gnd_label_zoom_threshold=ui.gnd_label_zoom_threshold)
 
         ui.update(real_delta, sim, selected_unit, placing_type, placing_remaining, show_all_enemies,
                   blue_contacts=sim.blue_contacts, show_air_labels=show_air_labels, show_ground_labels=show_ground_labels,

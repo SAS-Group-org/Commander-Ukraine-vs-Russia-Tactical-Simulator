@@ -6,6 +6,7 @@ import threading
 import time
 import itertools
 import pygame
+from collections import OrderedDict
 
 CACHE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "map_cache_en")
 os.makedirs(CACHE_DIR, exist_ok=True)
@@ -22,7 +23,7 @@ for _f in os.listdir(CACHE_DIR):
 _tile_queue      = queue.Queue()
 _queued_tiles    = set()          
 _queued_lock     = threading.Lock()
-_loaded_surfaces: dict[str, pygame.Surface] = {}  
+_loaded_surfaces: OrderedDict[str, pygame.Surface] = OrderedDict()  
 _LRU_MAX         = 512
 
 _SUBDOMAINS = itertools.cycle(["a", "b", "c", "d"])
@@ -36,6 +37,7 @@ _HEADERS = {
 }
 
 _NUM_WORKERS = 4     
+_stop_event  = threading.Event()
 
 
 def _valid_tile(z: int, x: int, y: int) -> tuple[int, int, int] | None:
@@ -50,8 +52,13 @@ def _valid_tile(z: int, x: int, y: int) -> tuple[int, int, int] | None:
 
 def _worker() -> None:
     import requests
-    while True:
-        z, x, y = _tile_queue.get()
+    while not _stop_event.is_set():
+        try:
+            # The timeout allows the thread to periodically check _stop_event
+            z, x, y = _tile_queue.get(timeout=1.0)
+        except queue.Empty:
+            continue
+
         key        = f"{z}_{x}_{y}"
         cache_path = os.path.join(CACHE_DIR, f"{key}.png")
         tmp_path   = os.path.join(CACHE_DIR, f"{key}.tmp")
@@ -80,9 +87,18 @@ def _worker() -> None:
                 _queued_tiles.discard(key)
             _tile_queue.task_done()
 
+# Keep track of threads to allow for graceful joins
+_worker_threads = []
 for _i in range(_NUM_WORKERS):
-    threading.Thread(target=_worker, daemon=True).start()
+    t = threading.Thread(target=_worker, daemon=True)
+    t.start()
+    _worker_threads.append(t)
 
+def shutdown_workers() -> None:
+    """Signals worker threads to exit cleanly."""
+    _stop_event.set()
+    for t in _worker_threads:
+        t.join(timeout=2.0)
 
 def get_tile(z: int, x: int, y: int) -> pygame.Surface | None:
     coords = _valid_tile(z, x, y)
@@ -91,19 +107,18 @@ def get_tile(z: int, x: int, y: int) -> pygame.Surface | None:
     z, x, y = coords
     key = f"{z}_{x}_{y}"
 
-    # TRUE LRU FIX: Pop and re-insert to move it to the end (most recently used)
+    # TRUE LRU FIX: move_to_end provides O(1) performance for marking recent usage
     if key in _loaded_surfaces:
-        surf = _loaded_surfaces.pop(key)
-        _loaded_surfaces[key] = surf
-        return surf
+        _loaded_surfaces.move_to_end(key)
+        return _loaded_surfaces[key]
 
     cache_path = os.path.join(CACHE_DIR, f"{key}.png")
     if os.path.exists(cache_path):
         try:
             surf = pygame.image.load(cache_path).convert()
             if len(_loaded_surfaces) >= _LRU_MAX:
-                oldest = next(iter(_loaded_surfaces))
-                del _loaded_surfaces[oldest]
+                # popitem(last=False) drops the oldest item (FIFO style)
+                _loaded_surfaces.popitem(last=False)
             _loaded_surfaces[key] = surf
             return surf
         except (pygame.error, Exception):

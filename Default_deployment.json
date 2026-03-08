@@ -2,16 +2,89 @@
   "deployment": [
     {
       "id": "blue_0001",
-      "platform": "Patriot",
-      "callsign": "UNIT 1",
+      "platform": "AirbaseB",
+      "callsign": "ALPHA BASE 1",
       "side": "Blue",
-      "lat": 49.16891,
-      "lon": 28.477722,
+      "lat": 49.74,
+      "lon": 27.27,
       "image_path": "assets/blue_jet.png",
-      "loadout": {
-        "PAC-3": 16
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
       },
+      "fire_intensity": 0.0,
+      "loadout": {},
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -20,15 +93,90 @@
     {
       "id": "blue_0002",
       "platform": "Patriot",
-      "callsign": "UNIT 2",
+      "callsign": "UNIT 1",
       "side": "Blue",
-      "lat": 50.41705,
-      "lon": 30.389343,
+      "lat": 49.73771,
+      "lon": 27.169097,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
         "PAC-3": 16
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -36,118 +184,653 @@
     },
     {
       "id": "blue_0003",
-      "platform": "Patriot",
-      "callsign": "UNIT 3",
+      "platform": "F-16A",
+      "callsign": "FALCON 1",
       "side": "Blue",
-      "lat": 49.864325,
-      "lon": 29.94989,
+      "lat": 49.74,
+      "lon": 27.27,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "PAC-3": 16
+        "AIM-120C": 4,
+        "AIM-9X": 2,
+        "M61A1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0001",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0004",
-      "platform": "IRIS-T_SLM",
-      "callsign": "UNIT 1",
+      "platform": "F-16A",
+      "callsign": "FALCON 2",
       "side": "Blue",
-      "lat": 48.949337,
-      "lon": 29.406067,
+      "lat": 49.74,
+      "lon": 27.27,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "IRIS-T": 8
+        "AIM-120C": 4,
+        "AIM-9X": 2,
+        "M61A1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0001",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0005",
-      "platform": "IRIS-T_SLM",
-      "callsign": "UNIT 2",
+      "platform": "F-16A",
+      "callsign": "FALCON 3",
       "side": "Blue",
-      "lat": 49.351743,
-      "lon": 29.955383,
+      "lat": 49.74,
+      "lon": 27.27,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "IRIS-T": 8
+        "AIM-120C": 4,
+        "AIM-9X": 2,
+        "M61A1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0001",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0006",
-      "platform": "IRIS-T_SLM",
-      "callsign": "UNIT 3",
+      "platform": "F-16A",
+      "callsign": "FALCON 4",
       "side": "Blue",
-      "lat": 50.549871,
-      "lon": 31.696716,
+      "lat": 49.74,
+      "lon": 27.27,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "IRIS-T": 8
+        "AIM-120C": 4,
+        "AIM-9X": 2,
+        "M61A1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0001",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0007",
-      "platform": "IRIS-T_SLM",
-      "callsign": "UNIT 4",
+      "platform": "Su-24M",
+      "callsign": "SWORD 1",
       "side": "Blue",
-      "lat": 49.711827,
-      "lon": 30.93866,
+      "lat": 49.74,
+      "lon": 27.27,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "IRIS-T": 8
+        "Kh-25ML": 4,
+        "R-60M": 2,
+        "GSh-6-23": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0001",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0008",
-      "platform": "NASAMS",
-      "callsign": "UNIT 1",
+      "platform": "Su-24M",
+      "callsign": "SWORD 2",
       "side": "Blue",
-      "lat": 48.521835,
-      "lon": 29.213806,
+      "lat": 49.74,
+      "lon": 27.27,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AIM-120_SAM": 6
+        "Kh-25ML": 4,
+        "R-60M": 2,
+        "GSh-6-23": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0001",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0009",
-      "platform": "NASAMS",
-      "callsign": "UNIT 2",
+      "platform": "AirbaseB",
+      "callsign": "ALPHA BASE 2",
       "side": "Blue",
-      "lat": 49.161726,
-      "lon": 29.779602,
+      "lat": 49.83,
+      "lon": 24.02,
       "image_path": "assets/blue_jet.png",
-      "loadout": {
-        "AIM-120_SAM": 6
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
       },
+      "fire_intensity": 0.0,
+      "loadout": {},
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -155,16 +838,91 @@
     },
     {
       "id": "blue_0010",
-      "platform": "NASAMS",
-      "callsign": "UNIT 3",
+      "platform": "IRIS-T_SLM",
+      "callsign": "UNIT 1",
       "side": "Blue",
-      "lat": 49.569536,
-      "lon": 30.427795,
+      "lat": 49.719802,
+      "lon": 24.079354,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AIM-120_SAM": 6
+        "IRIS-T": 8
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -172,86 +930,469 @@
     },
     {
       "id": "blue_0011",
-      "platform": "NASAMS",
-      "callsign": "UNIT 4",
+      "platform": "MiG-29UA",
+      "callsign": "GHOST 1",
       "side": "Blue",
-      "lat": 50.234689,
-      "lon": 31.378113,
+      "lat": 49.83,
+      "lon": 24.02,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AIM-120_SAM": 6
+        "R-27R": 2,
+        "R-27T": 2,
+        "R-73": 4,
+        "GSh-30-1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0009",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0012",
-      "platform": "NASAMS",
-      "callsign": "UNIT 5",
+      "platform": "MiG-29UA",
+      "callsign": "GHOST 2",
       "side": "Blue",
-      "lat": 50.803982,
-      "lon": 32.180115,
+      "lat": 49.83,
+      "lon": 24.02,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AIM-120_SAM": 6
+        "R-27R": 2,
+        "R-27T": 2,
+        "R-73": 4,
+        "GSh-30-1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0009",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0013",
-      "platform": "NASAMS",
-      "callsign": "UNIT 6",
+      "platform": "MiG-29UA",
+      "callsign": "GHOST 3",
       "side": "Blue",
-      "lat": 50.266302,
-      "lon": 30.449768,
+      "lat": 49.83,
+      "lon": 24.02,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AIM-120_SAM": 6
+        "R-27R": 2,
+        "R-27T": 2,
+        "R-73": 4,
+        "GSh-30-1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0009",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0014",
-      "platform": "T-72",
-      "callsign": "UNIT 1",
+      "platform": "MiG-29UA",
+      "callsign": "GHOST 4",
       "side": "Blue",
-      "lat": 48.682347,
-      "lon": 32.634159,
+      "lat": 49.83,
+      "lon": 24.02,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "R-27R": 2,
+        "R-27T": 2,
+        "R-73": 4,
+        "GSh-30-1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0009",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0015",
-      "platform": "T-72",
-      "callsign": "UNIT 2",
+      "platform": "AirbaseB",
+      "callsign": "ALPHA BASE 3",
       "side": "Blue",
-      "lat": 48.680307,
-      "lon": 32.635189,
+      "lat": 50.45,
+      "lon": 30.52,
       "image_path": "assets/blue_jet.png",
-      "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
       },
+      "fire_intensity": 0.0,
+      "loadout": {},
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -259,17 +1400,91 @@
     },
     {
       "id": "blue_0016",
-      "platform": "T-72",
-      "callsign": "UNIT 3",
+      "platform": "Patriot",
+      "callsign": "UNIT 2",
       "side": "Blue",
-      "lat": 48.677587,
-      "lon": 32.635189,
+      "lat": 50.504988,
+      "lon": 30.566755,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "PAC-3": 16
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -277,17 +1492,91 @@
     },
     {
       "id": "blue_0017",
-      "platform": "T-72",
-      "callsign": "UNIT 4",
+      "platform": "Patriot",
+      "callsign": "UNIT 3",
       "side": "Blue",
-      "lat": 48.67668,
-      "lon": 32.635532,
+      "lat": 50.424962,
+      "lon": 30.554859,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "PAC-3": 16
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -295,17 +1584,91 @@
     },
     {
       "id": "blue_0018",
-      "platform": "T-72",
-      "callsign": "UNIT 5",
+      "platform": "NASAMS",
+      "callsign": "UNIT 1",
       "side": "Blue",
-      "lat": 48.673506,
-      "lon": 32.635876,
+      "lat": 50.441964,
+      "lon": 30.493789,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "AIM-120_SAM": 6
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -313,17 +1676,91 @@
     },
     {
       "id": "blue_0019",
-      "platform": "T-72",
-      "callsign": "UNIT 6",
+      "platform": "NASAMS",
+      "callsign": "UNIT 2",
       "side": "Blue",
-      "lat": 48.670786,
-      "lon": 32.638279,
+      "lat": 50.467443,
+      "lon": 30.552006,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "AIM-120_SAM": 6
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -331,89 +1768,467 @@
     },
     {
       "id": "blue_0020",
-      "platform": "T-72",
-      "callsign": "UNIT 7",
+      "platform": "F-16C",
+      "callsign": "FALCON 1",
       "side": "Blue",
-      "lat": 48.617477,
-      "lon": 32.966496,
+      "lat": 50.45,
+      "lon": 30.52,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "AIM-120C": 6,
+        "AIM-9X": 2,
+        "M61A1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0015",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0021",
-      "platform": "T-72",
-      "callsign": "UNIT 8",
+      "platform": "F-16C",
+      "callsign": "FALCON 2",
       "side": "Blue",
-      "lat": 48.613165,
-      "lon": 32.962376,
+      "lat": 50.45,
+      "lon": 30.52,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "AIM-120C": 6,
+        "AIM-9X": 2,
+        "M61A1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0015",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0022",
-      "platform": "T-72",
-      "callsign": "UNIT 9",
+      "platform": "F-16C",
+      "callsign": "FALCON 3",
       "side": "Blue",
-      "lat": 48.609987,
-      "lon": 32.959629,
+      "lat": 50.45,
+      "lon": 30.52,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "AIM-120C": 6,
+        "AIM-9X": 2,
+        "M61A1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0015",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0023",
-      "platform": "T-72",
-      "callsign": "UNIT 10",
+      "platform": "F-16C",
+      "callsign": "FALCON 4",
       "side": "Blue",
-      "lat": 48.606582,
-      "lon": 32.958599,
+      "lat": 50.45,
+      "lon": 30.52,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "AIM-120C": 6,
+        "AIM-9X": 2,
+        "M61A1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0015",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0024",
-      "platform": "T-72",
-      "callsign": "UNIT 11",
+      "platform": "M142_HIMARS",
+      "callsign": "UNIT 1",
       "side": "Blue",
-      "lat": 48.603857,
-      "lon": 32.955853,
+      "lat": 50.440501,
+      "lon": 30.484355,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "GMLRS_227": 6
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -421,17 +2236,91 @@
     },
     {
       "id": "blue_0025",
-      "platform": "T-72",
-      "callsign": "UNIT 12",
+      "platform": "M142_HIMARS",
+      "callsign": "UNIT 2",
       "side": "Blue",
-      "lat": 48.600225,
-      "lon": 32.954136,
+      "lat": 50.482453,
+      "lon": 30.461112,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "GMLRS_227": 6
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -439,35 +2328,179 @@
     },
     {
       "id": "blue_0026",
-      "platform": "T-72",
-      "callsign": "UNIT 13",
+      "platform": "E-3G_Sentry",
+      "callsign": "SENTRY 1",
       "side": "Blue",
-      "lat": 48.709994,
-      "lon": 33.101765,
+      "lat": 50.45,
+      "lon": 30.52,
       "image_path": "assets/blue_jet.png",
-      "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
       },
+      "fire_intensity": 0.0,
+      "loadout": {},
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0015",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0027",
-      "platform": "T-72",
-      "callsign": "UNIT 14",
+      "platform": "AirbaseB",
+      "callsign": "ALPHA BASE 4",
       "side": "Blue",
-      "lat": 48.714072,
-      "lon": 33.100735,
+      "lat": 46.48,
+      "lon": 30.72,
       "image_path": "assets/blue_jet.png",
-      "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
       },
+      "fire_intensity": 0.0,
+      "loadout": {},
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -475,17 +2508,91 @@
     },
     {
       "id": "blue_0028",
-      "platform": "T-72",
-      "callsign": "UNIT 15",
+      "platform": "Patriot",
+      "callsign": "UNIT 4",
       "side": "Blue",
-      "lat": 48.717696,
-      "lon": 33.100735,
+      "lat": 46.463391,
+      "lon": 30.735321,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "PAC-3": 16
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -493,53 +2600,281 @@
     },
     {
       "id": "blue_0029",
-      "platform": "T-72",
-      "callsign": "UNIT 16",
+      "platform": "MiG-29UA",
+      "callsign": "GHOST 5",
       "side": "Blue",
-      "lat": 48.72132,
-      "lon": 33.100735,
+      "lat": 46.48,
+      "lon": 30.72,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "R-27R": 2,
+        "R-27T": 2,
+        "R-73": 4,
+        "GSh-30-1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0027",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0030",
-      "platform": "T-72",
-      "callsign": "UNIT 17",
+      "platform": "MiG-29UA",
+      "callsign": "GHOST 6",
       "side": "Blue",
-      "lat": 48.725623,
-      "lon": 33.101078,
+      "lat": 46.48,
+      "lon": 30.72,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "R-27R": 2,
+        "R-27T": 2,
+        "R-73": 4,
+        "GSh-30-1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0027",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0031",
-      "platform": "T-72",
-      "callsign": "UNIT 18",
+      "platform": "Gepard",
+      "callsign": "UNIT 1",
       "side": "Blue",
-      "lat": 48.731285,
-      "lon": 33.106228,
+      "lat": 46.497808,
+      "lon": 30.657114,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "Gepard_35": 40
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -547,17 +2882,91 @@
     },
     {
       "id": "blue_0032",
-      "platform": "T-72",
-      "callsign": "UNIT 19",
+      "platform": "Gepard",
+      "callsign": "UNIT 2",
       "side": "Blue",
-      "lat": 48.220784,
-      "lon": 33.75322,
+      "lat": 46.4566,
+      "lon": 30.696053,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "Gepard_35": 40
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -565,17 +2974,91 @@
     },
     {
       "id": "blue_0033",
-      "platform": "T-72",
-      "callsign": "UNIT 20",
+      "platform": "M777",
+      "callsign": "UNIT 1",
       "side": "Blue",
-      "lat": 48.250055,
-      "lon": 33.674942,
+      "lat": 46.415849,
+      "lon": 30.759059,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "ARTY_155": 30
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -583,17 +3066,91 @@
     },
     {
       "id": "blue_0034",
-      "platform": "T-72",
-      "callsign": "UNIT 21",
+      "platform": "M777",
+      "callsign": "UNIT 2",
       "side": "Blue",
-      "lat": 47.884809,
-      "lon": 33.517014,
+      "lat": 46.501952,
+      "lon": 30.721095,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "ARTY_155": 30
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -601,17 +3158,91 @@
     },
     {
       "id": "blue_0035",
-      "platform": "T-72",
-      "callsign": "UNIT 22",
+      "platform": "M777",
+      "callsign": "UNIT 3",
       "side": "Blue",
-      "lat": 47.892176,
-      "lon": 33.517014,
+      "lat": 46.494397,
+      "lon": 30.739491,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "ARTY_155": 30
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -619,17 +3250,91 @@
     },
     {
       "id": "blue_0036",
-      "platform": "T-72",
-      "callsign": "UNIT 23",
+      "platform": "M777",
+      "callsign": "UNIT 4",
       "side": "Blue",
-      "lat": 47.902304,
-      "lon": 33.51564,
+      "lat": 46.489786,
+      "lon": 30.738997,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "ARTY_155": 30
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -637,17 +3342,89 @@
     },
     {
       "id": "blue_0037",
-      "platform": "T-72",
-      "callsign": "UNIT 24",
+      "platform": "AirbaseB",
+      "callsign": "ALPHA BASE 5",
       "side": "Blue",
-      "lat": 47.907828,
-      "lon": 33.510147,
+      "lat": 50.25,
+      "lon": 28.65,
       "image_path": "assets/blue_jet.png",
-      "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
       },
+      "fire_intensity": 0.0,
+      "loadout": {},
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -655,89 +3432,469 @@
     },
     {
       "id": "blue_0038",
-      "platform": "T-72",
-      "callsign": "UNIT 25",
+      "platform": "Su-27UA",
+      "callsign": "PHANTOM 1",
       "side": "Blue",
-      "lat": 48.24251,
-      "lon": 33.669964,
+      "lat": 50.25,
+      "lon": 28.65,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "R-27R": 4,
+        "R-27T": 2,
+        "R-73": 4,
+        "GSh-30-1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0037",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0039",
-      "platform": "T-72",
-      "callsign": "UNIT 26",
+      "platform": "Su-27UA",
+      "callsign": "PHANTOM 2",
       "side": "Blue",
-      "lat": 48.241824,
-      "lon": 33.656574,
+      "lat": 50.25,
+      "lon": 28.65,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "R-27R": 4,
+        "R-27T": 2,
+        "R-73": 4,
+        "GSh-30-1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0037",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0040",
-      "platform": "T-72",
-      "callsign": "UNIT 27",
+      "platform": "Mi-24V",
+      "callsign": "HIND 1",
       "side": "Blue",
-      "lat": 48.248683,
-      "lon": 33.653484,
+      "lat": 50.25,
+      "lon": 28.65,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "Shturm": 4,
+        "S-8": 2,
+        "Yak-B": 1000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0037",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0041",
-      "platform": "T-72",
-      "callsign": "UNIT 28",
+      "platform": "Mi-24V",
+      "callsign": "HIND 2",
       "side": "Blue",
-      "lat": 48.242739,
-      "lon": 33.641811,
+      "lat": 50.25,
+      "lon": 28.65,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "Shturm": 4,
+        "S-8": 2,
+        "Yak-B": 1000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0037",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0042",
-      "platform": "T-72",
-      "callsign": "UNIT 29",
+      "platform": "IRIS-T_SLM",
+      "callsign": "UNIT 2",
       "side": "Blue",
-      "lat": 48.217353,
-      "lon": 33.759228,
+      "lat": 50.324756,
+      "lon": 28.704486,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "IRIS-T": 8
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -745,17 +3902,91 @@
     },
     {
       "id": "blue_0043",
-      "platform": "T-72",
-      "callsign": "UNIT 30",
+      "platform": "M270_MLRS",
+      "callsign": "UNIT 1",
       "side": "Blue",
-      "lat": 48.213464,
-      "lon": 33.756481,
+      "lat": 50.291729,
+      "lon": 28.624911,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "GMLRS_227": 12
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -763,17 +3994,92 @@
     },
     {
       "id": "blue_0044",
-      "platform": "T-72",
-      "callsign": "UNIT 31",
+      "platform": "Leopard2",
+      "callsign": "UNIT 1",
       "side": "Blue",
-      "lat": 48.208888,
-      "lon": 33.750301,
+      "lat": 48.492618,
+      "lon": 35.052743,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "GUN_120NATO": 42,
+        "ATGM_TOW": 2
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -781,17 +4087,92 @@
     },
     {
       "id": "blue_0045",
-      "platform": "T-72",
-      "callsign": "UNIT 32",
+      "platform": "Leopard2",
+      "callsign": "UNIT 2",
       "side": "Blue",
-      "lat": 48.203625,
-      "lon": 33.760944,
+      "lat": 48.4607,
+      "lon": 34.937653,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "GUN_120NATO": 42,
+        "ATGM_TOW": 2
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -799,17 +4180,92 @@
     },
     {
       "id": "blue_0046",
-      "platform": "T-72",
-      "callsign": "UNIT 33",
+      "platform": "Bradley",
+      "callsign": "UNIT 1",
       "side": "Blue",
-      "lat": 48.200422,
-      "lon": 33.745152,
+      "lat": 48.417743,
+      "lon": 34.987962,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "AUTOCANNON_25": 900,
+        "ATGM_TOW": 7
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -817,17 +4273,92 @@
     },
     {
       "id": "blue_0047",
-      "platform": "T-72",
-      "callsign": "UNIT 34",
+      "platform": "Bradley",
+      "callsign": "UNIT 2",
       "side": "Blue",
-      "lat": 49.92183,
-      "lon": 36.231323,
+      "lat": 48.440546,
+      "lon": 34.994026,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "AUTOCANNON_25": 900,
+        "ATGM_TOW": 7
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -835,17 +4366,92 @@
     },
     {
       "id": "blue_0048",
-      "platform": "T-72",
-      "callsign": "UNIT 35",
+      "platform": "Bradley",
+      "callsign": "UNIT 3",
       "side": "Blue",
-      "lat": 49.911219,
-      "lon": 36.264282,
+      "lat": 48.460007,
+      "lon": 35.036087,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "AUTOCANNON_25": 900,
+        "ATGM_TOW": 7
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -853,17 +4459,92 @@
     },
     {
       "id": "blue_0049",
-      "platform": "T-72",
-      "callsign": "UNIT 36",
+      "platform": "Bradley",
+      "callsign": "UNIT 4",
       "side": "Blue",
-      "lat": 49.907681,
-      "lon": 36.258789,
+      "lat": 48.438121,
+      "lon": 35.027986,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "AUTOCANNON_25": 900,
+        "ATGM_TOW": 7
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -871,17 +4552,91 @@
     },
     {
       "id": "blue_0050",
-      "platform": "T-72",
-      "callsign": "UNIT 37",
+      "platform": "Gepard",
+      "callsign": "UNIT 3",
       "side": "Blue",
-      "lat": 49.904144,
-      "lon": 36.231323,
+      "lat": 48.421274,
+      "lon": 35.072588,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "Gepard_35": 40
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -889,17 +4644,91 @@
     },
     {
       "id": "blue_0051",
-      "platform": "T-72",
-      "callsign": "UNIT 38",
+      "platform": "Gepard",
+      "callsign": "UNIT 4",
       "side": "Blue",
-      "lat": 49.893528,
-      "lon": 36.192871,
+      "lat": 48.410259,
+      "lon": 35.083943,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "Gepard_35": 40
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -907,17 +4736,91 @@
     },
     {
       "id": "blue_0052",
-      "platform": "T-72",
-      "callsign": "UNIT 39",
+      "platform": "PzH2000",
+      "callsign": "UNIT 1",
       "side": "Blue",
-      "lat": 49.868751,
-      "lon": 36.198364,
+      "lat": 48.462488,
+      "lon": 35.039149,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "GUN_125": 40,
-        "ATGM_Konkurs": 4
+        "ARTY_155": 60
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -925,17 +4828,91 @@
     },
     {
       "id": "blue_0053",
-      "platform": "Bradley",
-      "callsign": "UNIT 1",
+      "platform": "PzH2000",
+      "callsign": "UNIT 2",
       "side": "Blue",
-      "lat": 48.151199,
-      "lon": 33.703953,
+      "lat": 48.472069,
+      "lon": 35.015135,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+        "ARTY_155": 60
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -943,17 +4920,91 @@
     },
     {
       "id": "blue_0054",
-      "platform": "Bradley",
-      "callsign": "UNIT 2",
+      "platform": "PzH2000",
+      "callsign": "UNIT 3",
       "side": "Blue",
-      "lat": 48.147305,
-      "lon": 33.704639,
+      "lat": 48.441325,
+      "lon": 35.079171,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+        "ARTY_155": 60
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -961,17 +5012,92 @@
     },
     {
       "id": "blue_0055",
-      "platform": "Bradley",
-      "callsign": "UNIT 3",
+      "platform": "M1Abrams",
+      "callsign": "UNIT 1",
       "side": "Blue",
-      "lat": 48.144556,
-      "lon": 33.704983,
+      "lat": 46.620747,
+      "lon": 32.70889,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+        "GUN_120NATO": 40,
+        "ATGM_TOW": 2
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -979,17 +5105,92 @@
     },
     {
       "id": "blue_0056",
-      "platform": "Bradley",
-      "callsign": "UNIT 4",
+      "platform": "M1Abrams",
+      "callsign": "UNIT 2",
       "side": "Blue",
-      "lat": 48.140661,
-      "lon": 33.705669,
+      "lat": 46.629101,
+      "lon": 32.637228,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+        "GUN_120NATO": 40,
+        "ATGM_TOW": 2
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -997,17 +5198,92 @@
     },
     {
       "id": "blue_0057",
-      "platform": "Bradley",
-      "callsign": "UNIT 5",
+      "platform": "Stryker",
+      "callsign": "UNIT 1",
       "side": "Blue",
-      "lat": 48.136308,
-      "lon": 33.707386,
+      "lat": 46.590699,
+      "lon": 32.611758,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+        "AUTOCANNON_30": 200,
+        "ATGM_TOW": 2
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -1015,17 +5291,92 @@
     },
     {
       "id": "blue_0058",
-      "platform": "Bradley",
-      "callsign": "UNIT 6",
+      "platform": "Stryker",
+      "callsign": "UNIT 2",
       "side": "Blue",
-      "lat": 48.131267,
-      "lon": 33.707729,
+      "lat": 46.58146,
+      "lon": 32.621168,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+        "AUTOCANNON_30": 200,
+        "ATGM_TOW": 2
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -1033,17 +5384,92 @@
     },
     {
       "id": "blue_0059",
-      "platform": "Bradley",
-      "callsign": "UNIT 7",
+      "platform": "Stryker",
+      "callsign": "UNIT 3",
       "side": "Blue",
-      "lat": 48.125768,
-      "lon": 33.709103,
+      "lat": 46.613931,
+      "lon": 32.672449,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+        "AUTOCANNON_30": 200,
+        "ATGM_TOW": 2
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -1051,17 +5477,91 @@
     },
     {
       "id": "blue_0060",
-      "platform": "Bradley",
-      "callsign": "UNIT 8",
+      "platform": "Gepard",
+      "callsign": "UNIT 5",
       "side": "Blue",
-      "lat": 48.121413,
-      "lon": 33.709446,
+      "lat": 46.608203,
+      "lon": 32.586575,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+        "Gepard_35": 40
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -1069,17 +5569,92 @@
     },
     {
       "id": "blue_0061",
-      "platform": "Bradley",
-      "callsign": "UNIT 9",
+      "platform": "T-72",
+      "callsign": "UNIT 1",
       "side": "Blue",
-      "lat": 48.117288,
-      "lon": 33.711506,
+      "lat": 46.676625,
+      "lon": 32.526156,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -1087,17 +5662,92 @@
     },
     {
       "id": "blue_0062",
-      "platform": "Bradley",
-      "callsign": "UNIT 10",
+      "platform": "T-72",
+      "callsign": "UNIT 2",
       "side": "Blue",
-      "lat": 48.11362,
-      "lon": 33.712193,
+      "lat": 46.566954,
+      "lon": 32.574511,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+        "GUN_125": 40,
+        "ATGM_Konkurs": 4
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -1105,17 +5755,91 @@
     },
     {
       "id": "blue_0063",
-      "platform": "Bradley",
-      "callsign": "UNIT 11",
+      "platform": "CAESAR",
+      "callsign": "UNIT 1",
       "side": "Blue",
-      "lat": 48.110411,
-      "lon": 33.712879,
+      "lat": 46.682476,
+      "lon": 32.503795,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+        "ARTY_155": 20
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -1123,17 +5847,91 @@
     },
     {
       "id": "blue_0064",
-      "platform": "Bradley",
-      "callsign": "UNIT 12",
+      "platform": "CAESAR",
+      "callsign": "UNIT 2",
       "side": "Blue",
-      "lat": 48.107431,
-      "lon": 33.713909,
+      "lat": 46.698204,
+      "lon": 32.622514,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+        "ARTY_155": 20
       },
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -1141,17 +5939,89 @@
     },
     {
       "id": "blue_0065",
-      "platform": "Bradley",
-      "callsign": "UNIT 13",
+      "platform": "AirbaseB",
+      "callsign": "ALPHA BASE 6",
       "side": "Blue",
-      "lat": 48.264912,
-      "lon": 33.641468,
+      "lat": 48.335941,
+      "lon": 31.814819,
       "image_path": "assets/blue_jet.png",
-      "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
       },
+      "fire_intensity": 0.0,
+      "loadout": {},
       "roe": "TIGHT",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
       "home_uid": "",
       "duty_state": "ACTIVE",
       "duty_timer": 0.0,
@@ -1159,369 +6029,1210 @@
     },
     {
       "id": "blue_0066",
-      "platform": "Bradley",
-      "callsign": "UNIT 14",
+      "platform": "E-3G_Sentry",
+      "callsign": "SENTRY 2",
       "side": "Blue",
-      "lat": 48.266055,
-      "lon": 33.646618,
+      "lat": 48.335941,
+      "lon": 31.814819,
       "image_path": "assets/blue_jet.png",
-      "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
       },
+      "fire_intensity": 0.0,
+      "loadout": {},
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0065",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0067",
-      "platform": "Bradley",
-      "callsign": "UNIT 15",
+      "platform": "F-16A",
+      "callsign": "FALCON 5",
       "side": "Blue",
-      "lat": 48.26994,
-      "lon": 33.653828,
+      "lat": 48.335941,
+      "lon": 31.814819,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+        "AIM-120C": 4,
+        "AIM-9X": 2,
+        "M61A1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0065",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0068",
-      "platform": "Bradley",
-      "callsign": "UNIT 16",
+      "platform": "F-16A",
+      "callsign": "FALCON 6",
       "side": "Blue",
-      "lat": 48.270626,
-      "lon": 33.647991,
+      "lat": 48.335941,
+      "lon": 31.814819,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+        "AIM-120C": 4,
+        "AIM-9X": 2,
+        "M61A1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0065",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0069",
-      "platform": "Bradley",
-      "callsign": "UNIT 17",
+      "platform": "F-16A",
+      "callsign": "FALCON 7",
       "side": "Blue",
-      "lat": 48.268569,
-      "lon": 33.640781,
+      "lat": 48.335941,
+      "lon": 31.814819,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+        "AIM-120C": 4,
+        "AIM-9X": 2,
+        "M61A1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0065",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0070",
-      "platform": "Bradley",
-      "callsign": "UNIT 18",
+      "platform": "F-16A",
+      "callsign": "FALCON 8",
       "side": "Blue",
-      "lat": 48.268569,
-      "lon": 33.633572,
+      "lat": 48.335941,
+      "lon": 31.814819,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+        "AIM-120C": 4,
+        "AIM-9X": 2,
+        "M61A1": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0065",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0071",
-      "platform": "Bradley",
-      "callsign": "UNIT 19",
+      "platform": "Su-24M",
+      "callsign": "SWORD 3",
       "side": "Blue",
-      "lat": 48.272454,
-      "lon": 33.633572,
+      "lat": 48.335941,
+      "lon": 31.814819,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+        "Kh-25ML": 4,
+        "R-60M": 2,
+        "GSh-6-23": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0065",
+      "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
       "id": "blue_0072",
-      "platform": "Bradley",
-      "callsign": "UNIT 20",
+      "platform": "Su-24M",
+      "callsign": "SWORD 4",
       "side": "Blue",
-      "lat": 48.27451,
-      "lon": 33.639751,
+      "lat": 48.335941,
+      "lon": 31.814819,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AUTOCANNON_25": 900,
-        "ATGM_TOW": 7
+        "Kh-25ML": 4,
+        "R-60M": 2,
+        "GSh-6-23": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
-      "duty_timer": 0.0,
-      "waypoints": []
-    },
-    {
-      "id": "blue_0001",
-      "platform": "AirbaseB",
-      "callsign": "ALPHA BASE 1",
-      "side": "Blue",
-      "lat": 49.064194,
-      "lon": 28.403564,
-      "image_path": "assets/blue_jet.png",
-      "loadout": {},
-      "roe": "TIGHT",
-      "home_uid": "",
-      "duty_state": "ACTIVE",
-      "duty_timer": 0.0,
-      "waypoints": []
-    },
-    {
-      "id": "blue_0002",
-      "platform": "F-16AM",
-      "callsign": "VIPER 1",
-      "side": "Blue",
-      "lat": 49.064194,
-      "lon": 28.403564,
-      "image_path": "assets/blue_jet.png",
-      "loadout": {
-        "AIM-120C": 4,
-        "AIM-9X": 2,
-        "M61A1": 1
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
       },
-      "roe": "TIGHT",
-      "home_uid": "blue_0001",
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0065",
       "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
-      "id": "blue_0003",
-      "platform": "F-16AM",
-      "callsign": "VIPER 2",
+      "id": "blue_0073",
+      "platform": "Su-24M",
+      "callsign": "SWORD 5",
       "side": "Blue",
-      "lat": 49.064194,
-      "lon": 28.403564,
+      "lat": 48.335941,
+      "lon": 31.814819,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AIM-120C": 4,
-        "AIM-9X": 2,
-        "M61A1": 1
+        "Kh-25ML": 4,
+        "R-60M": 2,
+        "GSh-6-23": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "blue_0001",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0065",
       "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
-      "id": "blue_0004",
-      "platform": "F-16AM",
-      "callsign": "VIPER 3",
+      "id": "blue_0074",
+      "platform": "Su-24M",
+      "callsign": "SWORD 6",
       "side": "Blue",
-      "lat": 49.064194,
-      "lon": 28.403564,
+      "lat": 48.335941,
+      "lon": 31.814819,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AIM-120C": 4,
-        "AIM-9X": 2,
-        "M61A1": 1
+        "Kh-25ML": 4,
+        "R-60M": 2,
+        "GSh-6-23": 2000
       },
       "roe": "TIGHT",
-      "home_uid": "blue_0001",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0065",
       "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
-      "id": "blue_0005",
-      "platform": "F-16AM",
-      "callsign": "VIPER 4",
+      "id": "blue_0075",
+      "platform": "Bayraktar_TB2",
+      "callsign": "DRONE 1",
       "side": "Blue",
-      "lat": 49.064194,
-      "lon": 28.403564,
+      "lat": 48.335941,
+      "lon": 31.814819,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AIM-120C": 4,
-        "AIM-9X": 2,
-        "M61A1": 1
+        "MAM-L": 4
       },
       "roe": "TIGHT",
-      "home_uid": "blue_0001",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0065",
       "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
-      "id": "blue_0006",
-      "platform": "F-16AM",
-      "callsign": "VIPER 5",
+      "id": "blue_0076",
+      "platform": "Bayraktar_TB2",
+      "callsign": "DRONE 2",
       "side": "Blue",
-      "lat": 49.064194,
-      "lon": 28.403564,
+      "lat": 48.335941,
+      "lon": 31.814819,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AIM-120C": 4,
-        "AIM-9X": 2,
-        "M61A1": 1
+        "MAM-L": 4
       },
       "roe": "TIGHT",
-      "home_uid": "blue_0001",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0065",
       "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
-      "id": "blue_0007",
-      "platform": "F-16AM",
-      "callsign": "VIPER 6",
+      "id": "blue_0077",
+      "platform": "Bayraktar_TB2",
+      "callsign": "DRONE 3",
       "side": "Blue",
-      "lat": 49.064194,
-      "lon": 28.403564,
+      "lat": 48.335941,
+      "lon": 31.814819,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AIM-120C": 4,
-        "AIM-9X": 2,
-        "M61A1": 1
+        "MAM-L": 4
       },
       "roe": "TIGHT",
-      "home_uid": "blue_0001",
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
+      },
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0065",
       "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []
     },
     {
-      "id": "blue_0008",
-      "platform": "F-16AM",
-      "callsign": "VIPER 7",
+      "id": "blue_0078",
+      "platform": "Bayraktar_TB2",
+      "callsign": "DRONE 4",
       "side": "Blue",
-      "lat": 49.064194,
-      "lon": 28.403564,
+      "lat": 48.335941,
+      "lon": 31.814819,
       "image_path": "assets/blue_jet.png",
+      "drunkness": 1,
+      "corruption": 1,
+      "systems": {
+        "search_radar": "OK",
+        "fc_radar": "OK",
+        "mobility": "OK",
+        "weapons": "OK"
+      },
+      "fire_intensity": 0.0,
       "loadout": {
-        "AIM-120C": 4,
-        "AIM-9X": 2,
-        "M61A1": 1
+        "MAM-L": 4
       },
       "roe": "TIGHT",
-      "home_uid": "blue_0001",
-      "duty_state": "READY",
-      "duty_timer": 0.0,
-      "waypoints": []
-    },
-    {
-      "id": "blue_0009",
-      "platform": "F-16AM",
-      "callsign": "VIPER 8",
-      "side": "Blue",
-      "lat": 49.064194,
-      "lon": 28.403564,
-      "image_path": "assets/blue_jet.png",
-      "loadout": {
-        "AIM-120C": 4,
-        "AIM-9X": 2,
-        "M61A1": 1
+      "emcon_state": "ACTIVE",
+      "throttle_state": "CRUISE",
+      "wra": {
+        "ALL": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "fighter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "attacker": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "helicopter": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "awacs": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ifv": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "apc": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "recon": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "tank_destroyer": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "sam": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "artillery": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "airbase": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "ship": {
+          "range": 0.9,
+          "qty": 1
+        },
+        "submarine": {
+          "range": 0.9,
+          "qty": 1
+        }
       },
-      "roe": "TIGHT",
-      "home_uid": "blue_0001",
-      "duty_state": "READY",
-      "duty_timer": 0.0,
-      "waypoints": []
-    },
-    {
-      "id": "blue_0010",
-      "platform": "F-16AM",
-      "callsign": "VIPER 9",
-      "side": "Blue",
-      "lat": 49.064194,
-      "lon": 28.403564,
-      "image_path": "assets/blue_jet.png",
-      "loadout": {
-        "AIM-120C": 4,
-        "AIM-9X": 2,
-        "M61A1": 1
-      },
-      "roe": "TIGHT",
-      "home_uid": "blue_0001",
-      "duty_state": "READY",
-      "duty_timer": 0.0,
-      "waypoints": []
-    },
-    {
-      "id": "blue_0011",
-      "platform": "F-16AM",
-      "callsign": "VIPER 10",
-      "side": "Blue",
-      "lat": 49.064194,
-      "lon": 28.403564,
-      "image_path": "assets/blue_jet.png",
-      "loadout": {
-        "AIM-120C": 4,
-        "AIM-9X": 2,
-        "M61A1": 1
-      },
-      "roe": "TIGHT",
-      "home_uid": "blue_0001",
-      "duty_state": "READY",
-      "duty_timer": 0.0,
-      "waypoints": []
-    },
-    {
-      "id": "blue_0012",
-      "platform": "F-16AM",
-      "callsign": "VIPER 11",
-      "side": "Blue",
-      "lat": 49.064194,
-      "lon": 28.403564,
-      "image_path": "assets/blue_jet.png",
-      "loadout": {
-        "AIM-120C": 4,
-        "AIM-9X": 2,
-        "M61A1": 1
-      },
-      "roe": "TIGHT",
-      "home_uid": "blue_0001",
-      "duty_state": "READY",
-      "duty_timer": 0.0,
-      "waypoints": []
-    },
-    {
-      "id": "blue_0013",
-      "platform": "F-16AM",
-      "callsign": "VIPER 12",
-      "side": "Blue",
-      "lat": 49.064194,
-      "lon": 28.403564,
-      "image_path": "assets/blue_jet.png",
-      "loadout": {
-        "AIM-120C": 4,
-        "AIM-9X": 2,
-        "M61A1": 1
-      },
-      "roe": "TIGHT",
-      "home_uid": "blue_0001",
+      "formation": "WEDGE",
+      "flight_doctrine": "STANDARD",
+      "home_uid": "blue_0065",
       "duty_state": "READY",
       "duty_timer": 0.0,
       "waypoints": []

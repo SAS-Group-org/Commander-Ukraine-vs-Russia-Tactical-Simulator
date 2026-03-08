@@ -1,8 +1,10 @@
-# geo.py — pure geo-math, no pygame, no game state
+# geo.py — pure geo-math, JIT-compiled for high performance
 
 import math
+from numba import njit
 from constants import TILE_SIZE
 
+@njit(cache=True)
 def lat_lon_to_pixel(lat: float, lon: float, zoom: int) -> tuple[float, float]:
     """Web-Mercator projection → absolute pixel coordinates at given zoom."""
     lat_rad = math.radians(lat)
@@ -11,16 +13,30 @@ def lat_lon_to_pixel(lat: float, lon: float, zoom: int) -> tuple[float, float]:
     y = (1.0 - math.asinh(math.tan(lat_rad)) / math.pi) / 2.0 * n * TILE_SIZE
     return x, y
 
+@njit(cache=True)
 def pixel_to_lat_lon(x: float, y: float, zoom: int) -> tuple[float, float]:
     """Inverse Web-Mercator: absolute pixel → (lat, lon)."""
     n = 2.0 ** zoom
-    lon = x / TILE_SIZE / n * 360.0 - 180.0
-    lat_rad = math.atan(math.sinh(math.pi * (1 - 2 * y / TILE_SIZE / n)))
+    map_size = n * TILE_SIZE
+    
+    # Clamp y to prevent extreme values causing math domain errors at the poles
+    clamped_y = max(0.1, min(map_size - 0.1, y))
+    
+    lon = x / map_size * 360.0 - 180.0
+    lat_rad = math.atan(math.sinh(math.pi * (1 - 2 * clamped_y / map_size)))
     return math.degrees(lat_rad), lon
 
+@njit(cache=True)
+def fast_dist_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """Extremely fast flat-earth Pythagorean approximation for 60fps movement loops."""
+    dlat = lat2 - lat1
+    dlon = (lon2 - lon1) * math.cos(math.radians((lat1 + lat2) / 2.0))
+    return math.hypot(dlat, dlon) * 111.32
+
+@njit(cache=True)
 def haversine(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
-    """Great-circle distance in kilometres."""
-    R = 6_371.0
+    """Great-circle distance in kilometres. (No cache: floats change every frame)."""
+    R = 6371.0
     dlat = math.radians(lat2 - lat1)
     dlon = math.radians(lon2 - lon1)
     a = (math.sin(dlat / 2) ** 2
@@ -28,6 +44,7 @@ def haversine(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
          * math.sin(dlon / 2) ** 2)
     return R * 2.0 * math.atan2(math.sqrt(a), math.sqrt(1.0 - a))
 
+@njit(cache=True)
 def slant_range_km(lat1: float, lon1: float, alt1_ft: float,
                    lat2: float, lon2: float, alt2_ft: float) -> float:
     """True 3D slant range incorporating altitude differences."""
@@ -35,6 +52,7 @@ def slant_range_km(lat1: float, lon1: float, alt1_ft: float,
     dist_vert = (alt1_ft - alt2_ft) * 0.0003048  # Convert feet to km
     return math.hypot(dist_2d, dist_vert)
 
+@njit(cache=True)
 def bearing(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     """True bearing from point-1 to point-2 in degrees (0 = North)."""
     dlon  = math.radians(lon2 - lon1)
@@ -45,6 +63,7 @@ def bearing(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
          - math.sin(lat1r) * math.cos(lat2r) * math.cos(dlon))
     return (math.degrees(math.atan2(x, y)) + 360.0) % 360.0
 
+@njit(cache=True)
 def world_to_screen(lat: float, lon: float,
                     cam_px: float, cam_py: float,
                     zoom: int,
@@ -53,21 +72,30 @@ def world_to_screen(lat: float, lon: float,
     ax, ay = lat_lon_to_pixel(lat, lon, zoom)
     return ax - cam_px + map_w / 2, ay - cam_py + map_h / 2
 
+@njit(cache=True)
 def get_elevation_ft(lat: float, lon: float) -> float:
-    """Procedural pseudo-DEM for Eastern Europe / Ukraine without huge files."""
+    """
+    Procedural pseudo-DEM for Eastern Europe / Ukraine without huge files.
+    JIT compiled: raw math computation is now faster than Python dictionary caching.
+    """
+    lat_r = round(lat, 3)
+    lon_r = round(lon, 3)
+    
     # Black sea bounding
-    if lat < 46.5 and lon < 36.0 and lat < (46.5 - (36.0 - lon)*0.5): return 0.0 
+    if lat_r < 46.5 and lon_r < 36.0 and lat_r < (46.5 - (36.0 - lon_r)*0.5): 
+        return 0.0 
     
     # Base rolling hills for Donbas/Central
-    hills = (math.sin(lat * 15.0) * math.cos(lon * 15.0)) * 400.0
+    hills = (math.sin(lat_r * 15.0) * math.cos(lon_r * 15.0)) * 400.0
     
     # Carpathian mountains in the far west
-    if lon < 26.0:
-        mountains = (math.sin(lat * 20.0) * math.cos(lon * 20.0)) * 3500.0
+    if lon_r < 26.0:
+        mountains = (math.sin(lat_r * 20.0) * math.cos(lon_r * 20.0)) * 3500.0
         return max(0.0, 1000.0 + hills + mountains)
         
     return max(0.0, 300.0 + hills)
 
+@njit(cache=True)
 def check_line_of_sight(lat1: float, lon1: float, alt1_ft: float, 
                         lat2: float, lon2: float, alt2_ft: float) -> bool:
     """Checks radar horizon curvature AND intermediate terrain masking."""

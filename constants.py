@@ -1,6 +1,6 @@
 # constants.py — all shared constants in one place
 
-# ── Default window size (used only at startup) ───────────────────────────────
+# ── Window & Performance ──────────────────────────────────────────────────────
 WINDOW_WIDTH_DEFAULT    = 1920
 WINDOW_HEIGHT_DEFAULT   = 1080
 BOTTOM_PANEL_FRACTION   = 0.30
@@ -8,7 +8,7 @@ BOTTOM_PANEL_MIN_HEIGHT = 320
 FPS                     = 60
 TILE_SIZE               = 256
 
-# ── Unit / map colours (Updated for NTDS / MIL-STD-2525 aesthetic) ────────────
+# ── Strategic UI Colors (NTDS / MIL-STD-2525) ────────────────────────────────
 BLUE_UNIT_COLOR    = (80,  180, 240)   # High-contrast Cyan
 RED_UNIT_COLOR     = (255,  80,  80)   # Bright Hostile Red
 SELECTED_COLOR     = (255, 230,  50)   # Sharp Yellow
@@ -18,8 +18,8 @@ RADAR_RING_COLOR   = (60,  140, 200)   # Muted Cyan for friendly radar
 MISSILE_BLUE_COLOR = (140, 220, 255)   # Intense Cyan for friendly munitions
 MISSILE_RED_COLOR  = (255, 120, 120)   # Intense Red for hostile munitions
 TRAIL_COLOR        = (255, 220, 100)   # Hot Yellow for exhaust trails
-PANEL_BG           = (21,   24,  22)   # Deep #151816 matching the UI theme
-TEXT_COLOR         = (224, 216, 192)   # Soft off-white #e0d8c0
+PANEL_BG           = (21,   24,  22)   # Deep theme matching UI
+TEXT_COLOR         = (224, 216, 192)   # Soft off-white
 LOG_COLOR          = (160, 200, 160)   # Soft terminal green
 
 # Contact classification colours (used by renderer)
@@ -37,8 +37,9 @@ MISSILE_TRAIL_LEN = 24
 HIT_FLASH_FRAMES  = 12
 MIN_PK            = 0.05
 MAX_PK            = 0.95
+CONTACT_TIMEOUT_S = 45.0  # Stale tracks persist longer in attrition war
 
 # ── Electronic Warfare & Countermeasures ──────────────────────────────────────
-BURNTHROUGH_RANGE_KM = 15.0  # Radar overpowers jamming if target is within this range
+BURNTHROUGH_RANGE_KM = 25.0  # Increased for long-range BVR meta
 CHAFF_PK_PENALTY     = 0.25  # Pk reduction per dispensed chaff bundle
 FLARE_PK_PENALTY     = 0.25  # Pk reduction per dispensed flare
