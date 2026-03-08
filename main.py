@@ -9,7 +9,7 @@ import pathlib
 import tkinter as tk
 from tkinter import filedialog
 import math
-import random as _random
+import random
 
 import pygame
 import pygame_gui
@@ -18,12 +18,14 @@ from constants import (
     WINDOW_WIDTH_DEFAULT, WINDOW_HEIGHT_DEFAULT,
     BOTTOM_PANEL_FRACTION, BOTTOM_PANEL_MIN_HEIGHT, FPS, TIME_SPEEDS,
 )
-from geo import lat_lon_to_pixel, pixel_to_lat_lon, world_to_screen, get_elevation_ft, haversine, bearing
+from geo import lat_lon_to_pixel, pixel_to_lat_lon, world_to_screen, get_elevation_ft, haversine
 from renderer import Renderer
 from scenario import (
     Database, Unit, Mission, GameEvent, PlatformDef, 
-    load_scenario, save_scenario, save_deployment, load_deployment, 
-    CampaignBuilder, is_water, dist_to_loc, get_front_line_coords, DENSE_LOC
+    load_scenario, save_scenario, save_deployment, load_deployment
+)
+from campaign import (
+    CampaignBuilder, is_water, DENSE_LOC, make_live_unit, get_callsign_for
 )
 from simulation import SimulationEngine
 from ui import GameUI
@@ -32,13 +34,6 @@ _HERE         = pathlib.Path(__file__).parent
 SCENARIO_PATH = str(_HERE / "data" / "scenarios" / "ukraine_russia.json")
 SAVE_PATH     = str(_HERE / "data" / "scenarios" / "ukraine_russia_save.json")
 BGM_PATH      = str(_HERE / "assets" / "cc_style_bgm.mp3") 
-
-_UID_COUNTER = 0
-
-def _next_uid(prefix: str = "u") -> str:
-    global _UID_COUNTER
-    _UID_COUNTER += 1
-    return f"{prefix}_{_UID_COUNTER:04d}"
 
 def map_area_height(win_h: int) -> int:
     panel_h = max(BOTTOM_PANEL_MIN_HEIGHT, int(win_h * BOTTOM_PANEL_FRACTION))
@@ -94,12 +89,12 @@ def _inject_infrastructure(db: Database) -> None:
         ("Red_AmmoDepot", "Ammunition Depot", 300, 200.0),
         ("Red_PowerPlant", "Power Plant", 400, 600.0),
         ("Red_CommandCenter", "Command Center", 600, 50.0),
-        ("Red_Kremlin", "The Kremlin", 5000, 500.0) # Massive point value for the decapitation strike
+        ("Red_Kremlin", "The Kremlin", 5000, 500.0)
     ]
     for key, name, pts, rcs in infra_types:
         if key not in db.platforms:
             db.platforms[key] = PlatformDef(
-                key=key, display_name=name, unit_type="airbase", # Renders as a base symbol
+                key=key, display_name=name, unit_type="airbase", 
                 speed_kmh=0, ceiling_ft=0, ecm_rating=0.0, chaff_capacity=0, flare_capacity=0,
                 fuel_capacity_kg=0, fuel_burn_rate_kg_h=0, radar_range_km=0, radar_type="None",
                 radar_modes=(), radar_band="none", esm_range_km=0, ir_range_km=0,
@@ -112,105 +107,6 @@ def _write_default_scenario(path: str, db: "Database") -> None:
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(scenario, fh, indent=2)
-
-def _auto_deploy_blue(db: Database, sim: SimulationEngine, placement_counts: dict[str, int]) -> None:
-    rng = _random.Random()
-    
-    blue_bases = [
-        {"id": "base_west", "lat": 49.83, "lon": 24.02, "name": "LVIV AIR"},
-        {"id": "base_central", "lat": 50.45, "lon": 30.52, "name": "KYIV HUB"},
-        {"id": "base_south", "lat": 46.48, "lon": 30.72, "name": "ODESA AIR"},
-        {"id": "base_east", "lat": 48.46, "lon": 35.04, "name": "DNIPRO AIR"},
-        {"id": "base_north", "lat": 51.50, "lon": 31.30, "name": "CHERNIHIV AIR"} 
-    ]
-    
-    base_map = {}
-    for b in blue_bases:
-        n = placement_counts.get("AirbaseB", 0) + 1
-        placement_counts["AirbaseB"] = n
-        unit = _make_blue_unit("AirbaseB", b["lat"], b["lon"], db, b["name"])
-        if unit:
-            sim.units.append(unit)
-            base_map[b["id"]] = unit.uid
-
-    # Base Defenses
-    for b in blue_bases:
-        for _ in range(2):
-            n = placement_counts.get("Patriot", 0) + 1
-            placement_counts["Patriot"] = n
-            plat, plon = b["lat"] + rng.uniform(-0.05, 0.05), b["lon"] + rng.uniform(-0.05, 0.05)
-            unit = _make_blue_unit("Patriot", plat, plon, db, _callsign_for("Patriot", n))
-            if unit: sim.units.append(unit)
-            
-        n = placement_counts.get("Flamingo_TEL", 0) + 1
-        placement_counts["Flamingo_TEL"] = n
-        flat, flon = b["lat"] + rng.uniform(-0.02, 0.02), b["lon"] + rng.uniform(-0.02, 0.02)
-        unit = _make_blue_unit("Flamingo_TEL", flat, flon, db, _callsign_for("Flamingo_TEL", n))
-        if unit: sim.units.append(unit)
-
-    # Blue Brigade Heavy Clusters (South/East)
-    for b_idx in range(36):
-        clat, clon = get_front_line_coords("Blue", 25.0, 35.0, segment_range=(0, 18))
-        brigade_mix = [("Leopard2", 2, 25.0), ("Bradley", 4, 20.0), ("Gepard", 1, 20.0), ("M777", 2, 30.0), ("Stryker", 2, 20.0)]
-        
-        for p_key, qty, min_d in brigade_mix:
-            for _ in range(qty):
-                placed = False
-                for _attempt in range(50):
-                    u_lat = clat + rng.uniform(-0.08, 0.08)
-                    u_lon = clon + rng.uniform(-0.08, 0.08)
-                    if is_water(u_lat, u_lon) or dist_to_loc(u_lat, u_lon) < min_d: continue 
-                    n = placement_counts.get(p_key, 0) + 1
-                    placement_counts[p_key] = n
-                    unit = _make_blue_unit(p_key, u_lat, u_lon, db, _callsign_for(p_key, n))
-                    if unit: sim.units.append(unit)
-                    placed = True
-                    break
-                if not placed:
-                    flat, flon = get_front_line_coords("Blue", min_d, min_d + 10.0, segment_range=(0, 18))
-                    n = placement_counts.get(p_key, 0) + 1
-                    placement_counts[p_key] = n
-                    unit = _make_blue_unit(p_key, flat, flon, db, _callsign_for(p_key, n))
-                    if unit: sim.units.append(unit)
-
-    # Blue Brigade Light Clusters (North)
-    for b_idx in range(9):
-        clat, clon = get_front_line_coords("Blue", 25.0, 35.0, segment_range=(19, 24))
-        brigade_mix = [("Leopard2", 1, 25.0), ("Bradley", 2, 20.0), ("Gepard", 1, 20.0), ("M777", 1, 30.0)]
-        
-        for p_key, qty, min_d in brigade_mix:
-            for _ in range(qty):
-                flat, flon = get_front_line_coords("Blue", min_d, min_d + 10.0, segment_range=(19, 24))
-                n = placement_counts.get(p_key, 0) + 1
-                placement_counts[p_key] = n
-                unit = _make_blue_unit(p_key, flat, flon, db, _callsign_for(p_key, n))
-                if unit: sim.units.append(unit)
-
-    # Strategic Patriots (Remaining 5 out of 15 total)
-    for _ in range(5):
-        n = placement_counts.get("Patriot", 0) + 1
-        placement_counts["Patriot"] = n
-        flat, flon = get_front_line_coords("Blue", 70.0, 100.0, segment_range=(0, 24))
-        unit = _make_blue_unit("Patriot", flat, flon, db, _callsign_for("Patriot", n))
-        if unit: sim.units.append(unit)
-
-    strategic_assets = [("IRIS-T_SLM", 6), ("NASAMS", 6), ("E-3G_Sentry", 3), ("F-16C", 20), ("Su-24M", 12)]
-    for utype, qty in strategic_assets:
-        for _ in range(qty):
-            target_base = rng.choice(blue_bases)
-            n = placement_counts.get(utype, 0) + 1
-            placement_counts[utype] = n
-            
-            unit = _make_blue_unit(utype, target_base["lat"], target_base["lon"], db, _callsign_for(utype, n))
-            if unit:
-                if unit.platform.unit_type in ("fighter", "attacker", "awacs"):
-                    unit.home_uid = base_map[target_base["id"]]
-                    unit.duty_state = "READY"
-                    unit.altitude_ft = get_elevation_ft(unit.lat, unit.lon) + 15.0
-                    unit.target_altitude_ft = unit.altitude_ft 
-                sim.units.append(unit)
-
-    sim.log("Full theater Blue forces deployed. Variable density established.")
 
 def _pick_unit(screen_pos, cam: CameraState, units: list[Unit],
                blue_only: bool = False,
@@ -225,37 +121,6 @@ def _pick_unit(screen_pos, cam: CameraState, units: list[Unit],
         if unit.is_clicked(screen_pos, sx, sy):
             return unit
     return None
-
-def _make_blue_unit(platform_key: str, lat: float, lon: float, db: Database, callsign: str) -> Unit | None:
-    plat = db.platforms.get(platform_key)
-    if plat is None: return None
-    
-    # FIX: Ensure only fixed-wing/rotary aircraft get the jet icon. Ground units get NTDS symbols.
-    is_air = plat.unit_type.lower() in ("fighter", "attacker", "helicopter", "awacs")
-    img_path = "assets/blue_jet.png" if is_air else None
-    
-    return Unit(
-        uid        = _next_uid("blue"),
-        callsign   = callsign,
-        lat        = lat,
-        lon        = lon,
-        side       = "Blue",
-        platform   = plat,
-        loadout    = dict(plat.default_loadout),
-        image_path = img_path,
-        drunkness  = 1, 
-        corruption = 1
-    )
-
-def _callsign_for(platform_key: str, index: int) -> str:
-    prefixes = {
-        "MiG-29UA":     "GHOST", "Su-27UA":      "PHANTOM", "F-16AM":       "VIPER", "F-16A":        "FALCON",
-        "F-16C":        "FALCON", "F-16UA":       "FALCON", "Su-25UA":      "WARTHOG", "Su-24M":       "SWORD", 
-        "Mirage2000-5F":"ANGEL", "Mi-8UA":       "BEAR", "Mi-24V":       "HIND", "Mi-2UA":       "SWIFT", 
-        "AirbaseB":     "ALPHA BASE", "E-3G_Sentry": "SENTRY", "Leopard2": "LEO", "Bradley": "BRAD",
-        "Gepard": "FLAK", "M777": "ARCHER", "Patriot": "CASTLE", "Stryker": "GHOST", "Flamingo_TEL": "FLAMINGO"
-    }
-    return f"{prefixes.get(platform_key, 'UNIT')} {index}"
 
 def _handle_right_click(screen_pos, cam: CameraState,
                          sim: SimulationEngine,
@@ -466,7 +331,7 @@ def main() -> None:
                 elif action.get("type") == "place_unit_no_selection": 
                     pass   
                 elif action.get("type") == "auto_deploy_blue":
-                    _auto_deploy_blue(db, sim, placement_counts)
+                    CampaignBuilder.deploy_blue_forces(db, sim, placement_counts)
                 elif action.get("type") == "save_scenario":
                     root = tk.Tk()
                     root.withdraw()
@@ -683,7 +548,7 @@ def main() -> None:
 
                         n = placement_counts.get(placing_type, 0) + 1
                         placement_counts[placing_type] = n
-                        unit = _make_blue_unit(placing_type, lat, lon, db, _callsign_for(placing_type, n))
+                        unit = make_live_unit(placing_type, lat, lon, "Blue", db, get_callsign_for(placing_type, n))
                         
                         if unit: 
                             unit.home_uid = home_uid
@@ -709,7 +574,7 @@ def main() -> None:
 
                     if assigning_package_state:
                         lat, lon = cam.screen_to_world(*event.pos)
-                        pkg_id = f"PKG_{int(sim.game_time)}_{_random.randint(100,999)}"
+                        pkg_id = f"PKG_{int(sim.game_time)}_{random.randint(100,999)}"
                         count_launched = 0
                         
                         target_tot = sim.game_time + (assigning_package_tot * 60.0) if assigning_package_tot > 0 else 0.0

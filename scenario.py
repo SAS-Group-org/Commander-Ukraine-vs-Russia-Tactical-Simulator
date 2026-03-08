@@ -1,4 +1,4 @@
-# scenario.py — data models + DB/scenario load & save + Campaign Generation
+# scenario.py — data models + DB/scenario load & save
 
 from __future__ import annotations
 import json
@@ -12,9 +12,8 @@ from typing import Optional
 from numba import njit
 
 from constants import MIN_PK, MAX_PK, MISSILE_TRAIL_LEN, CHAFF_PK_PENALTY, FLARE_PK_PENALTY, BURNTHROUGH_RANGE_KM
-from geo import haversine, fast_dist_km, bearing, slant_range_km, check_line_of_sight, get_elevation_ft
+from geo import fast_dist_km, bearing, slant_range_km, get_elevation_ft
 from sensor import Contact
-
 
 # ── DATA-ORIENTED MISSILE MATH ────────────────────────────────────────────────
 @njit(cache=True)
@@ -180,7 +179,7 @@ class Missile:
         'active', 'status', 'detonated', 'launch_dist', 'trail',
         'eff_speed_kmh', 'is_ballistic', 'impact_lat', 'impact_lon',
         'impact_alt_ft', 'did_kill', 'guidance_timer', 'pd_check_timer',
-        'motor_burnout_fraction'
+        'motor_burnout_fraction', '_terminal_phase_triggered'
     )
     
     def __init__(self, shooter: "Unit", target: "Unit", weapon_def: WeaponDef):
@@ -210,94 +209,16 @@ class Missile:
         self.guidance_timer = 0.0 
         self.pd_check_timer = random.uniform(0.0, 0.25) 
         
+        # Link state to the DOD kinematics pipeline
+        self._terminal_phase_triggered = False
+        
         if self.is_ballistic and weapon_def.cep_km > 0.0:
             angle = random.uniform(0, 360)
             dist = random.gauss(0, weapon_def.cep_km)
             self.impact_lat += (math.cos(math.radians(angle)) * dist) / 111.32
             self.impact_lon += (math.sin(math.radians(angle)) * dist) / (111.32 * max(0.0001, math.cos(math.radians(target.lat))))
 
-    def update(self, sim_delta: float) -> None:
-        if not self.active: return
-        t_lat = self.impact_lat if self.is_ballistic else self.target.lat
-        t_lon = self.impact_lon if self.is_ballistic else self.target.lon
-        t_alt = self.impact_alt_ft if self.is_ballistic else self.target.altitude_ft
-        
-        dist = slant_range_km(self.lat, self.lon, self.altitude_ft, t_lat, t_lon, t_alt)
-
-        self.guidance_timer -= sim_delta
-        if self.guidance_timer <= 0:
-            self.guidance_timer = 0.5 
-            
-            if self.wdef.seeker in ("SARH", "CLOS", "ARH"):
-                is_pitbull = (self.wdef.seeker == "ARH" and dist <= 15.0)
-                if not is_pitbull:
-                    has_local_lock = self.shooter.alive and getattr(self.shooter, 'fc_radar_active', True) and check_line_of_sight(self.shooter.lat, self.shooter.lon, self.shooter.altitude_ft, self.target.lat, self.target.lon, self.target.altitude_ft)
-                    has_datalink_track = self.shooter.alive and getattr(self.shooter, 'datalink_active', False) and self.target.uid in getattr(self.shooter, 'merged_contacts', {})
-                    if self.wdef.seeker == "ARH":
-                        if not (has_local_lock or has_datalink_track):
-                            self.active = False
-                            self.status = "LOST"
-                            return
-                    else: 
-                        if not has_local_lock:
-                            self.active = False
-                            self.status = "LOST"
-                            return
-
-            if not self.target.alive and not self.is_ballistic:
-                self.active = False
-                self.status = "LOST"
-                return
-
-        self.trail.append((self.lat, self.lon))
-        
-        fraction_travelled = 1.0 - max(0.0, min(1.0, dist / max(1.0, self.launch_dist)))
-        if not self.is_ballistic and not self.wdef.is_gun and fraction_travelled > self.motor_burnout_fraction:
-            drag_factor = 250.0 if self.altitude_ft > 20000 else 600.0
-            if getattr(self.target, 'current_g_load', 1.0) > 3.0:
-                drag_factor *= 1.5
-            self.eff_speed_kmh = max(800.0, self.eff_speed_kmh - (drag_factor * sim_delta))
-            tgt_speed = getattr(self.target, 'current_speed_kmh', 0.0)
-            if self.eff_speed_kmh < tgt_speed + 50.0 and dist > 2.0:
-                self.active = False
-                self.status = "LOST ENERGY"
-                return
-
-        speed_kms   = self.eff_speed_kmh / 3600.0
-        move_dist   = speed_kms * sim_delta
-        
-        if self.wdef.flight_profile == "lofted":
-            if fraction_travelled < 0.5: self.altitude_ft = self.shooter.altitude_ft + (60000 - self.shooter.altitude_ft) * (fraction_travelled * 2)
-            else: self.altitude_ft = 60000 - (60000 - t_alt) * ((fraction_travelled - 0.5) * 2)
-        elif self.wdef.flight_profile == "sea_skimming":
-            if fraction_travelled > 0.05: self.altitude_ft = max(30.0, t_alt)
-        elif self.wdef.flight_profile == "terrain_following":
-            if fraction_travelled > 0.10: self.altitude_ft = max(200.0, t_alt)
-        elif self.is_ballistic:
-            peak_alt = self.launch_dist * 1000.0
-            self.altitude_ft = math.sin(fraction_travelled * math.pi) * peak_alt + t_alt
-
-        if dist <= move_dist:
-            pk = self._calculate_terminal_pk()
-            if random.random() <= pk:
-                if self.target.alive: 
-                    self.target.take_damage(self.wdef.damage)
-                    if not self.target.alive: self.did_kill = True
-                self.status = "HIT"
-                self.detonated = True
-            else:
-                self.status = "MISSED"
-                if self.is_ballistic or self.wdef.domain == "ground": self.detonated = True
-            self.active = False
-            self.lat, self.lon, self.altitude_ft = t_lat, t_lon, t_alt
-        else:
-            ratio    = move_dist / dist
-            self.lat += (t_lat - self.lat) * ratio
-            self.lon += (t_lon - self.lon) * ratio
-            self.altitude_ft += (t_alt - self.altitude_ft) * ratio
-
     def _prepare_pk_args(self) -> dict:
-        """Helper to map strings to ints for the Numba JIT compiler."""
         seeker_map = {"IR": 1, "ARH": 2, "SARH": 2, "ARM": 3}
         seeker_int = seeker_map.get(self.wdef.seeker, 0)
         
@@ -328,7 +249,6 @@ class Missile:
     def _calculate_terminal_pk(self) -> float:
         args = self._prepare_pk_args()
         
-        # State mutation happens in Python, purely evaluating random drops
         chaff_pen = 0.0
         flare_pen = 0.0
         if args["seeker_int"] == 2 and self.target.chaff > 0:
@@ -364,7 +284,7 @@ class Missile:
             args["seeker_int"], args["throttle_int"], args["aspect"], self.target.altitude_ft,
             getattr(self.target, 'search_radar_active', True), getattr(self.target, 'fc_radar_active', True),
             self.target.is_jamming, self.target.platform.ecm_rating, self.wdef.eccm,
-            0.0, 0.0, self.wdef.inevadable # UI Estimate assumes no chaff/flare dropped
+            0.0, 0.0, self.wdef.inevadable 
         )
 
 
@@ -415,7 +335,11 @@ class Unit:
         self._cached_tot_speed: float = 0.0
         
         unit_type_lower = platform.unit_type.lower()
-        self.auto_engage = True if unit_type_lower in ("tank", "ifv", "apc", "recon", "tank_destroyer", "sam", "artillery") else False
+        
+        if platform.key in ("Flamingo_TEL",):
+            self.auto_engage = False
+        else:
+            self.auto_engage = True if unit_type_lower in ("tank", "ifv", "apc", "recon", "tank_destroyer", "sam", "artillery") else False
         
         if unit_type_lower in ("fighter", "attacker", "helicopter", "awacs"):
             self.altitude_ft = platform.cruise_alt_ft
@@ -503,7 +427,6 @@ class Unit:
     
     @property
     def inefficiency_penalty(self) -> float: 
-        # Capped at 40% penalty
         return min(0.40, ((self.drunkness - 1) + (self.corruption - 1)) * 0.05)
 
     def take_damage(self, amount: float, is_dot: bool = False) -> None:
@@ -540,151 +463,6 @@ class Unit:
         if self.waypoints:
             if self.platform.unit_type.lower() in ("fighter", "attacker", "helicopter", "awacs"): self.target_heading = bearing(self.lat, self.lon, self.waypoints[0][0], self.waypoints[0][1])
             else: self.heading = bearing(self.lat, self.lon, self.waypoints[0][0], self.waypoints[0][1])
-
-    def update(self, sim_delta: float, game_time: float = 0.0) -> None:
-        if not self.alive: return
-        if self.fire_intensity > 0:
-            burn_dmg = (self.fire_intensity * 0.015) * sim_delta
-            self.take_damage(burn_dmg, is_dot=True)
-            dc_effectiveness = 0.025 * self.performance_mult * (1.0 - self.inefficiency_penalty)
-            self.fire_intensity -= dc_effectiveness * sim_delta
-            if self.fire_intensity <= 0: self.fire_intensity = 0.0
-        
-        if self.duty_state == "REARMING":
-            self.duty_timer -= sim_delta
-            if self.duty_timer <= 0: 
-                self.duty_state = "READY"
-                self.duty_timer = 0.0
-                self.fuel_kg = self.platform.fuel_capacity_kg
-                self.chaff = self.platform.chaff_capacity
-                self.flare = self.platform.flare_capacity
-                self.loadout = dict(self._max_loadout)
-                self.weapon_ready_times = {k: 0.0 for k in self.loadout.keys()}
-                
-        is_air = self.platform.unit_type.lower() in ("fighter", "attacker", "helicopter", "awacs")
-        if is_air and self.duty_state != "ACTIVE": return
-        
-        if self.altitude_ft != self.target_altitude_ft:
-            climb_rate_fps = 166.67 * self.performance_mult
-            alt_diff = self.target_altitude_ft - self.altitude_ft
-            step = climb_rate_fps * sim_delta
-            if abs(alt_diff) <= step: self.altitude_ft = self.target_altitude_ft
-            else: self.altitude_ft += math.copysign(step, alt_diff)
-
-        throttle_spd_mult = {"LOITER": 0.6, "CRUISE": 0.8, "FLANK": 1.1}.get(self.throttle_state, 0.8)
-        target_spd = self.platform.speed_kmh * self.performance_mult * throttle_spd_mult
-        if self.is_evading: target_spd = self.platform.speed_kmh * self.performance_mult * 1.1 
-
-        is_wingman = bool(self.leader_unit and self.leader_unit.alive)
-        if not is_wingman and self.leader_uid:
-            self.leader_uid = ""
-            self.leader_unit = None
-            
-        if is_wingman and not self.is_evading:
-            if self.waypoints: self.waypoints.clear()
-            
-            offset_dist = 0.5 * math.ceil(self.formation_slot / 2) 
-            angle_offset = -135 if self.formation_slot % 2 == 1 else 135
-            
-            leader_form = getattr(self.leader_unit, 'formation', 'WEDGE')
-            if leader_form == "LINE":
-                angle_offset = -90 if self.formation_slot % 2 == 1 else 90
-                offset_dist = 1.0 * math.ceil(self.formation_slot / 2)
-            elif leader_form == "TRAIL":
-                angle_offset = 180
-                offset_dist = 0.8 * self.formation_slot
-                
-            target_angle = (self.leader_unit.heading + angle_offset) % 360
-            lat_rad_clamped = max(0.0001, math.cos(math.radians(self.leader_unit.lat)))
-            tlat = self.leader_unit.lat + (math.cos(math.radians(target_angle)) * offset_dist) / 111.32
-            tlon = self.leader_unit.lon + (math.sin(math.radians(target_angle)) * offset_dist) / (111.32 * lat_rad_clamped)
-            
-            self.target_altitude_ft = self.leader_unit.altitude_ft
-            dist_to_slot = fast_dist_km(self.lat, self.lon, tlat, tlon)
-            
-            if dist_to_slot > 0.1:
-                self.target_heading = bearing(self.lat, self.lon, tlat, tlon)
-                if dist_to_slot > 2.0:
-                    target_spd = self.platform.speed_kmh * self.performance_mult 
-                else:
-                    target_spd = self.leader_unit.current_speed_kmh + (dist_to_slot * 150.0) 
-            else:
-                self.target_heading = self.leader_unit.heading
-                target_spd = self.leader_unit.current_speed_kmh
-                
-        elif self.mission and self.mission.mission_type != "CAP" and self.mission.time_on_target > game_time and self.waypoints and not self.is_evading:
-            self.tot_check_timer -= sim_delta
-            if self.tot_check_timer <= 0:
-                self.tot_check_timer = 1.0 
-                dist_to_tgt = sum(fast_dist_km(curr[0], curr[1], wp[0], wp[1]) for curr, wp in zip([(self.lat, self.lon)] + self.waypoints[:-1], self.waypoints))
-                time_rem = self.mission.time_on_target - game_time
-                if time_rem > 0:
-                    req_speed_kmh = (dist_to_tgt / (time_rem / 3600.0))
-                    self._cached_tot_speed = max(350.0, min(self.platform.speed_kmh * self.performance_mult * 1.1, req_speed_kmh))
-            
-            if self._cached_tot_speed > 0:
-                target_spd = self._cached_tot_speed
-
-        if is_air:
-            if self.is_cranking and not self.is_evading:
-                self.crank_timer -= sim_delta
-                if self.crank_timer <= 0: self.is_cranking = False; self._recalc_heading()
-                else: self.target_heading = self.crank_heading; target_spd = self.platform.speed_kmh * self.performance_mult 
-            
-            spd_mps = max(10.0, self.current_speed_kmh / 3.6)
-            max_turn_deg = ((self.platform.max_g * 9.81) / spd_mps * (180 / math.pi)) * sim_delta * self.performance_mult
-            diff = (self.target_heading - self.heading + 360) % 360
-            if diff > 180: diff -= 360
-
-            if abs(diff) <= max_turn_deg: self.heading = self.target_heading; self.current_g_load = 1.0
-            else: self.heading = (self.heading + math.copysign(max_turn_deg, diff)) % 360; self.current_g_load = self.platform.max_g * self.performance_mult
-
-            if self.current_g_load > 2.0: self.current_speed_kmh = max(250.0, self.current_speed_kmh - (self.current_g_load * 12.0) * sim_delta)
-            else:
-                if self.current_speed_kmh < target_spd: self.current_speed_kmh = min(target_spd, self.current_speed_kmh + 60.0 * sim_delta)
-                elif self.current_speed_kmh > target_spd: self.current_speed_kmh = max(target_spd, self.current_speed_kmh - 60.0 * sim_delta)
-
-            move_dist = (self.current_speed_kmh / 3600.0) * sim_delta
-            self.lat += (math.cos(math.radians(self.heading)) * move_dist) / 111.32
-            self.lon += (math.sin(math.radians(self.heading)) * move_dist) / (111.32 * max(0.0001, math.cos(math.radians(self.lat))))
-
-            if self.waypoints and not self.is_evading and not self.is_cranking and not is_wingman:
-                tlat, tlon, talt = self.waypoints[0]
-                if talt >= 0.0: self.target_altitude_ft = talt
-                
-                arrival_radius = max(1.0, move_dist * 1.2)
-                if fast_dist_km(self.lat, self.lon, tlat, tlon) < arrival_radius: 
-                    self.waypoints.pop(0)
-                    if self.waypoints:
-                        self.target_heading = bearing(self.lat, self.lon, self.waypoints[0][0], self.waypoints[0][1])
-                        if self.waypoints[0][2] >= 0.0: self.target_altitude_ft = self.waypoints[0][2]
-                        
-        elif self.waypoints:
-            dist_budget = (self.platform.speed_kmh * self.performance_mult / 3600.0) * sim_delta
-            while dist_budget > 0 and self.waypoints:
-                tlat, tlon, _ = self.waypoints[0]
-                dist_to_wp = fast_dist_km(self.lat, self.lon, tlat, tlon)
-                
-                if dist_to_wp <= dist_budget:
-                    self.lat, self.lon = tlat, tlon
-                    dist_budget -= dist_to_wp
-                    self.waypoints.pop(0)
-                    self._recalc_heading()
-                else:
-                    self.lat += (math.cos(math.radians(self.heading)) * dist_budget) / 111.32
-                    self.lon += (math.sin(math.radians(self.heading)) * dist_budget) / (111.32 * max(0.0001, math.cos(math.radians(self.lat))))
-                    dist_budget = 0
-                    self._recalc_heading()
-                    
-            if not is_air:
-                self.altitude_ft = get_elevation_ft(self.lat, self.lon) + 15.0
-
-        if self.fuel_kg > 0 and is_air:
-            throttle_fuel_mult = {"LOITER": 0.5, "CRUISE": 1.0, "FLANK": 3.0}.get(self.throttle_state, 1.0)
-            if self.is_evading: throttle_fuel_mult = 3.0
-            burn_per_sec = (self.platform.fuel_burn_rate_kg_h / 3600.0) * throttle_fuel_mult * (1.0 + self.inefficiency_penalty)
-            self.fuel_kg = max(0.0, self.fuel_kg - burn_per_sec * sim_delta)
-            if self.fuel_kg == 0: self.take_damage(999.0) 
 
     def has_ammo(self, weapon_key: str) -> bool: return self.loadout.get(weapon_key, 0) > 0
     def expend_round(self, weapon_key: str) -> bool:
@@ -935,356 +713,3 @@ def load_deployment(path: str, db: Database) -> list[Unit]:
             u.leader_unit = uid_map.get(u.leader_uid)
             
     return units
-
-# ── Level Design: Strategic Geography ─────────────────────────────────────────
-
-def is_water(lat: float, lon: float) -> bool:
-    if 45.3 < lat < 47.05 and 34.8 < lon < 38.5: return True
-    if lat < 46.2 and lon < 32.8: return True
-    if lat < 45.0 and lon < 33.4: return True
-    if lat < 44.38: return True
-    if lat < 44.8 and lon > 34.5: return True
-    if lat < 45.0 and lon > 35.3: return True
-    if 45.8 < lat < 46.2 and 34.0 < lon < 35.0: return True
-    return False
-
-FRONT_LINE_POINTS = [
-    (46.53, 32.30), (46.80, 33.30), (47.10, 34.30), (47.45, 35.40),
-    (47.60, 36.10), (47.75, 36.80), (47.90, 37.50), (47.95, 37.65),
-    (48.00, 37.80), (48.20, 37.85), (48.40, 37.90), (48.60, 38.00),
-    (48.80, 38.10), (49.00, 38.20), (49.30, 38.10), (49.60, 38.00),
-    (49.80, 37.90), (50.00, 37.80), (50.20, 37.70), (50.35, 36.30), 
-    (50.50, 35.50), (51.00, 35.10), (51.30, 34.30), (51.80, 34.00), 
-    (52.20, 33.60), (52.11, 31.78)
-]
-
-DENSE_LOC = []
-for i in range(len(FRONT_LINE_POINTS) - 1):
-    p1 = FRONT_LINE_POINTS[i]
-    p2 = FRONT_LINE_POINTS[i+1]
-    dist = haversine(p1[0], p1[1], p2[0], p2[1])
-    steps = max(1, int(dist / 1.0)) 
-    for step in range(steps):
-        f = step / steps
-        DENSE_LOC.append((p1[0] + f*(p2[0]-p1[0]), p1[1] + f*(p2[1]-p1[1])))
-DENSE_LOC.append(FRONT_LINE_POINTS[-1])
-
-def dist_to_loc(lat: float, lon: float) -> float:
-    min_d = 999999.0
-    for dp in DENSE_LOC:
-        d = haversine(lat, lon, dp[0], dp[1])
-        if d < min_d: min_d = d
-    return min_d
-
-def get_front_line_coords(side: str, min_dist: float, max_dist: float, segment_range: tuple[int, int] = None) -> tuple[float, float]:
-    min_idx = segment_range[0] if segment_range else 0
-    max_idx = segment_range[1] if segment_range else len(FRONT_LINE_POINTS) - 2
-    
-    for _ in range(100): 
-        idx = random.randint(min_idx, max_idx)
-        p1 = FRONT_LINE_POINTS[idx]
-        p2 = FRONT_LINE_POINTS[idx+1]
-        
-        f = random.random()
-        clat = p1[0] + f * (p2[0] - p1[0])
-        clon = p1[1] + f * (p2[1] - p1[1])
-        
-        brg = bearing(p1[0], p1[1], p2[0], p2[1])
-        normal_brg = (brg - 90) % 360 if side == "Blue" else (brg + 90) % 360
-        
-        dist_km = random.uniform(min_dist, max_dist)
-        lat_rad_clamped = max(0.0001, math.cos(math.radians(clat)))
-        tlat = clat + (math.cos(math.radians(normal_brg)) * dist_km) / 111.32
-        tlon = clon + (math.sin(math.radians(normal_brg)) * dist_km) / (111.32 * lat_rad_clamped)
-        
-        actual_dist = dist_to_loc(tlat, tlon)
-        if min_dist - 2.0 <= actual_dist <= max_dist + 15.0:
-            return tlat, tlon
-            
-    p1 = FRONT_LINE_POINTS[random.randint(min_idx, max_idx)]
-    offset = min_dist / 111.32
-    return (p1[0], p1[1] - offset) if side == "Blue" else (p1[0], p1[1] + offset)
-
-
-class CampaignBuilder:
-    @staticmethod
-    def _get_friction(rng: random.Random, is_elite: bool) -> tuple[int, int]:
-        """
-        GAME DESIGN TWEAK: Randomizes Drunkness and Corruption variables.
-        Conscripts (Ground units) have a massive bell-curve weighting toward high friction.
-        Elites (S-400 crews, fighter pilots) are cleaner but still imperfect.
-        """
-        if is_elite:
-            # Elite forces in 2026 are heavily depleted. "Sober" is no longer the default.
-            # Drunkness: 1 (Sober), 2 (Tipsy), 3 (Intoxicated), 4 (Wasted), 5 (Yeltsin)
-            d = rng.choices([1, 2, 3, 4], weights=[15, 45, 30, 10])[0]
-            # Corruption: 1 (Clean), 2 (Grass Eater), 3 (Dirty), 4 (Meat Eater), 5 (Shoigu)
-            c = rng.choices([1, 2, 3, 4, 5], weights=[10, 30, 40, 15, 5])[0]
-        else:
-            d = rng.choices([1, 2, 3, 4, 5], weights=[10, 20, 40, 20, 10])[0]
-            c = rng.choices([1, 2, 3, 4, 5], weights=[5, 15, 30, 30, 20])[0]
-        return d, c
-
-    @staticmethod
-    def generate_historical_campaign(db: "Database") -> dict:
-        rng = random.Random()
-        units = []
-        events = []
-        uid_counter = 0
-
-        # ── 1. Red Ground Forces (Heavy Deployment: South/East) ──────────
-        for _ in range(300):
-            uid_counter += 1
-            utype = rng.choices(["tank", "ifv", "apc", "sam", "artillery"], weights=[30, 35, 20, 5, 10])[0]
-            if utype == "sam": pool = ["Buk-M2", "Tor-M1"] 
-            else: pool = {"tank": ["T-72R", "T-80R", "T-90R"], "ifv": ["BMP-2R", "BMP-3R"], "apc": ["BTR-80R", "MTLBR"], "artillery": ["2S1_Gvozdika", "2S3_Akatsiya", "BM-21_Grad"]}[utype]
-            plat_key = rng.choice(pool)
-            
-            if utype in ("ifv", "apc"): min_d, max_d = 20.0, 35.0
-            elif utype == "tank": min_d, max_d = 25.0, 40.0
-            elif utype == "artillery": min_d, max_d = 30.0, 50.0
-            else: min_d, max_d = 25.0, 45.0 
-            
-            while True:
-                flat, flon = get_front_line_coords("Red", min_d, max_d, segment_range=(0, 18))
-                if not is_water(flat, flon): break
-            
-            drunk, corr = CampaignBuilder._get_friction(rng, is_elite=False)
-            
-            units.append({
-                "id": f"red_gnd_{uid_counter}", "platform": plat_key, "callsign": f"RF GROUP {uid_counter}",
-                "side": "Red", "lat": round(flat, 5), "lon": round(flon, 5),
-                "drunkness": drunk, "corruption": corr,
-                "loadout": dict(db.platforms[plat_key].default_loadout), "waypoints": []
-            })
-
-        # ── 2. Red Ground Forces (Light Deployment: North/Belarus Border) ──
-        for _ in range(50):
-            uid_counter += 1
-            utype = rng.choices(["tank", "ifv", "apc", "sam", "artillery"], weights=[30, 35, 20, 5, 10])[0]
-            if utype == "sam": pool = ["Buk-M2", "Tor-M1"] 
-            else: pool = {"tank": ["T-72R", "T-80R"], "ifv": ["BMP-2R"], "apc": ["BTR-80R", "MTLBR"], "artillery": ["2S1_Gvozdika", "BM-21_Grad"]}[utype]
-            plat_key = rng.choice(pool)
-            
-            if utype in ("ifv", "apc"): min_d, max_d = 20.0, 35.0
-            elif utype == "tank": min_d, max_d = 25.0, 40.0
-            elif utype == "artillery": min_d, max_d = 30.0, 50.0
-            else: min_d, max_d = 25.0, 45.0 
-            
-            while True:
-                flat, flon = get_front_line_coords("Red", min_d, max_d, segment_range=(19, 24))
-                if not is_water(flat, flon): break
-                
-            drunk, corr = CampaignBuilder._get_friction(rng, is_elite=False)
-                
-            units.append({
-                "id": f"red_gnd_{uid_counter}", "platform": plat_key, "callsign": f"NORTH GRP {uid_counter}",
-                "side": "Red", "lat": round(flat, 5), "lon": round(flon, 5),
-                "drunkness": drunk, "corruption": corr,
-                "loadout": dict(db.platforms[plat_key].default_loadout), "waypoints": []
-            })
-
-        # ── 3. Red Air Bases (With local S-400 defense) ───────────────────
-        red_bases = [
-            {"id": "red_base_1", "lat": 47.25, "lon": 39.72, "callsign": "ROSTOV-ON-DON"},
-            {"id": "red_base_2", "lat": 45.03, "lon": 38.97, "callsign": "KRASNODAR"},
-            {"id": "red_base_3", "lat": 44.68, "lon": 33.56, "callsign": "BELBEK AIR"},
-            {"id": "red_base_4", "lat": 48.93, "lon": 40.39, "callsign": "MILLEROVO AIR"},
-            {"id": "red_base_5", "lat": 51.75, "lon": 36.29, "callsign": "KURSK AIR"} 
-        ]
-        for rb in red_bases:
-            drunk, corr = CampaignBuilder._get_friction(rng, is_elite=False)
-            units.append({"id": rb["id"], "platform": "AirbaseR", "callsign": rb["callsign"], "side": "Red", "lat": rb["lat"], "lon": rb["lon"], "drunkness": drunk, "corruption": corr, "loadout": {}, "waypoints": []})
-            
-            uid_counter += 1
-            slat, slon = rb["lat"] + rng.uniform(-0.05, 0.05), rb["lon"] + rng.uniform(-0.05, 0.05)
-            drunk, corr = CampaignBuilder._get_friction(rng, is_elite=True)
-            units.append({"id": f"r_s400_{uid_counter}", "platform": "S-400", "callsign": f"TRIUMF {uid_counter}", "side": "Red", "lat": slat, "lon": slon, "drunkness": drunk, "corruption": corr, "loadout": dict(db.platforms["S-400"].default_loadout), "waypoints": []})
-
-        # ── 4. Critical Infrastructure (Real Russian Targets) ─────────────
-        REAL_TARGETS = [
-            {"key": "Red_Refinery", "name": "Tuapse Oil Refinery", "lat": 44.103, "lon": 39.093, "pts": 500},
-            {"key": "Red_Refinery", "name": "Novoshakhtinsk Refinery", "lat": 48.783, "lon": 39.920, "pts": 500},
-            {"key": "Red_Refinery", "name": "Ryazan Refinery", "lat": 54.580, "lon": 39.776, "pts": 500},
-            {"key": "Red_PowerPlant", "name": "Novocherkasskaya GRES", "lat": 47.399, "lon": 40.038, "pts": 400},
-            {"key": "Red_PowerPlant", "name": "Kursk Nuclear Plant", "lat": 51.674, "lon": 35.603, "pts": 1000},
-            {"key": "Red_CommandCenter", "name": "SMD HQ Rostov", "lat": 47.222, "lon": 39.719, "pts": 600},
-            {"key": "Red_CommandCenter", "name": "Voronezh C2 Bunker", "lat": 51.624, "lon": 39.145, "pts": 600},
-            {"key": "Red_AmmoDepot", "name": "Tikhoretsk Arsenal", "lat": 45.882, "lon": 40.042, "pts": 300},
-            {"key": "Red_AmmoDepot", "name": "Karachev Arsenal", "lat": 53.123, "lon": 35.011, "pts": 300},
-            {"key": "Red_AmmoDepot", "name": "Toropets Arsenal", "lat": 56.495, "lon": 31.720, "pts": 300},
-            {"key": "Red_Kremlin", "name": "The Kremlin", "lat": 55.752, "lon": 37.617, "pts": 5000},
-        ]
-
-        for t in REAL_TARGETS:
-            uid_counter += 1
-            infra_uid = f"red_infra_{uid_counter}"
-            
-            plat = db.platforms.get(t["key"])
-            if not plat: continue
-            
-            drunk, corr = CampaignBuilder._get_friction(rng, is_elite=False)
-            
-            units.append({
-                "id": infra_uid, "platform": t["key"], "callsign": t["name"].upper(),
-                "side": "Red", "lat": t["lat"], "lon": t["lon"],
-                "drunkness": drunk, "corruption": corr,
-                "loadout": {}, "waypoints": []
-            })
-
-            events.append({
-                "id": f"evt_score_{infra_uid}", "condition_type": "UNIT_DEAD", "condition_val": infra_uid,
-                "action_type": "SCORE", "action_val": f"Blue:{t['pts']}"
-            })
-            events.append({
-                "id": f"evt_log_{infra_uid}", "condition_type": "UNIT_DEAD", "condition_val": infra_uid,
-                "action_type": "LOG", "action_val": f"CRITICAL HIT: {t['name']} has been destroyed!"
-            })
-
-            if t["key"] == "Red_Kremlin":
-                events.append({
-                    "id": f"evt_win_{infra_uid}", "condition_type": "UNIT_DEAD", "condition_val": infra_uid,
-                    "action_type": "VICTORY", "action_val": "Blue"
-                })
-                
-                moscow_ring_radius_km = 40.0
-                lat_rad_clamped = max(0.0001, math.cos(math.radians(t["lat"])))
-                for i in range(6):
-                    uid_counter += 1
-                    angle = (360 / 6) * i
-                    slat = t["lat"] + (math.cos(math.radians(angle)) * moscow_ring_radius_km) / 111.32
-                    slon = t["lon"] + (math.sin(math.radians(angle)) * moscow_ring_radius_km) / (111.32 * lat_rad_clamped)
-                    drunk, corr = CampaignBuilder._get_friction(rng, is_elite=True)
-                    units.append({
-                        "id": f"r_s400_{uid_counter}", "platform": "S-400", "callsign": f"MOSCOW DEF {i+1}", 
-                        "side": "Red", "lat": round(slat, 5), "lon": round(slon, 5), 
-                        "drunkness": drunk, "corruption": corr,
-                        "loadout": dict(db.platforms["S-400"].default_loadout), "waypoints": []
-                    })
-            else:
-                uid_counter += 1
-                sam_uid = f"r_s400_{uid_counter}"
-                sam_plat = db.platforms.get("S-400")
-                if sam_plat:
-                    angle = rng.uniform(0, 360)
-                    dist_km = 10.0
-                    lat_rad = max(0.0001, math.cos(math.radians(t["lat"])))
-                    sam_lat = t["lat"] + (math.cos(math.radians(angle)) * dist_km) / 111.32
-                    sam_lon = t["lon"] + (math.sin(math.radians(angle)) * dist_km) / (111.32 * lat_rad)
-                    
-                    drunk, corr = CampaignBuilder._get_friction(rng, is_elite=True)
-                    units.append({
-                        "id": sam_uid, "platform": "S-400", "callsign": f"{t['name'][:8].upper()} DEF",
-                        "side": "Red", "lat": round(sam_lat, 5), "lon": round(sam_lon, 5),
-                        "drunkness": drunk, "corruption": corr,
-                        "loadout": dict(sam_plat.default_loadout), "waypoints": []
-                    })
-
-        # ── 4b. Dispersed Air Defense ─────────────────────────────────────────
-        crimea_points = [(45.28, 34.03), (45.70, 34.42), (44.95, 34.10), (45.30, 33.30)]
-        for cp in crimea_points:
-            uid_counter += 1
-            drunk, corr = CampaignBuilder._get_friction(rng, is_elite=True)
-            units.append({"id": f"r_s400_{uid_counter}", "platform": "S-400", "callsign": f"TRIUMF {uid_counter}", "side": "Red", "lat": cp[0] + rng.uniform(-0.05, 0.05), "lon": cp[1] + rng.uniform(-0.05, 0.05), "drunkness": drunk, "corruption": corr, "loadout": dict(db.platforms["S-400"].default_loadout), "waypoints": []})
-
-        num_front_sams = 8
-        for i in range(num_front_sams):
-            f = (i + 0.5) / num_front_sams
-            total_pts = len(FRONT_LINE_POINTS) - 1
-            idx = int(f * total_pts)
-            rem = (f * total_pts) - idx
-            
-            p1 = FRONT_LINE_POINTS[idx]
-            p2 = FRONT_LINE_POINTS[idx+1]
-            clat = p1[0] + rem * (p2[0] - p1[0])
-            clon = p1[1] + rem * (p2[1] - p1[1])
-            
-            brg = bearing(p1[0], p1[1], p2[0], p2[1]) 
-            norm_east = (brg + 90) % 360              
-            
-            lat_rad = max(0.0001, math.cos(math.radians(clat)))
-            sam_lat = clat + (math.cos(math.radians(norm_east)) * 60.0) / 111.32 
-            sam_lon = clon + (math.sin(math.radians(norm_east)) * 60.0) / (111.32 * lat_rad)
-            
-            uid_counter += 1
-            drunk, corr = CampaignBuilder._get_friction(rng, is_elite=True)
-            units.append({"id": f"r_s400_{uid_counter}", "platform": "S-400", "callsign": f"FRONT DEF {i+1}", "side": "Red", "lat": round(sam_lat, 5), "lon": round(sam_lon, 5), "drunkness": drunk, "corruption": corr, "loadout": dict(db.platforms["S-400"].default_loadout), "waypoints": []})
-
-
-        # ── 5. Stand-off CAP Stations (3 Pairs per Base) ───────────────────
-        for b_idx, rb in enumerate(red_bases):
-            best_dist = 999999.0
-            best_idx = 0
-            for i, p in enumerate(FRONT_LINE_POINTS):
-                d = haversine(rb["lat"], rb["lon"], p[0], p[1])
-                if d < best_dist:
-                    best_dist = d
-                    best_idx = i
-                    
-            p1 = FRONT_LINE_POINTS[best_idx]
-            if best_idx < len(FRONT_LINE_POINTS) - 1: p2 = FRONT_LINE_POINTS[best_idx+1]
-            else: p1 = FRONT_LINE_POINTS[best_idx-1]; p2 = FRONT_LINE_POINTS[best_idx]
-            
-            brg = bearing(p1[0], p1[1], p2[0], p2[1]) 
-            norm_east = (brg + 90) % 360              
-            
-            lat_rad = max(0.0001, math.cos(math.radians(p1[0])))
-            so_lat = p1[0] + (math.cos(math.radians(norm_east)) * 80.0) / 111.32
-            so_lon = p1[1] + (math.sin(math.radians(norm_east)) * 80.0) / (111.32 * lat_rad)
-            axis_val = round(brg, 1) if round(brg, 1) != 0.0 else 360.0
-            
-            for pair_idx in range(3):
-                leader_uid = f"red_air_{uid_counter+1}"
-                
-                state = "ACTIVE" if pair_idx == 0 else "READY"
-                timer = 0.0
-                
-                rtb_fuel = 0.25 + (rng.uniform(0.0, 0.05))
-                plat_key = rng.choice(["Su-35S", "Su-30SM"])
-
-                for wing_idx in range(2):
-                    uid_counter += 1
-                    is_leader = (wing_idx == 0)
-                    drunk, corr = CampaignBuilder._get_friction(rng, is_elite=True)
-                    
-                    u_dict = {
-                        "id": f"red_air_{uid_counter}",
-                        "platform": plat_key,
-                        "callsign": f"VULTUR {b_idx+1}-{pair_idx+1}{'A' if is_leader else 'B'}",
-                        "side": "Red",
-                        "lat": round(so_lat + rng.uniform(-0.02, 0.02) if state == "ACTIVE" else rb["lat"], 5),
-                        "lon": round(so_lon + rng.uniform(-0.02, 0.02) if state == "ACTIVE" else rb["lon"], 5),
-                        "drunkness": drunk,
-                        "corruption": corr,
-                        "home_uid": rb["id"],
-                        "duty_state": state,
-                        "duty_timer": timer,
-                        "mission": {
-                            "name": f"{rb['callsign']} CAP",
-                            "type": "CAP",
-                            "lat": round(so_lat, 5),
-                            "lon": round(so_lon, 5),
-                            "radius": 60.0,
-                            "alt": 30000.0,
-                            "rtb_fuel": round(rtb_fuel, 2),
-                            "time_on_target": axis_val 
-                        },
-                        "waypoints": []
-                    }
-                    if not is_leader:
-                        u_dict["leader_uid"] = leader_uid
-                        u_dict["formation_slot"] = 1
-                    else:
-                        u_dict["flight_doctrine"] = "STANDARD"
-                        
-                    units.append(u_dict)
-
-        return {
-            "name": "Operation: Deep Strike",
-            "description": "Massive front-line. Penetrate S-400 defense rings and strike critical infrastructure.",
-            "start_lat": 49.5,
-            "start_lon": 34.0,
-            "start_zoom": 6,
-            "units": units,
-            "events": events
-        }

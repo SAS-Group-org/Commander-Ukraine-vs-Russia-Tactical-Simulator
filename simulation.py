@@ -1,4 +1,4 @@
-# simulation.py — real-time simulation engine, optimized with O(1) mapping, centralized Broad-Phase, and Dynamic Standoff AI
+# simulation.py — real-time simulation engine, optimized with O(1) mapping, centralized Broad-Phase, and SIMD Physics
 
 from __future__ import annotations
 import math
@@ -11,6 +11,7 @@ from geo import haversine, fast_dist_km, slant_range_km, bearing, check_line_of_
 from scenario import Database, Missile, Unit, WeaponDef, Mission, GameEvent
 from sensor import Contact, update_local_contacts
 from spatial import SpatialHashGrid
+from physics import KinematicsComputePipeline
 
 _MAX_LOG = 60
 _HOME_ARRIVAL_KM       = 2.0    
@@ -87,10 +88,15 @@ class SimulationEngine:
         self._units_by_uid: dict[str, Unit] = {u.uid: u for u in self.units}
         self.package_manager = PackageManager(self)
         
+        # 10Hz Staggered Logic Ring
         self._logic_timer: float = 0.0 
+        self._tick_count: int = 0
         
         self.blue_grid = SpatialHashGrid(cell_size_deg=0.5)
         self.red_grid = SpatialHashGrid(cell_size_deg=0.5)
+        
+        # Link our SIMD kinematics pipeline
+        self.kinematics_pipeline = KinematicsComputePipeline()
         
         self.log(f"Front Line Attrition Engine Online. {len(units)} units processing.")
 
@@ -114,24 +120,33 @@ class SimulationEngine:
         sim_delta = real_delta * self.time_compression
         self.game_time += sim_delta
 
-        # 1. Physics & Movement
+        # 1. Physics & Movement (GPU/SIMD Offloaded) runs smoothly every frame
         self._move_units(sim_delta)
         self._move_missiles(sim_delta)
         self._process_point_defense(sim_delta)
         self.package_manager.update_packages(self.game_time, sim_delta)
         
-        # 2. Logic, AI & Sensors
+        # 2. Staggered Logic Ring (Distributes CPU load to prevent frame drops)
         self._logic_timer += sim_delta
-        if self._logic_timer >= 1.0:
-            self._build_spatial_grids()
-            self._process_unit_status(1.0)
-            self._process_unit_missions(1.0)
-            self._process_air_commander(1.0)
-            self._update_contacts() 
-            self._unit_defensive_ai(1.0)
-            self._red_ai(1.0)
-            self._blue_ai(1.0)
-            self._logic_timer %= 1.0
+        if self._logic_timer >= 0.1: # 10Hz Tick Rate
+            self._logic_timer %= 0.1
+            self._tick_count += 1
+            
+            phase = self._tick_count % 10
+            
+            if phase == 0:
+                self._build_spatial_grids()
+                self._update_contacts() # GPU Kernel fires here 
+            elif phase == 2:
+                self._unit_defensive_ai(1.0)
+            elif phase == 4:
+                self._red_ai(1.0)
+            elif phase == 6:
+                self._blue_ai(1.0)
+            elif phase == 8:
+                self._process_air_commander(1.0)
+                self._process_unit_status(1.0)
+                self._process_unit_missions(1.0)
         
         # 3. Combat Resolution
         self._process_salvos(sim_delta)
@@ -319,34 +334,29 @@ class SimulationEngine:
         blue_active = [u for u in self.units if u.side == "Blue" and u.alive]
         red_active  = [u for u in self.units if u.side == "Red"  and u.alive]
 
-        for b in blue_active:
-            max_sensor_rng = max([b.platform.radar_range_km, b.platform.esm_range_km, b.platform.ir_range_km])
-            candidates = self.red_grid.get_candidates(b.lat, b.lon, max_sensor_rng)
-            update_local_contacts([b], candidates, b.local_contacts, self.game_time, self.weather, self.time_of_day)
-
-        for r in red_active:
-            max_sensor_rng = max([r.platform.radar_range_km, r.platform.esm_range_km, r.platform.ir_range_km])
-            candidates = self.blue_grid.get_candidates(r.lat, r.lon, max_sensor_rng)
-            update_local_contacts([r], candidates, r.local_contacts, self.game_time, self.weather, self.time_of_day)
-
-        self.blue_network.clear()
-        self.red_network.clear()
-        for u in self.units:
-            if not u.alive: continue
-            master_net = self.blue_network if u.side == "Blue" else self.red_network
-            if getattr(u, 'datalink_active', False):
-                for uid, local_c in u.local_contacts.items():
-                    net_c = master_net.get(uid)
-                    if net_c is None or local_c.pos_error_km < net_c.pos_error_km: master_net[uid] = local_c
+        # DOD MATRIX BATCHING: Pass the entire faction as a single array to the SIMD pipeline.
+        if blue_active and red_active:
+            update_local_contacts(blue_active, red_active, self.blue_network, self.game_time, self.weather, self.time_of_day)
+            update_local_contacts(red_active, blue_active, self.red_network, self.game_time, self.weather, self.time_of_day)
 
         for u in self.units:
             if not u.alive: continue
             master_net = self.blue_network if u.side == "Blue" else self.red_network
-            u.merged_contacts = dict(u.local_contacts)
-            if getattr(u, 'datalink_active', False):
-                for uid, net_c in master_net.items():
-                    local_c = u.merged_contacts.get(uid)
-                    if local_c is None or net_c.pos_error_km < local_c.pos_error_km: u.merged_contacts[uid] = net_c
+            
+            # MEMORY OPTIMIZATION: O(1) Reference assignment instead of O(N) dict copying!
+            if getattr(u, 'datalink_active', True):
+                u.merged_contacts = master_net
+            else:
+                # If isolated, reuse the existing dictionary to prevent memory reallocation
+                if u.merged_contacts is master_net:
+                    u.merged_contacts = {} # Break reference if it just lost datalink
+                else:
+                    u.merged_contacts.clear()
+                    
+                max_rng = max(u.platform.radar_range_km, u.platform.esm_range_km, u.platform.ir_range_km) * 1.2
+                for uid, c in master_net.items():
+                    if fast_dist_km(u.lat, u.lon, c.est_lat, c.est_lon) <= max_rng:
+                        u.merged_contacts[uid] = c
 
     def _unit_defensive_ai(self, sim_delta: float) -> None:
         incoming_map: dict[str, list[Missile]] = {}
@@ -404,7 +414,172 @@ class SimulationEngine:
         self.salvos = active_salvos
 
     def _move_units(self, sim_delta: float) -> None:
-        for u in self.units: u.update(sim_delta, self.game_time)
+        # 1. Process logic (waypoints, fuel timers, fire damage)
+        air_units_for_physics = []
+        
+        for u in self.units:
+            if not u.alive: continue
+            
+            # Damage over time
+            if u.fire_intensity > 0:
+                burn_dmg = (u.fire_intensity * 0.015) * sim_delta
+                u.take_damage(burn_dmg, is_dot=True)
+                dc_effectiveness = 0.025 * u.performance_mult * (1.0 - u.inefficiency_penalty)
+                u.fire_intensity -= dc_effectiveness * sim_delta
+                if u.fire_intensity <= 0: u.fire_intensity = 0.0
+            
+            # Rearm logic
+            if u.duty_state == "REARMING":
+                u.duty_timer -= sim_delta
+                if u.duty_timer <= 0: 
+                    u.duty_state = "READY"
+                    u.duty_timer = 0.0
+                    u.fuel_kg = u.platform.fuel_capacity_kg
+                    u.chaff = u.platform.chaff_capacity
+                    u.flare = u.platform.flare_capacity
+                    u.loadout = dict(u._max_loadout)
+                    u.weapon_ready_times = {k: 0.0 for k in u.loadout.keys()}
+                    
+            is_air = u.platform.unit_type.lower() in ("fighter", "attacker", "helicopter", "awacs")
+            
+            if is_air and u.duty_state == "ACTIVE":
+                air_units_for_physics.append(u)
+                
+                is_wingman = bool(u.leader_unit and u.leader_unit.alive)
+                if not is_wingman and u.leader_uid:
+                    u.leader_uid = ""
+                    u.leader_unit = None
+                    
+                if is_wingman and not u.is_evading:
+                    if u.waypoints: u.waypoints.clear()
+                    offset_dist = 0.5 * math.ceil(u.formation_slot / 2) 
+                    angle_offset = -135 if u.formation_slot % 2 == 1 else 135
+                    
+                    leader_form = getattr(u.leader_unit, 'formation', 'WEDGE')
+                    if leader_form == "LINE":
+                        angle_offset = -90 if u.formation_slot % 2 == 1 else 90
+                        offset_dist = 1.0 * math.ceil(u.formation_slot / 2)
+                    elif leader_form == "TRAIL":
+                        angle_offset = 180
+                        offset_dist = 0.8 * u.formation_slot
+                        
+                    target_angle = (u.leader_unit.heading + angle_offset) % 360
+                    lat_rad_clamped = max(0.0001, math.cos(math.radians(u.leader_unit.lat)))
+                    tlat = u.leader_unit.lat + (math.cos(math.radians(target_angle)) * offset_dist) / 111.32
+                    tlon = u.leader_unit.lon + (math.sin(math.radians(target_angle)) * offset_dist) / (111.32 * lat_rad_clamped)
+                    
+                    u.target_altitude_ft = u.leader_unit.altitude_ft
+                    dist_to_slot = fast_dist_km(u.lat, u.lon, tlat, tlon)
+                    
+                    if dist_to_slot > 0.1:
+                        # OPTIMIZATION: Dynamically track the lead to prevent jitter
+                        u.target_heading = bearing(u.lat, u.lon, tlat, tlon)
+                        if dist_to_slot > 2.0:
+                            u.formation_target_speed = u.platform.speed_kmh * u.performance_mult 
+                        else:
+                            u.formation_target_speed = u.leader_unit.current_speed_kmh + (dist_to_slot * 150.0) 
+                    else:
+                        u.target_heading = u.leader_unit.heading
+                        u.formation_target_speed = u.leader_unit.current_speed_kmh
+                        
+                elif u.mission and u.mission.mission_type != "CAP" and u.mission.time_on_target > self.game_time and u.waypoints and not u.is_evading:
+                    u.tot_check_timer -= sim_delta
+                    if u.tot_check_timer <= 0:
+                        u.tot_check_timer = 1.0 
+                        dist_to_tgt = sum(fast_dist_km(curr[0], curr[1], wp[0], wp[1]) for curr, wp in zip([(u.lat, u.lon)] + u.waypoints[:-1], u.waypoints))
+                        time_rem = u.mission.time_on_target - self.game_time
+                        if time_rem > 0:
+                            req_speed_kmh = (dist_to_tgt / (time_rem / 3600.0))
+                            u._cached_tot_speed = max(350.0, min(u.platform.speed_kmh * u.performance_mult * 1.1, req_speed_kmh))
+                            
+                if u.is_cranking and not u.is_evading:
+                    u.crank_timer -= sim_delta
+                    if u.crank_timer <= 0: 
+                        u.is_cranking = False
+                        u._recalc_heading()
+                    else: 
+                        u.target_heading = u.crank_heading
+                
+                # Check waypoint arrival (Physics kernel handles the actual moving)
+                if u.waypoints and not u.is_evading and not u.is_cranking and not is_wingman:
+                    tlat, tlon, talt = u.waypoints[0]
+                    if talt >= 0.0: u.target_altitude_ft = talt
+                    
+                    # OPTIMIZATION: Dynamically recalculate bearing every frame to create smooth, sweeping arcs
+                    u.target_heading = bearing(u.lat, u.lon, tlat, tlon)
+                    
+                    move_dist = (u.current_speed_kmh / 3600.0) * sim_delta
+                    arrival_radius = max(1.5, move_dist * 2.0)
+                    if fast_dist_km(u.lat, u.lon, tlat, tlon) < arrival_radius: 
+                        u.waypoints.pop(0)
+                            
+            elif not is_air and u.waypoints:
+                # Ground units remain in Python logic loop (simpler 1D point-to-point movement)
+                dist_budget = (u.platform.speed_kmh * u.performance_mult / 3600.0) * sim_delta
+                while dist_budget > 0 and u.waypoints:
+                    tlat, tlon, _ = u.waypoints[0]
+                    
+                    # BUG FIX: Dynamically update heading, and reference `u.heading` instead of `self.heading`
+                    u.heading = bearing(u.lat, u.lon, tlat, tlon)
+                    dist_to_wp = fast_dist_km(u.lat, u.lon, tlat, tlon)
+                    
+                    if dist_to_wp <= dist_budget:
+                        u.lat, u.lon = tlat, tlon
+                        dist_budget -= dist_to_wp
+                        u.waypoints.pop(0)
+                    else:
+                        lat_rad_clamped = max(0.0001, math.cos(math.radians(u.lat)))
+                        u.lat += (math.cos(math.radians(u.heading)) * dist_budget) / 111.32
+                        u.lon += (math.sin(math.radians(u.heading)) * dist_budget) / (111.32 * lat_rad_clamped)
+                        dist_budget = 0
+                        
+                u.altitude_ft = get_elevation_ft(u.lat, u.lon) + 15.0
+
+        # 2. Run batched physics via SIMD kernel
+        if air_units_for_physics:
+            self.kinematics_pipeline.step_air_units(air_units_for_physics, sim_delta)
+
+
+    def _move_missiles(self, sim_delta: float) -> None:
+        # 1. Process Missile Logic (Guidance and seeker checks)
+        for m in self.missiles:
+            if not m.active: continue
+            
+            t_lat = m.impact_lat if m.is_ballistic else m.target.lat
+            t_lon = m.impact_lon if m.is_ballistic else m.target.lon
+            t_alt = m.impact_alt_ft if m.is_ballistic else m.target.altitude_ft
+            dist = slant_range_km(m.lat, m.lon, m.altitude_ft, t_lat, t_lon, t_alt)
+
+            m.guidance_timer -= sim_delta
+            if m.guidance_timer <= 0:
+                m.guidance_timer = 0.5 
+                
+                if m.wdef.seeker in ("SARH", "CLOS", "ARH"):
+                    is_pitbull = (m.wdef.seeker == "ARH" and dist <= 15.0)
+                    if not is_pitbull:
+                        has_local_lock = m.shooter.alive and getattr(m.shooter, 'fc_radar_active', True) and check_line_of_sight(m.shooter.lat, m.shooter.lon, m.shooter.altitude_ft, m.target.lat, m.target.lon, m.target.altitude_ft)
+                        has_datalink_track = m.shooter.alive and getattr(m.shooter, 'datalink_active', False) and m.target.uid in getattr(m.shooter, 'merged_contacts', {})
+                        if m.wdef.seeker == "ARH":
+                            if not (has_local_lock or has_datalink_track):
+                                m.active = False
+                                m.status = "LOST"
+                                continue
+                        else: 
+                            if not has_local_lock:
+                                m.active = False
+                                m.status = "LOST"
+                                continue
+
+                if not m.target.alive and not m.is_ballistic:
+                    m.active = False
+                    m.status = "LOST"
+                    continue
+                    
+        # 2. Execute Batched Physics Pipeline
+        active_missiles = [m for m in self.missiles if m.active]
+        if active_missiles:
+            self.kinematics_pipeline.step_missiles(active_missiles, sim_delta)
+
 
     def _process_unit_missions(self, sim_delta: float) -> None:
         for u in self.units:
@@ -473,48 +648,45 @@ class SimulationEngine:
                         center_lat = u.mission.target_lat
                         center_lon = u.mission.target_lon
                         
-                        # GAME DESIGN AI: Dynamic Standoff using JIT math
-                        if u.side == "Red":
-                            pushback_lat = 0.0
-                            pushback_lon = 0.0
-                            push_count = 0
+                        pushback_lat = 0.0
+                        pushback_lon = 0.0
+                        push_count = 0
+                        
+                        for c in threat_contacts:
+                            is_sam = c.unit_type == "sam"
+                            is_air = c.unit_type in ("fighter", "attacker")
+                            if not is_sam and not is_air: continue
                             
-                            for c in threat_contacts:
-                                is_sam = c.unit_type == "sam"
-                                is_air = c.unit_type in ("fighter", "attacker")
-                                if not is_sam and not is_air: continue
+                            dist = fast_dist_km(center_lat, center_lon, c.est_lat, c.est_lon)
+                            threshold = 130.0 if is_sam else 90.0
+                            
+                            if dist < threshold:
+                                push_dist = threshold - dist
+                                esc_brg = (bearing(c.est_lat, c.est_lon, center_lat, center_lon)) % 360
+                                lat_rad_clamped = max(0.0001, math.cos(math.radians(center_lat)))
+                                pushback_lat += (math.cos(math.radians(esc_brg)) * push_dist) / 111.32
+                                pushback_lon += (math.sin(math.radians(esc_brg)) * push_dist) / (111.32 * lat_rad_clamped)
+                                push_count += 1
                                 
-                                dist = fast_dist_km(center_lat, center_lon, c.est_lat, c.est_lon)
-                                threshold = 130.0 if is_sam else 90.0
-                                
-                                if dist < threshold:
-                                    push_dist = threshold - dist
-                                    esc_brg = (bearing(c.est_lat, c.est_lon, center_lat, center_lon)) % 360
-                                    lat_rad_clamped = max(0.0001, math.cos(math.radians(center_lat)))
-                                    pushback_lat += (math.cos(math.radians(esc_brg)) * push_dist) / 111.32
-                                    pushback_lon += (math.sin(math.radians(esc_brg)) * push_dist) / (111.32 * lat_rad_clamped)
-                                    push_count += 1
-                                    
-                            if push_count > 0:
-                                center_lat += pushback_lat / push_count
-                                center_lon += pushback_lon / push_count
+                        if push_count > 0:
+                            center_lat += pushback_lat / push_count
+                            center_lon += pushback_lon / push_count
 
-                        # Dynamic intercept bearing for Blue, Static patrol axis for Red
-                        if threat_contacts and u.side == "Blue": 
-                            best_c = min(threat_contacts, key=lambda c: fast_dist_km(center_lat, center_lon, c.est_lat, c.est_lon))
-                            threat_brg = bearing(center_lat, center_lon, best_c.est_lat, best_c.est_lon)
+                        axis = getattr(u.mission, 'time_on_target', 0.0)
+                        
+                        if axis > 0:
+                            if not hasattr(u, 'patrol_dir'): u.patrol_dir = 1
+                            else: u.patrol_dir *= -1
+                            threat_brg = (axis if u.patrol_dir == 1 else axis + 180) % 360
                         else:
-                            axis = getattr(u.mission, 'time_on_target', 0.0)
-                            if u.side == "Red" and axis > 0:
-                                if not hasattr(u, 'patrol_dir'): u.patrol_dir = 1
-                                else: u.patrol_dir *= -1
-                                threat_brg = (axis if u.patrol_dir == 1 else axis + 180) % 360
+                            if threat_contacts: 
+                                best_c = min(threat_contacts, key=lambda c: fast_dist_km(center_lat, center_lon, c.est_lat, c.est_lon))
+                                threat_brg = bearing(center_lat, center_lon, best_c.est_lat, best_c.est_lon)
                             else:
                                 u.patrol_angle = (getattr(u, 'patrol_angle', random.uniform(0, 360)) + 45) % 360
                                 threat_brg = u.patrol_angle
                         
-                        # GAME DESIGN TWEAK: 150km racetrack loops for Red, 60km loops for Blue
-                        leg_len = 75.0 if u.side == "Red" else 30.0
+                        leg_len = 75.0 
                         
                         lat_rad_clamped = max(0.0001, math.cos(math.radians(center_lat)))
                         lat1 = center_lat + (math.cos(math.radians(threat_brg)) * leg_len) / 111.32
@@ -537,11 +709,27 @@ class SimulationEngine:
                             u.mission = Mission("Emergency RTB", "RTB", base.lat, base.lon, 0, u.altitude_ft, 0)
                             u.clear_waypoints()
 
-    def _move_missiles(self, sim_delta: float) -> None:
-        for m in self.missiles: m.update(sim_delta)
-
     def _resolve_missile_outcomes(self) -> None:
         for m in self.missiles:
+            # Check the hardware-flag to see if the terminal phase was entered
+            if getattr(m, '_terminal_phase_triggered', False):
+                m._terminal_phase_triggered = False # consume the flag
+                
+                # We call the old object-oriented math block for the single explosive frame
+                pk = m._calculate_terminal_pk()
+                
+                if random.random() <= pk:
+                    if m.target.alive: 
+                        m.target.take_damage(m.wdef.damage)
+                        if not m.target.alive: m.did_kill = True
+                    m.status = "HIT"
+                    m.detonated = True
+                else:
+                    m.status = "MISSED"
+                    if m.is_ballistic or m.wdef.domain == "ground": m.detonated = True
+                
+                m.active = False
+                
             if not m.active and getattr(m, 'detonated', False):
                 radius = m.wdef.splash_radius_km if m.wdef.splash_radius_km > 0 else 0.05 
                 self.explosions.append(Explosion(m.lat, m.lon, radius))

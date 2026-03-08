@@ -20,6 +20,20 @@ _BTN_PAD = 4
 _WEAP_H  = 30   
 
 class GameUI:
+    _CATEGORIES = [
+        ("AWACS & C2",        ("awacs",)),
+        ("FIXED-WING",        ("fighter", "attacker")),
+        ("ROTARY WING",       ("helicopter",)),
+        ("LOGISTICS",         ("airbase",)),
+        ("AIR DEFENSE",       ("sam",)),
+        ("ARTILLERY",         ("artillery",)),
+        ("ARMOR (MBT)",       ("tank",)),
+        ("INFANTRY FV",       ("ifv",)),
+        ("ARMORED PC",        ("apc",)),
+        ("RECON",             ("recon",)),
+        ("TANK DESTROYERS",   ("tank_destroyer",)),
+    ]
+
     def __init__(self, surface: pygame.Surface, win_w: int, win_h: int, db: Database):
         self._win        = surface
         self._win_w      = win_w
@@ -140,21 +154,10 @@ class GameUI:
             "Red":  {cat[0]: True for cat in self._CATEGORIES}
         }
         
+        # O(1) Pre-computed lookup dictionary to eliminate string comparison bottleneck
+        self._unit_type_to_cat = {t: cat[0] for cat in self._CATEGORIES for t in cat[1]}
+        
         self._build()
-
-    _CATEGORIES = [
-        ("AWACS & C2",        ("awacs",)),
-        ("FIXED-WING",        ("fighter", "attacker")),
-        ("ROTARY WING",       ("helicopter",)),
-        ("LOGISTICS",         ("airbase",)),
-        ("AIR DEFENSE",       ("sam",)),
-        ("ARTILLERY",         ("artillery",)),
-        ("ARMOR (MBT)",       ("tank",)),
-        ("INFANTRY FV",       ("ifv",)),
-        ("ARMORED PC",        ("apc",)),
-        ("RECON",             ("recon",)),
-        ("TANK DESTROYERS",   ("tank_destroyer",)),
-    ]
 
     def _build_roster_data(self) -> None:
         self._roster_items.clear()
@@ -252,7 +255,6 @@ class GameUI:
         btn_y = _PAD + info_h + _PAD
         _LBL_W, _ENTRY_W, _GAP = 45, 52, _PAD
         
-        # Exact sizing: Auto Deploy matches btn_w_half, Place Button takes the remainder
         auto_w = btn_w_half
         place_w = ctrl_w - (_LBL_W + _ENTRY_W + _GAP * 2) - auto_w - _BTN_PAD
 
@@ -468,14 +470,8 @@ class GameUI:
         scroll_container.set_scrollable_area_dimensions((w-50, by + 20))
 
     def is_unit_visible(self, unit: Unit) -> bool:
-        """Helper for the main rendering loop to quickly check if a unit should be drawn based on the Map Settings toggles."""
-        cat_name = None
-        utype = unit.platform.unit_type.lower()
-        for name, types in self._CATEGORIES:
-            if utype in types:
-                cat_name = name
-                break
-        
+        """O(1) Dictionary lookup for map filter toggles to prevent string-loop bottlenecks."""
+        cat_name = self._unit_type_to_cat.get(unit.platform.unit_type.lower())
         if cat_name:
             return self.visibility_filters[unit.side][cat_name]
         return True # Fallback for uncategorized units
@@ -896,16 +892,6 @@ class GameUI:
                 if selected.platform.unit_type.lower() == "airbase" and selected.side == "Blue":
                     for btn in self._salvo_btns: btn.hide()
                     if getattr(self, "_strike_pkg_btn", None): self._strike_pkg_btn.show()
-                    parked = [u for u in sim.units if u.home_uid == selected.uid and u.duty_state != "ACTIVE" and u.alive]
-                    parked_count = len(parked)
-                    if parked_count != getattr(self, "_last_parked_count", -1): self.rebuild_weapon_buttons(selected, sim); self._last_parked_count = parked_count
-                    for i, key in enumerate(self._weap_keys):
-                        if key.startswith("SELECT:"):
-                            p_uid = key.split(":")[1]; p_unit = sim.get_unit_by_uid(p_uid)
-                            if p_unit:
-                                btn = self._weap_btns[i]
-                                if p_unit.duty_state == "READY": btn.set_text(f"✈ {p_unit.callsign.upper()} (READY)"); btn.enable()
-                                else: btn.set_text(f"⏳ {p_unit.callsign.upper()} (REARM {int(p_unit.duty_timer)}S)"); btn.disable()
                 else:
                     for btn in self._salvo_btns: btn.show()
                     if getattr(self, "_strike_pkg_btn", None): self._strike_pkg_btn.hide()
@@ -913,6 +899,21 @@ class GameUI:
 
                 if self._ui_refresh_timer <= 0 or force_refresh:
                     self._ui_refresh_timer = 0.25
+                    
+                    # OPTIMIZATION: Only parse parked aircraft array once every UI refresh, instead of every frame
+                    if selected.platform.unit_type.lower() == "airbase" and selected.side == "Blue":
+                        parked = [u for u in sim.units if u.home_uid == selected.uid and u.duty_state != "ACTIVE" and u.alive]
+                        parked_count = len(parked)
+                        if parked_count != getattr(self, "_last_parked_count", -1) or force_refresh: 
+                            self.rebuild_weapon_buttons(selected, sim)
+                            self._last_parked_count = parked_count
+                        for i, key in enumerate(self._weap_keys):
+                            if key.startswith("SELECT:"):
+                                p_uid = key.split(":")[1]; p_unit = sim.get_unit_by_uid(p_uid)
+                                if p_unit:
+                                    btn = self._weap_btns[i]
+                                    if p_unit.duty_state == "READY": btn.set_text(f"✈ {p_unit.callsign.upper()} (READY)"); btn.enable()
+                                    else: btn.set_text(f"⏳ {p_unit.callsign.upper()} (REARM {int(p_unit.duty_timer)}S)"); btn.disable()
                     
                     alt_display = f"{int(selected.altitude_ft):,} ft"
                     if int(selected.target_altitude_ft) != int(selected.altitude_ft): alt_display += f" <font color='#FFAA00'>(→{int(selected.target_altitude_ft):,})</font>"
